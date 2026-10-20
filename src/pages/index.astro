@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+
+<BaseLayout title="Silberg Creative – SoMe-bureau">
+  <PageHero eyebrow="Fundament" title="Sociale medier med <em>kant</em>" lead="Midlertidig testside for design-systemet.">
+    <a href="/pakkeloesninger/" class="btn">Se pakkerne</a>
+    <a href="/kontakt/" class="btn btn--outline">Book et møde</a>
+  </PageHero>
+  <section class="section">
+    <div class="container">
+      <SectionHead eyebrow="Ydelser" title="Alt, hvad jeres sociale medier <em>kræver</em>" lead="Strategi, content, annoncering og rapportering samlet ét sted." align="split" />
+      <div class="accordion"><details><summary>Hvor hurtigt kan vi komme i gang?</summary><div class="accordion-body">Typisk inden for 1–2 uger.</div></details></div>
+    </div>
+  </section>
+  <CtaBand />
+</BaseLayout>

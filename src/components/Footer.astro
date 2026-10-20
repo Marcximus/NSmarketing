@@ -1,0 +1,339 @@
+---
+import Icon from './Icon.astro';
+import { site, footerNav, legalNav } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer on-dark">
+  <div class="container">
+    <div class="site-footer__newsletter">
+      <div>
+        <p class="eyebrow">Nyhedsbrev</p>
+        <h2 class="h3">Inspiration til jeres sociale medier – én gang om måneden.</h2>
+      </div>
+      <form class="newsletter" data-form="newsletter" novalidate>
+        <label for="newsletter-email" class="visually-hidden">Din e-mail</label>
+        <input
+          id="newsletter-email"
+          class="newsletter__input"
+          type="email"
+          name="email"
+          placeholder="Din e-mail"
+          autocomplete="email"
+          required
+        />
+        <input type="hidden" name="_subject" value="Ny tilmelding til nyhedsbrev" />
+        <button type="submit" class="btn btn--gold">Tilmeld <Icon name="arrow" size={16} /></button>
+        <p class="newsletter__status small" role="status" aria-live="polite" data-form-status></p>
+      </form>
+    </div>
+
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a href="/" aria-label={`${site.name} – til forsiden`}>
+          <img
+            src="/brand/silberg-creative-logo-white.svg"
+            alt=""
+            width="1168"
+            height="450"
+            class="site-footer__logo"
+            loading="lazy"
+          />
+        </a>
+        <p class="muted small">
+          Fuldt SoMe-bureau med strategi, content, annoncering og rapportering samlet ét sted.
+        </p>
+        <ul class="site-footer__social">
+          {
+            site.social.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label}`}>
+                  <Icon name={s.icon} size={18} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__title">Kontakt</h2>
+        <ul class="site-footer__list">
+          <li>
+            <a href={site.phoneHref}><Icon name="phone" size={16} /> {site.phone}</a>
+          </li>
+          <li>
+            <a href={site.emailHref}><Icon name="mail" size={16} /> {site.email}</a>
+          </li>
+          {
+            site.address ? (
+              <li>
+                <span>
+                  <Icon name="pin" size={16} /> {site.address.street}, {site.address.zip} {site.address.city}
+                </span>
+              </li>
+            ) : (
+              <li>
+                <span>
+                  <Icon name="pin" size={16} /> {site.serviceArea}
+                </span>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__title">Åbningstider</h2>
+        <dl class="site-footer__hours">
+          {
+            site.hours.map((h) => (
+              <div>
+                <dt>{h.days}</dt>
+                <dd>{h.time}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <nav aria-label="Genveje">
+        <h2 class="site-footer__title">Genveje</h2>
+        <ul class="site-footer__list">
+          {
+            footerNav.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>
+        © {year}
+        {site.name}
+        {site.cvr && <span> · CVR {site.cvr}</span>}
+      </p>
+      <ul>
+        {
+          legalNav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--c-brown-deep);
+    color: var(--c-cream);
+    font-size: var(--fs-sm);
+  }
+
+  .site-footer__newsletter {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(3.5rem, 6vw, 5rem);
+    border-bottom: 1px solid rgba(205, 191, 174, 0.18);
+  }
+
+  .site-footer__newsletter .h3 {
+    max-width: 30rem;
+    color: var(--c-cream);
+  }
+
+  @media (min-width: 900px) {
+    .site-footer__newsletter {
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 4rem;
+    }
+  }
+
+  .newsletter {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 560px) {
+    .newsletter {
+      grid-template-columns: 1fr auto;
+      gap: 0;
+    }
+  }
+
+  .newsletter__input {
+    min-height: 3.25rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(205, 191, 174, 0.4);
+    border-radius: 0;
+    background: transparent;
+    color: var(--c-cream);
+    font-size: var(--fs-base);
+  }
+
+  .newsletter__input::placeholder {
+    color: var(--c-cream-muted);
+  }
+
+  .newsletter__input:focus {
+    outline: none;
+    border-color: var(--c-gold-light);
+  }
+
+  .newsletter__status {
+    grid-column: 1 / -1;
+    min-height: 1.5em;
+    margin-top: 0.5rem;
+    color: var(--c-gold-light);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: 2.75rem 2rem;
+    padding-block: clamp(3.5rem, 6vw, 5rem);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr 0.8fr;
+      gap: 3rem;
+    }
+  }
+
+  .site-footer__brand {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+    max-width: 22rem;
+  }
+
+  .site-footer__logo {
+    width: 170px;
+    height: auto;
+  }
+
+  .site-footer__social {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  .site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(205, 191, 174, 0.3);
+    color: var(--c-cream);
+    transition:
+      border-color 0.3s var(--ease),
+      color 0.3s var(--ease);
+  }
+
+  .site-footer__social a:hover {
+    border-color: var(--c-gold-light);
+    color: var(--c-gold-light);
+  }
+
+  .site-footer__title {
+    margin-bottom: 1.25rem;
+    font-family: var(--f-sans);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-light);
+  }
+
+  .site-footer__list {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+  }
+
+  .site-footer__list a,
+  .site-footer__list span {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    color: var(--c-cream);
+    text-decoration: none;
+    transition: color 0.3s var(--ease);
+  }
+
+  .site-footer__list a:hover {
+    color: var(--c-gold-light);
+  }
+
+  .site-footer__list :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.2em;
+    color: var(--c-gold-light);
+  }
+
+  .site-footer__hours {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+  }
+
+  .site-footer__hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: 17rem;
+  }
+
+  .site-footer__hours dt {
+    color: var(--c-cream-muted);
+  }
+
+  .site-footer__hours dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    padding-block: 1.75rem;
+    border-top: 1px solid rgba(205, 191, 174, 0.18);
+    color: var(--c-cream-muted);
+    font-size: 0.8125rem;
+  }
+
+  .site-footer__bottom ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+  }
+
+  .site-footer__bottom a {
+    color: var(--c-cream-muted);
+    text-decoration: none;
+  }
+
+  .site-footer__bottom a:hover {
+    color: var(--c-gold-light);
+  }
+</style>

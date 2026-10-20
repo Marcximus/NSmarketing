@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import ctaImage from '../assets/images/cta.jpg';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  text?: string;
+}
+
+const {
+  eyebrow = 'Lad os tage en snak',
+  title = 'Klar til sociale medier, der <em>arbejder</em> for jer?',
+  text = 'Book et uforpligtende møde. Vi kigger på jeres nuværende profiler, fortæller, hvad vi ville gøre – og hvilken pakke der giver mening for jer.',
+} = Astro.props;
+---
+
+<section class="cta-band section section--brown">
+  <div class="container cta-band__grid">
+    <div class="cta-band__content" data-reveal>
+      <p class="eyebrow">{eyebrow}</p>
+      <h2 set:html={title} />
+      <p class="lead">{text}</p>
+      <div class="btn-row">
+        <a href="/kontakt/" class="btn btn--gold">Book et uforpligtende møde <Icon name="arrow" size={16} /></a>
+        <a href={site.phoneHref} class="btn btn--outline-light"><Icon name="phone" size={16} /> Ring {site.phone}</a>
+      </div>
+      <p class="cta-band__note small">Vi svarer inden for én hverdag.</p>
+    </div>
+    <div class="cta-band__media" data-reveal style="--reveal-delay: .12s">
+      <div class="media">
+        <Image src={ctaImage} alt="Content creator filmer indhold til sociale medier" widths={[480, 720, 960]} sizes="(min-width: 900px) 40vw, 90vw" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band__grid {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .cta-band__grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(3rem, 6vw, 7rem);
+    }
+  }
+
+  .cta-band__content .lead {
+    max-width: 34rem;
+    margin-block: var(--space-5) var(--space-6);
+  }
+
+  .cta-band__note {
+    margin-top: var(--space-4);
+    color: var(--c-cream-muted);
+  }
+
+  .cta-band__media .media {
+    aspect-ratio: 4 / 5;
+    max-height: 560px;
+    margin-left: auto;
+    outline: 1px solid rgba(212, 185, 138, 0.45);
+    outline-offset: 14px;
+  }
+
+  @media (max-width: 899px) {
+    .cta-band__media .media {
+      aspect-ratio: 16 / 10;
+      outline-offset: 10px;
+    }
+  }
+</style>

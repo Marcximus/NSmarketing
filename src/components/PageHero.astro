@@ -1,0 +1,70 @@
+---
+// Topsektion til undersider. Titlen må indeholde <em> for kursiv guld-accent.
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center';
+}
+
+const { eyebrow, title, lead, align = 'center' } = Astro.props;
+---
+
+<section class:list={['page-hero', `page-hero--${align}`]}>
+  <div class="page-hero__marble" aria-hidden="true"></div>
+  <div class="container page-hero__inner">
+    <p class:list={['eyebrow', align === 'center' && 'eyebrow--center']} data-reveal>{eyebrow}</p>
+    <h1 set:html={title} data-reveal style="--reveal-delay: .08s" />
+    {lead && <p class="lead" data-reveal style="--reveal-delay: .16s">{lead}</p>}
+    <div class="page-hero__actions" data-reveal style="--reveal-delay: .24s"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(4.5rem, 3rem + 6vw, 8rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    border-bottom: 1px solid var(--c-line);
+    isolation: isolate;
+  }
+
+  .page-hero__marble {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(180deg, rgba(250, 247, 242, 0.72) 0%, rgba(250, 247, 242, 0.92) 100%),
+      url('../assets/images/marble.jpg');
+    background-size: cover;
+    background-position: center 30%;
+  }
+
+  .page-hero__inner {
+    max-width: calc(58rem + var(--gutter) * 2);
+  }
+
+  .page-hero--center .page-hero__inner {
+    text-align: center;
+  }
+
+  .page-hero .lead {
+    max-width: 42rem;
+    margin-top: var(--space-5);
+  }
+
+  .page-hero--center .lead {
+    margin-inline: auto;
+  }
+
+  .page-hero__actions:not(:empty) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .page-hero--center .page-hero__actions {
+    justify-content: center;
+  }
+</style>

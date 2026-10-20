@@ -1,0 +1,29 @@
+---
+// Overskriftsblok til sektioner: eyebrow + titel + valgfri lead.
+// Titlen må indeholde <em> for kursiv guld-accent, fx "Sociale medier med <em>kant</em>".
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center' | 'split';
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+
+const { eyebrow, title, lead, align = 'left', as: Tag = 'h2', class: className } = Astro.props;
+const classes = [
+  'section-head',
+  align === 'center' && 'section-head--center',
+  align === 'split' && 'section-head--split',
+  className,
+];
+---
+
+<div class:list={classes} data-reveal>
+  <div>
+    {eyebrow && <p class:list={['eyebrow', align === 'center' && 'eyebrow--center']}>{eyebrow}</p>}
+    <Tag set:html={title} />
+  </div>
+  {lead && <p class="lead">{lead}</p>}
+  <slot />
+</div>
