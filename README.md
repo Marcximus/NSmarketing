@@ -52,6 +52,7 @@ Logoet i `public/brand/` er vektoriseret ud fra den JPG, vi fik. Har I den origi
 
 ## Før lancering – tjekliste
 
+- [ ] **Fjern `noindex`** i `vercel.json` (blokken med `X-Robots-Tag`), så Google må indeksere sitet. Den er sat, mens sitet indeholder eksempelindhold og foreslåede priser
 - [ ] Priser på pakker og tillægsydelser (`packages.ts`, `addons.ts`)
 - [ ] Pakkenavne (Silver / Gold / Black) godkendt
 - [ ] CVR-nummer og adresse (`site.ts`). E-handelsloven § 7 kræver normalt, at hjemmesiden oplyser en geografisk adresse. Adressen vises automatisk i footer, på kontaktsiden og i privatlivspolitikken, når den er sat.
@@ -108,5 +109,7 @@ Forventet resultat er **0 fund**. To bevidste undtagelser er registreret med beg
 Tilføj kun nye undtagelser, når kunden eller brandbriefet står bag (`npx impeccable ignores add-value <regel> "*" --file "<glob>" --reason "..."`). Ret ellers fundet.
 
 ## Hosting
+
+Sitet er sat op på **Vercel** og deployes automatisk fra GitHub: hver push til en branch giver en preview-adresse, og `main` er produktion. Indstillingerne står i `vercel.json`: Astro, afsluttende skråstreg, lang caching af `/_astro/` og `noindex`, indtil sitet lanceres. Eget domæne (fx silbergcreative.dk) tilføjes under *Project → Settings → Domains* i Vercel.
 
 `npm run build` giver en mappe (`dist/`) med rene HTML-, CSS- og billedfiler, som kan lægges på alle webhoteller. Anbefalet: **Vercel** eller **Netlify** (gratis, automatisk deploy fra GitHub, HTTPS inkluderet). Klassiske danske webhoteller som Simply.com og one.com virker også: upload indholdet af `dist/` via FTP. Husk den skjulte fil `.htaccess`, så Apache viser sitets egen 404-side.
