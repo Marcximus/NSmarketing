@@ -10,11 +10,9 @@ const sameDayNote = site.callbackCutoff
 ---
 
 <section class="section section--deep cb" id="ring-op" aria-labelledby="cb-titel">
-  <div class="cb__marble" aria-hidden="true"></div>
   <div class="container cb__grid">
-    <div class="cb__intro" data-reveal>
-      <p class="eyebrow">Hellere en snak i telefonen?</p>
-      <h2 id="cb-titel">Bliv ringet op <em>samme dag</em></h2>
+    <div class="cb__intro">
+      <h2 id="cb-titel">Bliv ringet op samme dag</h2>
       <p class="lead">
         Efterlad navn og nummer, og vælg, hvornår det passer jer. Så ringer vi – og I slipper for at skrive en
         lang besked.
@@ -36,8 +34,6 @@ const sameDayNote = site.callbackCutoff
       action={site.formEndpoint || `mailto:${site.email}`}
       enctype={site.formEndpoint ? undefined : 'text/plain'}
       aria-labelledby="cb-titel"
-      data-reveal
-      style="--reveal-delay: .1s"
     >
       <div class="cb__fields">
         <div class="field">
@@ -90,27 +86,9 @@ const sameDayNote = site.callbackCutoff
 </section>
 
 <style>
+  /* Flad, dyb brun (section--deep) – marmoren er forbeholdt de få steder, hvor årerne kan ses */
   .cb {
-    overflow: hidden;
-    isolation: isolate;
     padding-block: clamp(4rem, 2.5rem + 5vw, 7rem);
-  }
-
-  /* Meget diskret marmortekstur i den mørke flade */
-  .cb__marble {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image:
-      linear-gradient(
-        100deg,
-        var(--c-brown-deep) 0%,
-        color-mix(in srgb, var(--c-brown-deep) 94%, transparent) 55%,
-        color-mix(in srgb, var(--c-brown-deep) 88%, transparent) 100%
-      ),
-      url('../../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center;
   }
 
   .cb__grid {
@@ -187,9 +165,11 @@ const sameDayNote = site.callbackCutoff
     color: var(--c-cream);
   }
 
-  .cb .input:hover,
-  .cb .select:hover {
-    border-color: var(--c-cream);
+  @media (hover: hover) {
+    .cb .input:hover,
+    .cb .select:hover {
+      border-color: var(--c-cream);
+    }
   }
 
   /* Fokus: kantskift + den globale fokusring i guld (se global.css) */
@@ -200,7 +180,7 @@ const sameDayNote = site.callbackCutoff
 
   .cb .input[aria-invalid='true'],
   .cb .select[aria-invalid='true'] {
-    border-color: #f2b8a8; /* samme fejltone som .field-error på mørk flade */
+    border-color: var(--c-error-on-dark); /* samme fejltone som .field-error på mørk flade */
   }
 
   .cb__submit .btn {
@@ -216,14 +196,17 @@ const sameDayNote = site.callbackCutoff
     color: var(--c-cream);
   }
 
-  .cb__privacy a:hover {
-    color: var(--c-gold-light);
+  @media (hover: hover) {
+    .cb__privacy a:hover {
+      color: var(--c-gold-light);
+    }
   }
 
+  /* Status (fx "Tryk send i mailen"): en stille hårstregsramme, ingen farvet sidestribe */
   .cb__status:not(:empty) {
     margin-top: var(--space-4);
     padding: 0.85rem 1rem;
-    border-left: 2px solid var(--c-gold-light);
+    border: 1px solid color-mix(in srgb, var(--c-gold-light) 55%, transparent);
     background: color-mix(in srgb, var(--c-cream) 6%, transparent);
     color: var(--c-cream);
   }

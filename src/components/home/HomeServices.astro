@@ -1,5 +1,6 @@
 ---
-// De fire kerneydelser i et skarpt grid med hårstreger + udvalgte tillægsydelser (linker til kortene på pakkesiden).
+// De fire kerneydelser som typografisk liste med hårstreger (.ruled-list) + udvalgte tillægsydelser
+// (linker til kortene på pakkesiden). Ingen numre, ikoner eller kort – overskrifterne bærer sig selv.
 import Icon from '../Icon.astro';
 import SectionHead from '../SectionHead.astro';
 import { services } from '../../data/content';
@@ -19,31 +20,23 @@ const breakable = (name: string) => name.replace(/(\p{Ll})(marketing)/gu, '$1\u0
 <section class="section section--white services">
   <div class="container">
     <SectionHead
-      eyebrow="Det tager vi os af"
-      title="Alt, hvad jeres sociale medier <em>kræver</em>"
+      title="Alt, hvad jeres sociale medier kræver"
       lead="Fire discipliner, ét samlet team og én fast pris om måneden. Vi tager ansvaret for hele processen – fra den første strategi til den månedlige rapport."
       align="split"
     />
 
-    <ul class="services__grid">
+    <ul class="ruled-list ruled-list--2 services__list" role="list">
       {
-        services.map((s, i) => (
-          <li class="service" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
-            <div class="service__top">
-              <span class="service__num" aria-hidden="true">
-                {s.number}
-              </span>
-              <Icon name={s.icon} size={30} strokeWidth={1.2} />
-            </div>
-            <h3 class="service__title">{s.title}</h3>
-            <p class="service__text">{s.text}</p>
-            <span class="service__rule" aria-hidden="true" />
+        services.map((s) => (
+          <li>
+            <h3 class="ruled-list__title">{s.title}</h3>
+            <p class="ruled-list__text">{s.text}</p>
           </li>
         ))
       }
     </ul>
 
-    <div class="services__addons" data-reveal>
+    <div class="services__addons">
       <p class="services__addons-label">Og når I vil mere</p>
       <ul>
         {featuredAddons.map((a) => (
@@ -58,86 +51,6 @@ const breakable = (name: string) => name.replace(/(\p{Ll})(marketing)/gu, '$1\u0
 </section>
 
 <style>
-  /* Hårstreger: 1px mellemrum på stregfarvet baggrund */
-  .services__grid {
-    display: grid;
-    gap: 1px;
-    list-style: none;
-    background: var(--c-line);
-    border: 1px solid var(--c-line);
-  }
-
-  @media (min-width: 720px) {
-    .services__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .services__grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  .service {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem);
-    background: var(--c-white);
-    transition: background-color var(--dur) var(--ease);
-  }
-
-  .service:hover {
-    background: var(--c-paper);
-  }
-
-  .service__top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: clamp(2rem, 4vw, 3.5rem);
-    color: var(--c-gold);
-  }
-
-  .service__num {
-    font-family: var(--f-serif);
-    font-variant-numeric: lining-nums;
-    font-size: 1.05rem;
-    font-style: italic;
-    color: var(--c-gold-ink);
-  }
-
-  .service__title {
-    font-size: clamp(1.4rem, 1.2rem + 0.5vw, 1.6rem);
-  }
-
-  .service__text {
-    margin-top: var(--space-4);
-    font-size: 0.975rem;
-    line-height: 1.7;
-    color: var(--c-ink-2);
-  }
-
-  .service__rule {
-    display: block;
-    width: 2rem;
-    height: 1px;
-    margin-top: auto;
-    padding-top: 0;
-    background: var(--c-gold);
-    transform-origin: left;
-    transition: width var(--dur) var(--ease);
-  }
-
-  .service__text {
-    margin-bottom: var(--space-6);
-  }
-
-  .service:hover .service__rule {
-    width: 4rem;
-  }
-
   /* Tillæg */
   .services__addons {
     display: grid;
@@ -155,7 +68,7 @@ const breakable = (name: string) => name.replace(/(\p{Ll})(marketing)/gu, '$1\u0
   }
 
   .services__addons-label {
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
@@ -200,8 +113,10 @@ const breakable = (name: string) => name.replace(/(\p{Ll})(marketing)/gu, '$1\u0
     text-underline-offset: 0.3em;
   }
 
-  .services__addons li a:hover {
-    text-decoration-line: underline;
+  @media (hover: hover) {
+    .services__addons li a:hover {
+      text-decoration-line: underline;
+    }
   }
 
   .services__addons li::before {

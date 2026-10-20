@@ -1,26 +1,37 @@
 ---
+// Afsluttende CTA-bånd (mørkebrunt) med booking og telefon. Ingen kicker; titlen skrives uden <em>.
+// Props:
+// - title / text: overskrift og lead.
+// - image: billede i højre kolonne (default cta.jpg). Hver side bør have sit eget billede, så båndet ikke
+//   gentager sig fra side til side. null giver et kompakt tekstbånd uden billede.
+// - imageAlt: alt-tekst til billedet.
+// - imagePosition: object-position til beskæringen, fx 'center 30%'.
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Icon from './Icon.astro';
 import { site } from '../data/site';
 import ctaImage from '../assets/images/cta.jpg';
 
 interface Props {
-  eyebrow?: string;
   title?: string;
   text?: string;
+  image?: ImageMetadata | null;
+  imageAlt?: string;
+  imagePosition?: string;
 }
 
 const {
-  eyebrow = 'Lad os tage en snak',
-  title = 'Klar til sociale medier, der <em>arbejder</em> for jer?',
+  title = 'Klar til sociale medier, der arbejder for jer?',
   text = 'På et kort møde kigger vi på jeres nuværende profiler og fortæller, hvad vi ville gøre – og hvilken pakke der giver mening for jer.',
+  image = ctaImage,
+  imageAlt = 'Content creator filmer indhold til sociale medier',
+  imagePosition = 'center',
 } = Astro.props;
 ---
 
-<section class="cta-band section section--brown">
+<section class:list={['cta-band section section--brown', !image && 'cta-band--compact']}>
   <div class="container cta-band__grid">
-    <div class="cta-band__content" data-reveal>
-      <p class="eyebrow">{eyebrow}</p>
+    <div class="cta-band__content">
       <h2 set:html={title} />
       <p class="lead">{text}</p>
       <div class="btn-row">
@@ -29,11 +40,21 @@ const {
       </div>
       <p class="cta-band__note small">Vi svarer inden for én hverdag.</p>
     </div>
-    <div class="cta-band__media" data-reveal style="--reveal-delay: .12s">
-      <div class="media">
-        <Image src={ctaImage} alt="Content creator filmer indhold til sociale medier" widths={[480, 720, 960]} sizes="(min-width: 900px) 40vw, 90vw" />
-      </div>
-    </div>
+    {
+      image && (
+        <div class="cta-band__media">
+          <div class="media">
+            <Image
+              src={image}
+              alt={imageAlt}
+              widths={[480, 720, 960]}
+              sizes="(min-width: 900px) 40vw, 90vw"
+              style={`object-position: ${imagePosition}`}
+            />
+          </div>
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -69,7 +90,7 @@ const {
     aspect-ratio: 4 / 5;
     max-height: 560px;
     margin-left: auto;
-    outline: 1px solid rgba(212, 185, 138, 0.45);
+    outline: 1px solid color-mix(in srgb, var(--c-gold-light) 45%, transparent);
     outline-offset: 14px;
   }
 
@@ -78,5 +99,18 @@ const {
       aspect-ratio: 16 / 10;
       outline-offset: 10px;
     }
+  }
+
+  /* Kompakt tekstbånd uden billede (image={null}) */
+  .cta-band--compact {
+    padding-block: calc(var(--section-y) * 0.7);
+  }
+
+  .cta-band--compact .cta-band__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cta-band--compact .cta-band__content {
+    max-width: 44rem;
   }
 </style>

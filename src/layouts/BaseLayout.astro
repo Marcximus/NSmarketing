@@ -85,14 +85,8 @@ const websiteLd = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline>
-      // .js skjuler [data-reveal] til reveal.ts viser dem. Indlæses reveal.ts ikke (fx manglende _astro-fil),
-      // vises alt indhold alligevel efter 2,5 sek.
-      (function (d) {
-        d.classList.add('js');
-        setTimeout(function () {
-          if (!d.classList.contains('reveal-ready')) d.classList.add('no-reveal');
-        }, 2500);
-      })(document.documentElement);
+      // .js bruges af mobilmenuen, sammenligningstabellen og case-filteret.
+      (function (d) { d.classList.add('js'); })(document.documentElement);
     </script>
 
     <title>{fullTitle}</title>
@@ -103,7 +97,9 @@ const websiteLd = {
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#faf7f2" />
+    <meta name="color-scheme" content="only light" />
+    <!-- --c-brown-deep over forsidens mørke hero, ellers --c-paper -->
+    <meta name="theme-color" content={headerVariant === 'overlay' ? '#241914' : '#faf7f2'} />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="da_DK" />
@@ -129,7 +125,6 @@ const websiteLd = {
     <Footer />
 
     <script>
-      import '../scripts/reveal';
       import '../scripts/forms';
       import '../scripts/focus-clear';
     </script>

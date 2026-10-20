@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
-import { site, mainNav } from '../data/site';
+import Logo from '../assets/logo-currentcolor.svg';
+import { site, mainNav, socialLinks } from '../data/site';
 
 interface Props {
   /** 'overlay' = gennemsigtig header over et mørkt hero-billede, indtil man scroller */
@@ -24,15 +25,18 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
       <li>
         <a href={site.emailHref}><Icon name="mail" size={14} /> {site.email}</a>
       </li>
-      <li class="topbar__social">
-        {
-          site.social.map((s) => (
-            <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
-              <Icon name={s.icon} size={15} />
-            </a>
-          ))
-        }
-      </li>
+      {
+        /* Kun rigtige profil-links (se socialLinks i site.ts) – generiske links til platformens forside vises ikke */
+        socialLinks.length > 0 && (
+          <li class="topbar__social">
+            {socialLinks.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
+                <Icon name={s.icon} size={15} />
+              </a>
+            ))}
+          </li>
+        )
+      }
     </ul>
   </div>
 </aside>
@@ -40,20 +44,8 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
 <header class="site-header" data-variant={variant} data-header>
   <div class="container site-header__inner">
     <a href="/" class="site-header__logo" aria-label={`${site.name} – til forsiden`}>
-      <img
-        class="logo logo--dark"
-        src="/brand/silberg-creative-logo.svg"
-        alt=""
-        width="1168"
-        height="450"
-      />
-      <img
-        class="logo logo--light"
-        src="/brand/silberg-creative-logo-white.svg"
-        alt=""
-        width="1168"
-        height="450"
-      />
+      {/* Inline SVG i currentColor: ink på lys header, creme over forsidens hero, synligt i høj kontrast */}
+      <Logo class="logo" aria-hidden="true" focusable="false" />
     </a>
 
     <nav class="site-nav" aria-label="Hovedmenu">
@@ -139,7 +131,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
   }
 
   .topbar__tagline {
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
@@ -160,15 +152,30 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     transition: color 0.3s var(--ease);
   }
 
-  .topbar__links a:hover {
-    color: var(--c-gold-light);
+  @media (hover: hover) {
+    .topbar__links a:hover {
+      color: var(--c-gold-light);
+    }
   }
 
   .topbar__social {
     display: flex;
     gap: 0.9rem;
     padding-left: 1.75rem;
-    border-left: 1px solid rgba(205, 191, 174, 0.25);
+    border-left: 1px solid color-mix(in srgb, var(--c-cream-muted) 25%, transparent);
+  }
+
+  /* Touch på iPad på tværs (topbaren vises fra 1024px): trykflader på mindst 44 px */
+  @media (pointer: coarse) {
+    .topbar__links a {
+      min-height: 44px;
+    }
+
+    .topbar__social a {
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+    }
   }
 
   /* Header */
@@ -189,7 +196,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgba(250, 247, 242, 0.96);
+    background: color-mix(in srgb, var(--c-paper) 96%, transparent);
     backdrop-filter: saturate(140%) blur(10px);
     -webkit-backdrop-filter: saturate(140%) blur(10px);
     transition: opacity 0.4s var(--ease);
@@ -210,12 +217,13 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     height: var(--header-h);
   }
 
+  /* Logoet arver headerens farve (ink; creme i overlay-tilstanden) – ingen fast farve her */
   .site-header__logo {
-    position: relative;
     display: block;
     flex-shrink: 0;
     width: 132px;
     margin-right: auto;
+    color: inherit;
   }
 
   @media (min-width: 1024px) {
@@ -224,16 +232,11 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     }
   }
 
-  .logo {
-    width: 100%;
-    height: auto;
-    transition: opacity 0.4s var(--ease);
-  }
-
-  .logo--light {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
+  /* Telefon på tværs: lavere header (--header-h: 64px i global.css) og mindre logo */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .site-header__logo {
+      width: 112px;
+    }
   }
 
   .site-nav {
@@ -277,10 +280,16 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     transition: transform 0.45s var(--ease);
   }
 
-  .site-nav a:hover::after,
   .site-nav a[aria-current='page']::after {
     transform: scaleX(1);
     transform-origin: left;
+  }
+
+  @media (hover: hover) {
+    .site-nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
   }
 
   .site-header__cta {
@@ -300,14 +309,6 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
 
   .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open)::before {
     opacity: 0;
-  }
-
-  .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open) .logo--dark {
-    opacity: 0;
-  }
-
-  .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open) .logo--light {
-    opacity: 1;
   }
 
   .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open) .site-header__cta {
@@ -391,12 +392,14 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     height: 10px;
   }
 
+  /* Stregerne tegnes med kant (ikke baggrund), så de også ses i Windows' høj kontrast-tilstand */
   .menu-toggle__bars span {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 1.5px;
-    background: currentColor;
+    height: 0;
+    border-top: 1.5px solid currentColor;
+    background: none;
     transition:
       transform 0.4s var(--ease),
       top 0.4s var(--ease);
@@ -410,13 +413,17 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     top: 8.5px;
   }
 
-  .menu-open .menu-toggle__bars span:first-child {
+  /* Krydset: begge streger midt i 10px-boksen (midten af en 1,5px-streg ligger på 4,25px) */
+  .menu-open .menu-toggle__bars span:first-child,
+  .menu-open .menu-toggle__bars span:last-child {
     top: 4.25px;
+  }
+
+  .menu-open .menu-toggle__bars span:first-child {
     transform: rotate(45deg);
   }
 
   .menu-open .menu-toggle__bars span:last-child {
-    top: 4.25px;
     transform: rotate(-45deg);
   }
 
@@ -451,7 +458,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     padding: 0.85rem 0;
     border-bottom: 1px solid var(--c-line);
     font-family: var(--f-serif);
-    font-size: 1.85rem;
+    font-size: 1.75rem;
     line-height: 1.2;
     text-decoration: none;
     color: var(--c-ink);

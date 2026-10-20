@@ -1,30 +1,21 @@
 ---
-// Teamet bag Silberg Creative + netværket af specialister.
-// Personer uden navn vises med rollen som titel og et ikonfelt i stedet for foto.
-// Når der står et navn i src/data/team.ts, vises navnet som titel, rollen som undertitel og initialerne i feltet.
+// Teamet bag Silberg Creative som redaktionel masthead + netværket af specialister.
+// Founder-kortet står på mørkebrun marmor; de øvrige roller er en liste med hårstreger.
+// Personer uden navn vises med rollen som titel. Når der står et navn i src/data/team.ts, vises navnet
+// som titel og rollen som undertitel.
 import Icon from '../Icon.astro';
 import Monogram from '../../assets/monogram-s.svg';
 import { team, network } from '../../data/team';
 
 const leadMember = team.find((m) => m.lead);
 const members = team.filter((m) => m !== leadMember);
-
-const initials = (name: string) =>
-  name
-    .replace(/[^\p{L}\s.-]/gu, '')
-    .split(/[\s.-]+/)
-    .filter(Boolean)
-    .map((part) => part[0]!.toUpperCase())
-    .slice(0, 2)
-    .join('');
 ---
 
 <section class="section section--white team" id="team" aria-labelledby="team-title">
   <div class="container">
-    <div class="section-head section-head--split" data-reveal>
+    <div class="section-head section-head--split">
       <div>
-        <p class="eyebrow">Teamet bag</p>
-        <h2 id="team-title">Et team af <em>specialister</em></h2>
+        <h2 id="team-title">Et team af specialister</h2>
       </div>
       <p class="lead">
         Bag hver profil, vi håndterer, står et team med hver sit speciale. Strategi, content og annoncering
@@ -32,14 +23,13 @@ const initials = (name: string) =>
       </p>
     </div>
 
-    <ul class="team__grid" role="list">
+    <div class="team__layout">
       {
         leadMember && (
-          <li class="member member--lead on-dark" data-reveal>
-            <div class="member__marble" aria-hidden="true" />
+          <div class="member--lead on-dark">
+            <div class="marble marble--dark" aria-hidden="true" />
             <Monogram class="member__monogram" aria-hidden="true" focusable="false" />
             <div class="member__body">
-              <p class="member__label">Ledelse</p>
               <h3 class="member__title">{leadMember.name ?? leadMember.role}</h3>
               {leadMember.name && <p class="member__sub">{leadMember.role}</p>}
               <p class="member__text">{leadMember.description}</p>
@@ -47,36 +37,26 @@ const initials = (name: string) =>
                 Book et møde med os <Icon name="arrow" size={16} />
               </a>
             </div>
-          </li>
+          </div>
         )
       }
-      {
-        members.map((member, i) => (
-          <li class="member" data-reveal style={`--reveal-delay: ${(i % 3) * 0.08}s`}>
-            <div class="member__top">
-              <span class="member__badge" aria-hidden="true">
-                {member.name ? (
-                  <span class="member__initials">{initials(member.name)}</span>
-                ) : (
-                  <Icon name={member.icon} size={22} />
-                )}
-              </span>
-              <span class="member__num" aria-hidden="true">
-                {String(i + 2).padStart(2, '0')}
-              </span>
-            </div>
-            <h3 class="member__title">{member.name ?? member.role}</h3>
-            {member.name && <p class="member__sub">{member.role}</p>}
-            <p class="member__text">{member.description}</p>
-          </li>
-        ))
-      }
-    </ul>
 
-    <div class="network" id="netvaerk" data-reveal>
+      <ul class="ruled-list team__roles" role="list">
+        {
+          members.map((member) => (
+            <li>
+              <h3 class="ruled-list__title">{member.name ?? member.role}</h3>
+              {member.name && <p class="member__sub">{member.role}</p>}
+              <p class="ruled-list__text">{member.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="network" id="netvaerk">
       <div class="network__intro">
-        <p class="eyebrow">Vores netværk</p>
-        <h3 class="network__title">Specialister, når I har <em>brug</em> for dem</h3>
+        <h3 class="network__title">Specialister, når I har brug for dem</h3>
         <p class="network__text">
           Vi tilknytter specialister efter behov, så I altid får de rette kompetencer – uden at betale for
           dem, når I ikke har brug for dem.
@@ -95,108 +75,26 @@ const initials = (name: string) =>
 </section>
 
 <style>
-  /* ---------- Grid ---------- */
-  .team__grid {
+  /* ---------- Masthead: founder-kort + roller ---------- */
+  .team__layout {
     display: grid;
-    gap: 1px;
-    list-style: none;
-    background: var(--c-line);
-    border: 1px solid var(--c-line);
+    gap: clamp(2.5rem, 1.5rem + 3vw, 4rem);
   }
 
-  @media (min-width: 720px) {
-    .team__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .team__layout > * {
+    min-width: 0;
+  }
 
-    .member--lead {
-      grid-column: span 2;
-    }
-
-    /* Står det sidste kort alene på rækken, fylder det hele rækken */
-    .member:last-child:nth-child(even) {
-      grid-column: span 2;
+  @media (min-width: 960px) {
+    .team__layout {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: stretch;
     }
   }
 
-  @media (min-width: 1100px) {
-    .team__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .member--lead {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-
-    .member:last-child:nth-child(even) {
-      grid-column: auto;
-    }
-
-    .member:last-child:nth-child(3n + 2) {
-      grid-column: span 2;
-    }
-
-    .member:last-child:nth-child(3n + 1):not(.member--lead) {
-      grid-column: span 3;
-    }
-  }
-
-  /* ---------- Rollekort ---------- */
-  .member {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
-    background: var(--c-white);
-    transition: background-color var(--dur) var(--ease);
-  }
-
-  .member:not(.member--lead):hover {
-    background: var(--c-paper);
-  }
-
-  .member__top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.25rem);
-  }
-
-  .member__badge {
-    display: grid;
-    place-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    border: 1px solid var(--c-gold);
-    background: var(--c-paper);
-    color: var(--c-gold-ink);
-    transition:
-      background-color var(--dur) var(--ease),
-      color var(--dur) var(--ease);
-  }
-
-  .member:hover .member__badge {
-    background: var(--c-brown-deep);
-    color: var(--c-gold-light);
-  }
-
-  .member__initials {
-    font-family: var(--f-serif);
-    font-size: 1.25rem;
-    letter-spacing: 0.04em;
-  }
-
-  .member__num {
-    font-family: var(--f-serif);
-    font-size: 1.05rem;
-    font-style: italic;
-    line-height: 1;
-    color: var(--c-muted);
-  }
-
-  .member__title {
-    font-size: clamp(1.35rem, 1.2rem + 0.4vw, 1.6rem);
+  .team__roles .ruled-list__title {
+    font-size: clamp(1.375rem, 1.25rem + 0.3vw, 1.5rem);
   }
 
   .member__sub {
@@ -208,33 +106,18 @@ const initials = (name: string) =>
     color: var(--c-gold-ink);
   }
 
-  .member__text {
-    margin-top: var(--space-3);
-    max-width: 30rem;
-    font-size: 0.975rem;
-    color: var(--c-ink-2);
-  }
-
   /* ---------- Founder-kort ---------- */
   .member--lead {
-    overflow: hidden;
+    position: relative;
     isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     justify-content: flex-end;
     min-height: 26rem;
     padding: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
     background: var(--c-brown-deep);
     color: var(--c-cream);
-  }
-
-  .member__marble {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: url('../../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.07;
-    mix-blend-mode: screen;
   }
 
   .member--lead :global(.member__monogram) {
@@ -243,7 +126,7 @@ const initials = (name: string) =>
     top: clamp(1.75rem, 1rem + 2vw, 3rem);
     right: clamp(1.5rem, 0.5rem + 3vw, 3.5rem);
     width: auto;
-    height: clamp(8rem, 4rem + 13vw, 21rem);
+    height: clamp(8rem, 4rem + 13vw, 18rem);
     color: var(--c-gold);
     opacity: 0.4;
   }
@@ -252,27 +135,8 @@ const initials = (name: string) =>
     max-width: 34rem;
   }
 
-  .member__label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.9rem;
-    margin-bottom: var(--space-4);
-    font-size: var(--fs-xs);
-    font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--c-gold-light);
-  }
-
-  .member__label::before {
-    content: '';
-    width: 2.25rem;
-    height: 1px;
-    background: var(--c-gold-light);
-  }
-
   .member--lead .member__title {
-    font-size: clamp(1.9rem, 1.4rem + 1.8vw, 2.9rem);
+    font-size: clamp(2rem, 1.4rem + 1.8vw, 2.9rem);
     line-height: var(--lh-tight);
   }
 
@@ -282,6 +146,7 @@ const initials = (name: string) =>
 
   .member--lead .member__text {
     margin-top: var(--space-4);
+    max-width: var(--measure);
     font-size: var(--fs-md);
     font-weight: 300;
     color: var(--c-cream-muted);
@@ -291,30 +156,14 @@ const initials = (name: string) =>
     margin-top: var(--space-6);
   }
 
-  @media (min-width: 1100px) {
-    .member--lead {
-      min-height: 0;
-    }
-  }
-
   /* ---------- Netværk ---------- */
   .network {
-    position: relative;
     display: grid;
     gap: var(--space-6);
     margin-top: clamp(3rem, 2rem + 4vw, 5rem);
     padding: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
     border: 1px solid var(--c-line);
-    background-color: var(--c-paper);
-    background-image:
-      linear-gradient(
-        100deg,
-        color-mix(in srgb, var(--c-paper) 94%, transparent) 0%,
-        color-mix(in srgb, var(--c-paper) 80%, transparent) 100%
-      ),
-      url('../../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center;
+    background: var(--c-paper);
   }
 
   @media (min-width: 960px) {
@@ -325,23 +174,14 @@ const initials = (name: string) =>
     }
   }
 
-  .network .eyebrow {
-    margin-bottom: var(--space-4);
-  }
-
   .network__title {
     font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
     line-height: var(--lh-tight);
   }
 
-  .network__title em {
-    font-style: italic;
-    color: var(--c-gold-ink);
-  }
-
   .network__text {
     margin-top: var(--space-4);
-    max-width: 30rem;
+    max-width: var(--measure);
     color: var(--c-ink-2);
   }
 
@@ -382,5 +222,12 @@ const initials = (name: string) =>
 
   .network__link {
     margin-top: var(--space-5);
+  }
+
+  @media (forced-colors: active) {
+    .network__list li::before {
+      background: none;
+      border: 1px solid CanvasText;
+    }
   }
 </style>

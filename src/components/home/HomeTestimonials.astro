@@ -1,200 +1,96 @@
 ---
-// Kundeudtalelser i et roligt citat-layout.
+// Ét fremhævet kundecitat. Alle udtalelser har deres hjem på /cases/#udtalelser.
 // OBS: Indholdet kommer fra content.ts og er pt. eksempler (placeholder: true), der skal udskiftes.
 // Så længe en udtalelse er placeholder, signeres den "Eksempel på udtalelse" i stedet for navn/virksomhed,
 // så den ikke kan forveksles med en rigtig anmeldelse.
 import Icon from '../Icon.astro';
-import SectionHead from '../SectionHead.astro';
 import { testimonials } from '../../data/content';
+
+const t = testimonials[0];
 ---
 
-<section class="section section--beige quotes">
-  <div class="container">
-    <SectionHead eyebrow="Kundeudtalelser" title="Det siger <em>kunderne</em>" align="center" />
-
-    <div class="quotes__scroller" role="region" aria-label="Kundeudtalelser" data-quotes>
-      <ul class="quotes__grid">
-      {
-        testimonials.map((t, i) => (
-          <li data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
-            <figure class="quote">
-              <Icon name="quote" size={34} strokeWidth={1} class="quote__mark" />
-              <blockquote>
-                <p>{t.quote}</p>
-              </blockquote>
-              <figcaption>
-                {t.placeholder ? (
-                  <span class="quote__example">Eksempel på udtalelse</span>
-                ) : (
-                  <>
-                    <span class="quote__name">{t.name}</span>
-                    <span class="quote__company">{t.company}</span>
-                  </>
-                )}
-              </figcaption>
-            </figure>
-          </li>
-        ))
-      }
-      </ul>
-    </div>
-    <p class="quotes__hint" aria-hidden="true">Swipe for at se flere</p>
-  </div>
-</section>
+{
+  t && (
+    <section class="section section--beige quotes" aria-label="Kundeudtalelse">
+      <div class="container">
+        <figure class="quote-feature">
+          <Icon name="quote" size={34} strokeWidth={1} class="quote-feature__mark" />
+          <blockquote>
+            <p>{t.quote}</p>
+          </blockquote>
+          <figcaption>
+            {t.placeholder ? (
+              <span class="quote-feature__example">Eksempel på udtalelse</span>
+            ) : (
+              <>
+                <span class="quote-feature__name">{t.name}</span>
+                <span class="quote-feature__company">{t.company}</span>
+              </>
+            )}
+          </figcaption>
+        </figure>
+        <p class="quotes__more">
+          <a href="/cases/#udtalelser" class="text-link">
+            Flere udtalelser under cases <Icon name="arrow" size={16} />
+          </a>
+        </p>
+      </div>
+    </section>
+  )
+}
 
 <style>
-  /* Mobil/tablet: vandret swipe-række med snap og tynd guld-scrollbar (viser, at der er flere).
-     Desktop: tre kolonner med hårstreger. */
-  .quotes__scroller {
-    margin-inline: calc(-1 * var(--gutter));
-    padding-inline: var(--gutter);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-gold) transparent;
-  }
-
-  /* Fokusringen tegnes indenfor, så den ikke klippes af sidens kanter */
-  .quotes__scroller:focus-visible {
-    outline-offset: -3px;
-  }
-
-  .quotes__grid {
+  .quote-feature {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: min(84%, 26rem);
-    gap: 1rem;
-    list-style: none;
+    justify-items: center;
+    max-width: 46rem;
+    margin-inline: auto;
+    text-align: center;
   }
 
-  .quotes__grid > li {
-    display: flex;
-    scroll-snap-align: start;
-  }
-
-  .quote {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 2rem 1.75rem;
-    background: var(--c-paper);
-    border: 1px solid var(--c-sand);
-  }
-
-  .quotes__hint {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--c-muted);
-  }
-
-  .quotes__hint::after {
-    content: '';
-    width: 2.5rem;
-    height: 1px;
-    background: var(--c-gold);
-  }
-
-  @media (min-width: 960px) {
-    .quotes__scroller {
-      margin-inline: 0;
-      padding-inline: 0;
-      overflow: visible;
-    }
-
-    .quotes__grid {
-      grid-auto-flow: row;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-    }
-
-    .quote {
-      padding: 0.5rem clamp(1.75rem, 3vw, 3rem);
-      background: none;
-      border: 0;
-    }
-
-    .quotes__grid > li + li .quote {
-      border-left: 1px solid var(--c-sand);
-    }
-
-    .quotes__grid > li:first-child .quote {
-      padding-left: 0;
-    }
-
-    .quotes__grid > li:last-child .quote {
-      padding-right: 0;
-    }
-
-    .quotes__hint {
-      display: none;
-    }
-  }
-
-  .quote :global(.quote__mark) {
+  .quote-feature :global(.quote-feature__mark) {
     color: var(--c-gold);
   }
 
-  .quote blockquote {
-    flex: 1;
-    margin: 1.5rem 0 2rem;
+  .quote-feature blockquote {
+    margin: 1.75rem 0 2rem;
   }
 
-  .quote blockquote p {
+  .quote-feature blockquote p {
     font-family: var(--f-serif);
-    font-size: clamp(1.1rem, 1.05rem + 0.35vw, 1.3rem);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
     font-style: italic;
-    line-height: 1.6;
+    line-height: 1.35;
+    text-wrap: balance;
     color: var(--c-ink);
   }
 
-  .quote figcaption {
+  .quote-feature figcaption {
     display: grid;
     gap: 0.2rem;
+    min-width: 3rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--c-gold);
-    width: fit-content;
-    min-width: 3rem;
   }
 
-  .quote__name {
+  .quote-feature__name {
     font-size: var(--fs-sm);
     font-weight: 500;
     letter-spacing: 0.04em;
   }
 
-  .quote__company {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--c-muted);
-  }
-
-  .quote__example {
+  .quote-feature__company,
+  .quote-feature__example {
     font-size: var(--fs-xs);
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--c-muted);
   }
-</style>
 
-<script>
-  // Gør kun swipe-rækken fokuserbar (tastatur-scroll), når den faktisk kan scrolles.
-  document.querySelectorAll<HTMLElement>('[data-quotes]').forEach((el) => {
-    const update = () => {
-      if (el.scrollWidth > el.clientWidth + 1) el.setAttribute('tabindex', '0');
-      else el.removeAttribute('tabindex');
-    };
-    update();
-    window.addEventListener('resize', update, { passive: true });
-  });
-</script>
+  .quotes__more {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+</style>

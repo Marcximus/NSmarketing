@@ -1,7 +1,6 @@
 ---
-// Topsektion til undersider. Titlen må indeholde <em> for kursiv guld-accent.
+// Topsektion til undersider: H1 + lead + handlinger på synlig marmor. Ingen kicker; titlen skrives uden <em>.
 interface Props {
-  eyebrow: string;
   title: string;
   lead?: string;
   align?: 'left' | 'center';
@@ -9,16 +8,15 @@ interface Props {
   compact?: boolean;
 }
 
-const { eyebrow, title, lead, align = 'center', compact = false } = Astro.props;
+const { title, lead, align = 'center', compact = false } = Astro.props;
 ---
 
 <section class:list={['page-hero', `page-hero--${align}`, compact && 'page-hero--compact']}>
-  <div class="page-hero__marble" aria-hidden="true"></div>
+  <div class="marble page-hero__marble" aria-hidden="true"></div>
   <div class="container page-hero__inner">
-    <p class:list={['eyebrow', align === 'center' && 'eyebrow--center']} data-reveal>{eyebrow}</p>
-    <h1 set:html={title} data-reveal style="--reveal-delay: .08s" />
-    {lead && <p class="lead" data-reveal style="--reveal-delay: .16s">{lead}</p>}
-    <div class="page-hero__actions" data-reveal style="--reveal-delay: .24s"><slot /></div>
+    <h1 set:html={title} />
+    {lead && <p class="lead">{lead}</p>}
+    <div class="page-hero__actions"><slot /></div>
   </div>
 </section>
 
@@ -36,15 +34,14 @@ const { eyebrow, title, lead, align = 'center', compact = false } = Astro.props;
     padding-top: clamp(3rem, 2rem + 3vw, 5rem);
   }
 
+  /* Marmor (global .marble) med en lettere papirvask end før (72–92 %), så årerne kan ses */
   .page-hero__marble {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image:
-      linear-gradient(180deg, rgba(250, 247, 242, 0.72) 0%, rgba(250, 247, 242, 0.92) 100%),
-      url('../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center 30%;
+    --marble-wash: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-paper) 62%, transparent) 0%,
+      color-mix(in srgb, var(--c-paper) 86%, transparent) 100%
+    );
+    --marble-pos: center 30%;
   }
 
   .page-hero__inner {
@@ -56,7 +53,7 @@ const { eyebrow, title, lead, align = 'center', compact = false } = Astro.props;
   }
 
   .page-hero .lead {
-    max-width: 42rem;
+    max-width: var(--measure);
     margin-top: var(--space-5);
   }
 
@@ -80,6 +77,41 @@ const { eyebrow, title, lead, align = 'center', compact = false } = Astro.props;
     .page-hero__actions:not(:empty) {
       flex-direction: column;
       align-items: stretch;
+    }
+  }
+
+  /* Lav desktop/laptop (fx 1280×720): samme greb som forsidens hero – mindre H1 og topluft.
+     Bundpaddingen røres ikke, fordi pakkekortenes overlap (PlanCards) regner med den. */
+  @media (min-width: 1024px) and (max-height: 820px) {
+    .page-hero {
+      padding-top: clamp(3rem, 1rem + 5vh, 4.5rem);
+    }
+
+    .page-hero--compact {
+      padding-top: 2.5rem;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(2.75rem, 1rem + 7vh, 4.25rem);
+    }
+  }
+
+  /* Telefon på tværs: kompakt hero, så indholdet under (fx pakkerne) begynder i første skærmbillede */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .page-hero {
+      padding-block: 1.75rem 2.25rem;
+    }
+
+    .page-hero h1 {
+      font-size: 2.25rem;
+    }
+
+    .page-hero .lead {
+      margin-top: 0.75rem;
+    }
+
+    .page-hero__actions:not(:empty) {
+      margin-top: 1.25rem;
     }
   }
 </style>

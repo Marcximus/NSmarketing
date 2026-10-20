@@ -56,8 +56,8 @@ Logoet i `public/brand/` er vektoriseret ud fra den JPG, vi fik. Har I den origi
 - [ ] Pakkenavne (Silver / Gold / Black) godkendt
 - [ ] CVR-nummer og adresse (`site.ts`). E-handelsloven § 7 kræver normalt, at hjemmesiden oplyser en geografisk adresse. Adressen vises automatisk i footer, på kontaktsiden og i privatlivspolitikken, når den er sat.
 - [ ] Åbningstider og tidsfristen for "Bliv ringet op samme dag" (`site.ts` → `hours`, `callbackCutoff`)
-- [ ] Links til egne profiler på Instagram, Facebook, LinkedIn og TikTok (`site.ts`)
-- [ ] Formular-endpoint oprettet, fx gratis hos [Formspree](https://formspree.io) eller [Web3Forms](https://web3forms.com), og URL'en indsat i `site.ts` → `formEndpoint`. Indtil da åbner formularerne brugerens mailprogram.
+- [ ] Links til egne profiler på Instagram, Facebook, LinkedIn og TikTok (`site.ts`). Ikonerne i topbar, footer og på kontaktsiden vises først, når der står en rigtig profil-URL (fx `https://www.instagram.com/silbergcreative/`) – ikke bare platformens forside.
+- [ ] Formular-endpoint oprettet, fx gratis hos [Formspree](https://formspree.io) eller [Web3Forms](https://web3forms.com), og URL'en indsat i `site.ts` → `formEndpoint`. Indtil da åbner formularerne brugerens mailprogram (med en ærlig besked om at trykke send), og nyhedsbrevstilmeldingen i footeren er skjult.
 - [ ] Svar i FAQ bekræftet (binding, opstart, rettigheder) (`content.ts`)
 - [ ] Løfterne (svartid, fast kontaktperson osv.) bekræftet (`content.ts`)
 - [ ] Rigtige cases, kundeudtalelser og team indsat. **Eksempelindholdet (markeret `placeholder: true` / "[Kundenavn]") må ikke gå live**, da det ville være vildledende markedsføring.
@@ -81,6 +81,31 @@ npm run check     # tjekker typer og Astro-filer
 ```
 
 Marmorteksturen er genereret med `python3 scripts/generate-marble.py`.
+
+## Design-system og Impeccable
+
+Designet er finpudset med [Impeccable](https://github.com/pbakaus/impeccable) (open source design-skill af Paul Bakaus, Apache 2.0) og er dokumenteret i **`DESIGN.md`** i projektroden: farver, typografi, layout, komponenter og de regler, der holder sitet on-brand ("stille luksus": Playfair-overskrifter uden kicker og uden kursive guldord, hårstreger i stedet for ikonkort, guld som accent, marmor kun hvor årerne kan ses). Læs den, før der tilføjes nye sider eller sektioner. Maskinlæsbare tokens står i frontmatter, og `.impeccable/design.json` er en sidecar til Impeccables live-panel.
+
+Impeccables detektor finder typiske skabelon-mønstre (kicker over overskrifter, ikonfliser, for lange linjer, begravet marmor, for lille tekst osv.). Kør den mod det byggede site:
+
+```bash
+npm run build
+npm run preview -- --port 4321          # i én terminal
+npx impeccable detect http://localhost:4321/ http://localhost:4321/pakkeloesninger/ \
+  http://localhost:4321/cases/ http://localhost:4321/om-os/ http://localhost:4321/karriere/ \
+  http://localhost:4321/kontakt/ http://localhost:4321/privatlivspolitik/ \
+  http://localhost:4321/cookiepolitik/ http://localhost:4321/404/ --viewport 1440x900
+# gentag med --viewport 390x844 for mobil; tilføj --json for maskinlæsbart output
+```
+
+Detektoren bruger en headless Chrome/Chromium (sæt `IMPECCABLE_BROWSER=/sti/til/chrome`, hvis den ikke findes automatisk). Den kan også scanne kildefiler: `npx impeccable detect src/`.
+
+Forventet resultat er **0 fund**. To bevidste undtagelser er registreret med begrundelse i `.impeccable/config.json` (se dem med `npx impeccable ignores list`):
+
+- `cream-palette` på hele sitet – papir/beige er kundens egne brandfarver.
+- `italic-serif-display` kun på forsidens rod-URL – ordet "scene" i H1 er sitets ene kursive signatur.
+
+Tilføj kun nye undtagelser, når kunden eller brandbriefet står bag (`npx impeccable ignores add-value <regel> "*" --file "<glob>" --reason "..."`). Ret ellers fundet.
 
 ## Hosting
 

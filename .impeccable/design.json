@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-20T17:10:12Z",
+  "title": "Design System: Silberg Creative",
+  "extensions": {
+    "colorMeta": {
+      "white": {
+        "role": "neutral",
+        "displayName": "Hvid",
+        "canonical": "oklch(1.000 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(0.15 0.000 89.9)",
+          "oklch(0.26 0.000 89.9)",
+          "oklch(0.38 0.000 89.9)",
+          "oklch(0.49 0.000 89.9)",
+          "oklch(0.61 0.000 89.9)",
+          "oklch(0.72 0.000 89.9)",
+          "oklch(0.84 0.000 89.9)",
+          "oklch(0.95 0.000 89.9)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papir",
+        "canonical": "oklch(0.977 0.007 80.7)",
+        "tonalRamp": [
+          "oklch(0.15 0.007 80.7)",
+          "oklch(0.26 0.007 80.7)",
+          "oklch(0.38 0.007 80.7)",
+          "oklch(0.49 0.007 80.7)",
+          "oklch(0.61 0.007 80.7)",
+          "oklch(0.72 0.007 80.7)",
+          "oklch(0.84 0.007 80.7)",
+          "oklch(0.95 0.007 80.7)"
+        ]
+      },
+      "beige": {
+        "role": "neutral",
+        "displayName": "Beige",
+        "canonical": "oklch(0.931 0.017 76.1)",
+        "tonalRamp": [
+          "oklch(0.15 0.017 76.1)",
+          "oklch(0.26 0.017 76.1)",
+          "oklch(0.38 0.017 76.1)",
+          "oklch(0.49 0.017 76.1)",
+          "oklch(0.61 0.017 76.1)",
+          "oklch(0.72 0.017 76.1)",
+          "oklch(0.84 0.017 76.1)",
+          "oklch(0.95 0.017 76.1)"
+        ]
+      },
+      "sand": {
+        "role": "neutral",
+        "displayName": "Sand",
+        "canonical": "oklch(0.860 0.027 74.7)",
+        "tonalRamp": [
+          "oklch(0.15 0.027 74.7)",
+          "oklch(0.26 0.027 74.7)",
+          "oklch(0.38 0.027 74.7)",
+          "oklch(0.49 0.027 74.7)",
+          "oklch(0.61 0.027 74.7)",
+          "oklch(0.72 0.027 74.7)",
+          "oklch(0.84 0.027 74.7)",
+          "oklch(0.95 0.027 74.7)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hårstreg",
+        "canonical": "oklch(0.895 0.019 75.3)",
+        "tonalRamp": [
+          "oklch(0.15 0.019 75.3)",
+          "oklch(0.26 0.019 75.3)",
+          "oklch(0.38 0.019 75.3)",
+          "oklch(0.49 0.019 75.3)",
+          "oklch(0.61 0.019 75.3)",
+          "oklch(0.72 0.019 75.3)",
+          "oklch(0.84 0.019 75.3)",
+          "oklch(0.95 0.019 75.3)"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Varm ink",
+        "canonical": "oklch(0.181 0.006 55.9)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 55.9)",
+          "oklch(0.26 0.006 55.9)",
+          "oklch(0.38 0.006 55.9)",
+          "oklch(0.49 0.006 55.9)",
+          "oklch(0.61 0.006 55.9)",
+          "oklch(0.72 0.006 55.9)",
+          "oklch(0.84 0.006 55.9)",
+          "oklch(0.95 0.006 55.9)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Sekundær tekst",
+        "canonical": "oklch(0.389 0.015 59.2)",
+        "tonalRamp": [
+          "oklch(0.15 0.015 59.2)",
+          "oklch(0.26 0.015 59.2)",
+          "oklch(0.38 0.015 59.2)",
+          "oklch(0.49 0.015 59.2)",
+          "oklch(0.61 0.015 59.2)",
+          "oklch(0.72 0.015 59.2)",
+          "oklch(0.84 0.015 59.2)",
+          "oklch(0.95 0.015 59.2)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Dæmpet tekst",
+        "canonical": "oklch(0.511 0.020 61.7)",
+        "tonalRamp": [
+          "oklch(0.15 0.020 61.7)",
+          "oklch(0.26 0.020 61.7)",
+          "oklch(0.38 0.020 61.7)",
+          "oklch(0.49 0.020 61.7)",
+          "oklch(0.61 0.020 61.7)",
+          "oklch(0.72 0.020 61.7)",
+          "oklch(0.84 0.020 61.7)",
+          "oklch(0.95 0.020 61.7)"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Feltkant",
+        "canonical": "oklch(0.598 0.025 67.3)",
+        "tonalRamp": [
+          "oklch(0.15 0.025 67.3)",
+          "oklch(0.26 0.025 67.3)",
+          "oklch(0.38 0.025 67.3)",
+          "oklch(0.49 0.025 67.3)",
+          "oklch(0.61 0.025 67.3)",
+          "oklch(0.72 0.025 67.3)",
+          "oklch(0.84 0.025 67.3)",
+          "oklch(0.95 0.025 67.3)"
+        ]
+      },
+      "brown": {
+        "role": "primary",
+        "displayName": "Mørkebrun",
+        "canonical": "oklch(0.301 0.029 50.6)",
+        "tonalRamp": [
+          "oklch(0.15 0.029 50.6)",
+          "oklch(0.26 0.029 50.6)",
+          "oklch(0.38 0.029 50.6)",
+          "oklch(0.49 0.029 50.6)",
+          "oklch(0.61 0.029 50.6)",
+          "oklch(0.72 0.029 50.6)",
+          "oklch(0.84 0.029 50.6)",
+          "oklch(0.95 0.029 50.6)"
+        ]
+      },
+      "brown-deep": {
+        "role": "primary",
+        "displayName": "Dyb mørkebrun",
+        "canonical": "oklch(0.226 0.020 45.6)",
+        "tonalRamp": [
+          "oklch(0.15 0.020 45.6)",
+          "oklch(0.26 0.020 45.6)",
+          "oklch(0.38 0.020 45.6)",
+          "oklch(0.49 0.020 45.6)",
+          "oklch(0.61 0.020 45.6)",
+          "oklch(0.72 0.020 45.6)",
+          "oklch(0.84 0.020 45.6)",
+          "oklch(0.95 0.020 45.6)"
+        ]
+      },
+      "gold": {
+        "role": "secondary",
+        "displayName": "Messing-guld",
+        "canonical": "oklch(0.664 0.083 77.4)",
+        "tonalRamp": [
+          "oklch(0.15 0.083 77.4)",
+          "oklch(0.26 0.083 77.4)",
+          "oklch(0.38 0.083 77.4)",
+          "oklch(0.49 0.083 77.4)",
+          "oklch(0.61 0.083 77.4)",
+          "oklch(0.72 0.083 77.4)",
+          "oklch(0.84 0.083 77.4)",
+          "oklch(0.95 0.083 77.4)"
+        ]
+      },
+      "gold-ink": {
+        "role": "secondary",
+        "displayName": "Guld som tekst",
+        "canonical": "oklch(0.503 0.076 76.4)",
+        "tonalRamp": [
+          "oklch(0.15 0.076 76.4)",
+          "oklch(0.26 0.076 76.4)",
+          "oklch(0.38 0.076 76.4)",
+          "oklch(0.49 0.076 76.4)",
+          "oklch(0.61 0.076 76.4)",
+          "oklch(0.72 0.076 76.4)",
+          "oklch(0.84 0.076 76.4)",
+          "oklch(0.95 0.076 76.4)"
+        ]
+      },
+      "gold-light": {
+        "role": "secondary",
+        "displayName": "Lys guld",
+        "canonical": "oklch(0.798 0.069 81.2)",
+        "tonalRamp": [
+          "oklch(0.15 0.069 81.2)",
+          "oklch(0.26 0.069 81.2)",
+          "oklch(0.38 0.069 81.2)",
+          "oklch(0.49 0.069 81.2)",
+          "oklch(0.61 0.069 81.2)",
+          "oklch(0.72 0.069 81.2)",
+          "oklch(0.84 0.069 81.2)",
+          "oklch(0.95 0.069 81.2)"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Creme",
+        "canonical": "oklch(0.951 0.011 76.6)",
+        "tonalRamp": [
+          "oklch(0.15 0.011 76.6)",
+          "oklch(0.26 0.011 76.6)",
+          "oklch(0.38 0.011 76.6)",
+          "oklch(0.49 0.011 76.6)",
+          "oklch(0.61 0.011 76.6)",
+          "oklch(0.72 0.011 76.6)",
+          "oklch(0.84 0.011 76.6)",
+          "oklch(0.95 0.011 76.6)"
+        ]
+      },
+      "cream-muted": {
+        "role": "neutral",
+        "displayName": "Dæmpet creme",
+        "canonical": "oklch(0.812 0.028 72.7)",
+        "tonalRamp": [
+          "oklch(0.15 0.028 72.7)",
+          "oklch(0.26 0.028 72.7)",
+          "oklch(0.38 0.028 72.7)",
+          "oklch(0.49 0.028 72.7)",
+          "oklch(0.61 0.028 72.7)",
+          "oklch(0.72 0.028 72.7)",
+          "oklch(0.84 0.028 72.7)",
+          "oklch(0.95 0.028 72.7)"
+        ]
+      },
+      "error": {
+        "role": "error",
+        "displayName": "Fejl",
+        "canonical": "oklch(0.465 0.147 24.9)",
+        "tonalRamp": [
+          "oklch(0.15 0.147 24.9)",
+          "oklch(0.26 0.147 24.9)",
+          "oklch(0.38 0.147 24.9)",
+          "oklch(0.49 0.147 24.9)",
+          "oklch(0.61 0.147 24.9)",
+          "oklch(0.72 0.147 24.9)",
+          "oklch(0.84 0.147 24.9)",
+          "oklch(0.95 0.147 24.9)"
+        ]
+      },
+      "error-on-dark": {
+        "role": "error",
+        "displayName": "Fejl på mørk",
+        "canonical": "oklch(0.831 0.071 36.0)",
+        "tonalRamp": [
+          "oklch(0.15 0.071 36.0)",
+          "oklch(0.26 0.071 36.0)",
+          "oklch(0.38 0.071 36.0)",
+          "oklch(0.49 0.071 36.0)",
+          "oklch(0.61 0.071 36.0)",
+          "oklch(0.72 0.071 36.0)",
+          "oklch(0.84 0.071 36.0)",
+          "oklch(0.95 0.071 36.0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Kun forsidens H1; eneste kursive overskriftsord er \"scene\"."
+      },
+      "headline-lg": {
+        "displayName": "Headline lg",
+        "purpose": "Undersidernes H1 i PageHero – altid et trin under display."
+      },
+      "display-compact": {
+        "displayName": "Display compact",
+        "purpose": "Heroer på lave laptop-skærme (max-height 820px)."
+      },
+      "display-landscape": {
+        "displayName": "Display landscape",
+        "purpose": "Heroer på telefon på tværs (max-height 500px)."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Det dekorative 404-tal; proces-numrene bruger samme stemme mindre."
+      },
+      "quote": {
+        "displayName": "Quote",
+        "purpose": "Fremhævede citater i kursiv Playfair."
+      },
+      "title-lg": {
+        "displayName": "Title lg",
+        "purpose": "Serif-mellemtrin: tillægskategorier, netværksboks, telefonnummer i kontaktkortet."
+      },
+      "headline-md": {
+        "displayName": "Headline md",
+        "purpose": "Sektions-H2."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "H3 og titler i redaktionelle lister."
+      },
+      "title-sm": {
+        "displayName": "Title sm",
+        "purpose": "H4 og titler i Read-mode."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Indledninger, max-width --measure."
+      },
+      "body-lg": {
+        "displayName": "Body lg",
+        "purpose": "Små titler i hjælpebokse og pakkevælgeren, juridiske termer (= --fs-md)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Brødtekst, max-width --measure på længere tekst."
+      },
+      "body-md": {
+        "displayName": "Body md",
+        "purpose": "Beskrivelser i lister, kort, tabeller og prislister."
+      },
+      "body-sm": {
+        "displayName": "Body sm",
+        "purpose": "Beskrivelser i lister og kort."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Formularlabels, tabelhoveder, footer-titler, topbar – kun data og kontroller."
+      },
+      "label-min": {
+        "displayName": "Label min",
+        "purpose": "Tags, badges, enheder. 11 px er gulvet."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Knapper og tekstlinks."
+      },
+      "price": {
+        "displayName": "Pris",
+        "purpose": "Priser og nøgletal med lining- og tabulære tal."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-soft",
+        "value": "0 24px 60px -30px color-mix(in srgb, var(--c-brown-deep) 35%, transparent)",
+        "purpose": "Eneste skygge: flydende kort (teamkortet i forsidens intro)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Standard for hover- og tilstandsskift (0.45s)."
+      },
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Forsidens hero: billedet sætter sig (1.8s), H1 afdækkes nedefra (1.3s, clip-path). Ingen animation ved prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "390px"
+      },
+      {
+        "name": "buttons-stack",
+        "value": "479px"
+      },
+      {
+        "name": "ruled-2",
+        "value": "720px"
+      },
+      {
+        "name": "split-head",
+        "value": "900px"
+      },
+      {
+        "name": "ruled-3",
+        "value": "960px"
+      },
+      {
+        "name": "plans-overlap",
+        "value": "1000px"
+      },
+      {
+        "name": "desktop-nav",
+        "value": "1024px"
+      },
+      {
+        "name": "low-desktop",
+        "value": "(min-width: 1024px) and (max-height: 820px)"
+      },
+      {
+        "name": "phone-landscape",
+        "value": "(orientation: landscape) and (max-height: 500px)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primærknap",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primær handling på lyse flader: ink-flade, papirtekst, skarpe hjørner, pil der rykker ved hover.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Se pakkerne <svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; gap: 0.85em; min-height: 3.25rem; padding: 0.85rem 1.9rem; border: 1px solid var(--c-ink, #14110f); border-radius: 0; background: var(--c-ink, #14110f); color: var(--c-paper, #faf7f2); font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: background-color .45s cubic-bezier(0.22,1,0.36,1), border-color .45s cubic-bezier(0.22,1,0.36,1); } .ds-btn svg { transition: transform .45s cubic-bezier(0.22,1,0.36,1); } .ds-btn:hover { background: var(--c-brown, #3a2a21); border-color: var(--c-brown, #3a2a21); } .ds-btn:hover svg { transform: translateX(4px); } .ds-btn:focus-visible { outline: 2px solid var(--c-gold-ink, #7d5e2e); outline-offset: 3px; }"
+    },
+    {
+      "name": "Outline-knap",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Sekundær handling på lyse flader: transparent med ink-kant, fyldes med ink ved hover.",
+      "html": "<a class=\"ds-btn-outline\" href=\"#\">Book et uforpligtende møde</a>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; min-height: 3.25rem; padding: 0.85rem 1.9rem; border: 1px solid var(--c-ink, #14110f); border-radius: 0; background: transparent; color: var(--c-ink, #14110f); font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: background-color .45s, color .45s; } .ds-btn-outline:hover { background: var(--c-ink, #14110f); color: var(--c-paper, #faf7f2); } .ds-btn-outline:focus-visible { outline: 2px solid var(--c-gold-ink, #7d5e2e); outline-offset: 3px; }"
+    },
+    {
+      "name": "Guldknap på mørk",
+      "kind": "button",
+      "refersTo": "button-gold",
+      "description": "Primær handling på mørkebrune bånd: lys guld med dyb mørkebrun tekst, creme ved hover.",
+      "html": "<div class=\"ds-dark\"><a class=\"ds-btn-gold\" href=\"#\">Book et uforpligtende møde</a></div>",
+      "css": ".ds-dark { background: var(--c-brown, #3a2a21); padding: 1.5rem; } .ds-btn-gold { display: inline-flex; align-items: center; min-height: 3.25rem; padding: 0.85rem 1.9rem; border: 1px solid var(--c-gold-light, #d4b98a); border-radius: 0; background: var(--c-gold-light, #d4b98a); color: var(--c-brown-deep, #241914); font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: background-color .45s, border-color .45s; } .ds-btn-gold:hover { background: var(--c-cream, #f3eee7); border-color: var(--c-cream, #f3eee7); } .ds-btn-gold:focus-visible { outline: 2px solid var(--c-gold-light, #d4b98a); outline-offset: 3px; }"
+    },
+    {
+      "name": "Tekstlink",
+      "kind": "custom",
+      "refersTo": "text-link",
+      "description": "Spærret tekstlink med 1px understregning, der trækker sig tilbage ved hover.",
+      "html": "<a class=\"ds-text-link\" href=\"#\">Se alle cases <svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-text-link { display: inline-flex; align-items: center; gap: 0.6em; padding-block: 0.35em; font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: var(--c-ink, #14110f); background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat; transition: background-size .45s cubic-bezier(0.22,1,0.36,1), color .45s; } .ds-text-link:hover { background-size: 0% 1px; background-position: right bottom; color: var(--c-gold-ink, #7d5e2e); } .ds-text-link:focus-visible { outline: 2px solid var(--c-gold-ink, #7d5e2e); outline-offset: 3px; }"
+    },
+    {
+      "name": "Formularfelt",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Spærret label over et hvidt felt med 1px feltkant og skarpe hjørner.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field__label\">Navn *</span><input class=\"ds-input\" type=\"text\" placeholder=\"Jeres navn\"></label>",
+      "css": ".ds-field { display: grid; gap: 0.5rem; max-width: 22rem; } .ds-field__label { font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--c-ink-2, #4b433d); } .ds-input { min-height: 3.25rem; padding: 0.85rem 1rem; border: 1px solid var(--c-field, #8a7d70); border-radius: 0; background: var(--c-white, #fff); color: var(--c-ink, #14110f); font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 1.0625rem; transition: border-color .45s; } .ds-input::placeholder { color: var(--c-muted, #6f645b); } .ds-input:hover { border-color: var(--c-ink-2, #4b433d); } .ds-input:focus { border-color: var(--c-ink, #14110f); outline: 2px solid var(--c-gold-ink, #7d5e2e); outline-offset: 3px; } .ds-input[aria-invalid='true'] { border-color: var(--c-error, #9b2c2c); }"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Datamærke for ydelser og roller: transparent, 1px sand-kant, 11px spærrede versaler.",
+      "html": "<span class=\"ds-tag\">Sociale medier</span> <span class=\"ds-tag ds-tag--gold\">Kun teknisk nødvendige</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; padding: 0.3rem 0.7rem; border: 1px solid var(--c-sand, #dccfbe); font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-ink-2, #4b433d); } .ds-tag--gold { border-color: var(--c-gold, #b08d57); color: var(--c-gold-ink, #7d5e2e); }"
+    },
+    {
+      "name": "Hovedmenu",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Spærrede versaler i ink; aktiv side har en guldstreg, hover tegner den fra venstre.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Eksempel\"><a href=\"#\" aria-current=\"page\">Pakkeløsninger</a><a href=\"#\">Cases</a><a href=\"#\">Om os</a><a href=\"#\">Kontakt</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 1.75rem; } .ds-nav a { position: relative; padding-block: 0.5rem; font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: var(--c-ink, #14110f); } .ds-nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0.1rem; height: 1px; background: var(--c-gold, #b08d57); transform: scaleX(0); transform-origin: right; transition: transform .45s cubic-bezier(0.22,1,0.36,1); } .ds-nav a[aria-current='page']::after, .ds-nav a:hover::after { transform: scaleX(1); transform-origin: left; } .ds-nav a:focus-visible { outline: 2px solid var(--c-gold-ink, #7d5e2e); outline-offset: 3px; }"
+    },
+    {
+      "name": "Redaktionel liste",
+      "kind": "custom",
+      "refersTo": "ruled-list",
+      "description": "Erstatter kort med ikon + overskrift + tekst: hårstreg over hvert punkt, Playfair-titel, ingen bokse.",
+      "html": "<ul class=\"ds-ruled\"><li><h3>Strategi &amp; styring</h3><p>Vi lægger strategien og står for den daglige drift.</p></li><li><h3>Produktion &amp; content</h3><p>Billeder, reels og stories, der ligner jer – bare skarpere.</p></li></ul>",
+      "css": ".ds-ruled { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; border-bottom: 1px solid var(--c-line, #e4dbcf); } .ds-ruled li { padding-block: 1.75rem; border-top: 1px solid var(--c-line, #e4dbcf); } .ds-ruled h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 1.6rem; font-weight: 400; line-height: 1.25; letter-spacing: -0.01em; color: var(--c-ink, #14110f); } .ds-ruled p { margin: 0.75rem 0 0; max-width: 30em; font-family: Jost, 'Helvetica Neue', Arial, sans-serif; color: var(--c-ink-2, #4b433d); }"
+    },
+    {
+      "name": "Prisliste-række",
+      "kind": "custom",
+      "refersTo": "price-list",
+      "description": "Tillæg som menukort: navn og beskrivelse til venstre, pris højrestillet i Playfair med lining-tal.",
+      "html": "<div class=\"ds-menu\"><div><h4 class=\"ds-menu__name\">Statister &amp; modeller</h4><p class=\"ds-menu__desc\">Vi caster og booker statister til jeres optagelser.</p></div><div class=\"ds-menu__side\"><p class=\"ds-menu__price\">Fra 1.500 kr.</p><span class=\"ds-menu__unit\">pr. person pr. optagedag</span></div></div>",
+      "css": ".ds-menu { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 2.5rem; align-items: baseline; padding-block: 1.25rem; border-block: 1px solid var(--c-line, #e4dbcf); } .ds-menu__name { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 1.375rem; font-weight: 400; } .ds-menu__desc { margin: 0.35rem 0 0; max-width: 30em; font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.875rem; color: var(--c-ink-2, #4b433d); } .ds-menu__side { text-align: right; } .ds-menu__price { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 1.25rem; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; } .ds-menu__unit { font-family: Jost, 'Helvetica Neue', Arial, sans-serif; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-muted, #6f645b); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Stille luksus",
+    "overview": "Silberg Creative skal føles som et større, etableret bureau uden at råbe. Identiteten bæres af store Playfair-overskrifter i ink, hårstreger i stedet for bokse, guld som accent på knapper, streger og ikoner, mørkebrune bånd og marmor, der kun ses få og bevidste steder. Alt er skarpt: ingen runde hjørner, ingen skygger som pynt, ingen gradient-tekst. Kunden ser materialer (papir, messing, marmor, mørkt træ) frem for effekter.\n\nSitet er et Persuade-site (forside, pakker, cases, om os, karriere, kontakt) med to Read-sider (privatlivs- og cookiepolitik). På Persuade-siderne arbejder rytmen med store overskrifter, rolig luft og ét forfattet øjeblik: forsidens hero, hvor billedet sætter sig, og H1 afdækkes nedefra som et tæppe, der går op. Resten står stille. På Read-siderne er ambitionen præcision: en læsespalte på cirka 70 tegn, nummererede afsnit og en indholdsfortegnelse.\n\nSkabelon-ritualet er bevidst fjernet: ingen kicker over overskrifter, ingen kursive guldord i overskrifter (undtagen forsidens ene \"scene\"), ingen nummererede ikonkort, intet tal-bånd, ingen marquee og ingen scroll-reveal. Hver overskrift skal bære sig selv.",
+    "keyCharacteristics": [
+      "Playfair Display (matcher logoets serif-wordmark) til overskrifter, Jost til brødtekst, kontroller og data.",
+      "Varm papirgrund og beige sektioner; mørkebrune bånd som kontrast; guld kun som accent.",
+      "Hårstreger (1px) strukturerer indhold; kort og fliser undgås.",
+      "Marmor som materiale, kun hvor årerne kan ses.",
+      "Spærrede versaler kun på data og kontroller, aldrig som kicker."
+    ],
+    "rules": [
+      {
+        "name": "The Brass Rule",
+        "body": "Guld er en accent: knapper på mørk, streger, ikoner, badges og små datamærker. Guld bruges aldrig til at farve et ord i en overskrift.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pinned Palette Rule",
+        "body": "Papir, beige, mørkebrun og marmor er kundens valg. De erstattes ikke af \"mere originale\" farver, selvom en detektor foreslår det.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Kicker Rule",
+        "body": "Ingen label-blok direkte over en h1–h3, heller ikke som hero-chip. Bærer labelen information, skrives den ind i overskriften eller leadet.",
+        "section": "typography"
+      },
+      {
+        "name": "The Roman Heading Rule",
+        "body": "`em` i overskrifter neutraliseres globalt (arver stil og farve). Fremhævning sker med ordvalg, størrelse, vægt og placering. Eneste undtagelse er forsidens \"scene\", som styles lokalt i HomeHero.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tracked Caps Rule",
+        "body": "Spærrede versaler bruges kun på data og kontroller: labels, tabelhoveder, tags, badges, enheder, meta-rækker (\"Eksempel · København\"), knapper og tekstlinks.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Ingen glød, ingen hårde blokskygger, ingen glas som pynt. Hvis noget skal løftes, sker det med en tonal flade eller en hårstreg.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Visible Marble Rule",
+        "body": "Marmor er PINNED brandmateriale og bruges kun, hvor årerne kan ses, via de delte klasser: `.marble` (lys, papirvask ≤ cirka 85 % via `--marble-wash`) og `.marble.marble--dark` (invert, sepia 0,5 og screen ved cirka 0,4). Tilladte steder: PageHero, forsidens proces, 404, founder-kortet på Om os og udtalelserne på Cases. Alle andre flader er flad token-farve. Under forced colors skjules marmoren.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** lad overskriften stå alene: Playfair i ink, roman, `text-wrap: balance`, uden label over.",
+      "**Do** brug `.ruled-list` eller en prisliste, når flere ensartede punkter skal vises.",
+      "**Do** brug tokens og `color-mix(in srgb, var(--token) X%, transparent)` til alle farver og gennemsigtigheder.",
+      "**Do** hold længere tekst inden for `--measure` (30em) og UI-tekst på mindst 0.6875rem.",
+      "**Do** brug guld som accent på knapper på mørk, streger, ikoner og badges.",
+      "**Do** brug marmor kun via `.marble` / `.marble--dark` og kun dér, hvor årerne kan ses.",
+      "**Do** behold \"Eksempel\"-mærkningen på alt eksempelindhold, indtil der er rigtige cases, udtalelser og navne.",
+      "**Do** tegn funktionelle streger og ikoner med border eller currentColor (forced colors)."
+    ],
+    "donts": [
+      "**Don't** sæt en kicker, eyebrow eller hero-chip over en h1–h3.",
+      "**Don't** farv eller kursivér enkeltord i overskrifter; eneste undtagelse er forsidens \"scene\".",
+      "**Don't** byg grids af ens kort med ikon + overskrift + tekst, og sæt ikke ikoner i indrammede fliser.",
+      "**Don't** nummerér punkter (01/02/03), medmindre rækkefølgen er information (proces, \"Hvad sker der nu?\", ansøgningstrin, juridiske afsnit).",
+      "**Don't** tilføj tal-bånd, marquee eller scroll-reveal; sitet har ét forfattet bevægelsesøjeblik (forsidens hero), og ved `prefers-reduced-motion` er der ingen animation.",
+      "**Don't** brug runde hjørner, dekorative skygger, gradient-tekst eller en farvet border-left over 1px.",
+      "**Don't** læg marmor under en næsten opak vask, hvor årerne forsvinder.",
+      "**Don't** tilføj nye påstande, tal eller kundenavne uden kundens bekræftelse."
+    ]
+  }
+}

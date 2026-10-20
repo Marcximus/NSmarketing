@@ -1,5 +1,6 @@
 ---
 // Nummereret afsnit i en juridisk tekst. Bruges inde i LegalLayout.
+// Nummeret står på overskriftens grundlinje (hængende på desktop), ikke som en label over overskriften.
 interface Props {
   id: string;
   number: number;
@@ -32,30 +33,35 @@ const num = String(number).padStart(2, '0');
     padding-top: 0;
   }
 
+  /* Nummeret står på overskriftens grundlinje – ikke som en label over den. Numrene bevares, fordi
+     afsnittene krydsrefereres i teksten (fx "afsnit 05"). Roman, lining-tal, samme kolonne som i
+     indholdsfortegnelsen. */
   .legal-section__head {
-    display: grid;
-    gap: var(--space-3);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
     margin-bottom: var(--space-5);
   }
 
   .legal-section__num {
-    font-size: var(--fs-xs);
+    flex: none;
+    width: 1.75rem;
+    font-size: var(--fs-sm);
     font-weight: 500;
-    letter-spacing: var(--tracking-label);
+    letter-spacing: 0.06em;
     color: var(--c-gold-ink);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.9rem;
+    font-variant-numeric: tabular-nums lining-nums;
   }
 
-  .legal-section__num::after {
-    content: '';
-    width: 2.25rem;
-    height: 1px;
-    background: var(--c-gold);
+  /* Desktop: nummeret hænger ude i spaltemellemrummet, så overskriften flugter med brødteksten */
+  @media (min-width: 1024px) {
+    .legal-section__head {
+      margin-left: calc(-1 * (1.75rem + var(--space-4)));
+    }
   }
 
   .legal-section__title {
+    min-width: 0;
     font-size: clamp(1.6rem, 1.25rem + 1.2vw, 2.25rem);
     line-height: 1.18;
   }

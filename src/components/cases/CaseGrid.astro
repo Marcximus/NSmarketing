@@ -64,7 +64,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
     {
       filters.length > 0 && (
-        <div class="case-filter" data-reveal>
+        <div class="case-filter">
           <p class="case-filter__label" id="case-filter-label">
             Filtrér efter ydelse
           </p>
@@ -103,16 +103,15 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
               data-services={c.services.map(slug).join(' ')}
               data-layout={layout}
               data-offset={offset ? '' : undefined}
-              data-reveal
-              style={`--reveal-delay: ${Math.min(i, 2) * 0.08}s`}
             >
               <article class="case__inner" aria-labelledby={titleId}>
-                <div class="case__media media media--zoom">
+                <div class="case__media media">
                   <Image
                     src={c.image}
                     alt={c.imageAlt}
                     widths={[480, 720, 960, 1280]}
                     sizes="(min-width: 1440px) 800px, (min-width: 720px) 56vw, 92vw"
+                    quality={70}
                   />
                 </div>
                 <div class="case__body">
@@ -138,9 +137,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
                       <li class="tag">{serviceLabel(s)}</li>
                     ))}
                   </ul>
-                  <a href="/kontakt/" class="text-link case__cta">
-                    Tal med os om et lignende forløb <Icon name="arrow" size={16} />
-                  </a>
                 </div>
               </article>
             </li>
@@ -149,10 +145,10 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
       }
     </ul>
 
-    <div class="cases__more" data-reveal>
+    <div class="cases__more">
       <p>
-        Vil I høre, hvordan vi ville gribe <em>jeres</em> profiler an? Vi giver gerne et konkret bud på et
-        uforpligtende møde.
+        Vil I høre, hvordan vi ville gribe jeres profiler an? Vi giver gerne et konkret bud på et uforpligtende
+        møde.
       </p>
       <a href="/kontakt/" class="btn btn--outline">Book et uforpligtende møde <Icon name="arrow" size={16} /></a>
     </div>
@@ -175,22 +171,13 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     border-bottom: 1px solid var(--c-line);
   }
 
+  /* Kontrol-label: spærrede versaler uden dekorativ guldstreg */
   .case-filter__label {
     font-size: var(--fs-xs);
     font-weight: 500;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.9rem;
-    color: var(--c-gold-ink);
-  }
-
-  .case-filter__label::before {
-    content: '';
-    width: 2.25rem;
-    height: 1px;
-    background: var(--c-gold);
+    color: var(--c-ink-2);
   }
 
   .case-filter__buttons {
@@ -231,10 +218,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
   @media (max-width: 599px) {
     .case-filter__label {
       letter-spacing: 0.2em;
-    }
-
-    .case-filter__label::before {
-      display: none;
     }
 
     .case-filter__btn {
@@ -296,7 +279,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -312,14 +295,14 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
   .case__title {
     margin-top: 1.25rem;
-    font-size: clamp(1.5rem, 1.3rem + 0.7vw, 1.875rem);
+    font-size: clamp(1.5rem, 1.3rem + 0.7vw, 2rem);
     transition: color var(--dur) var(--ease);
   }
 
   .case__excerpt {
     margin-top: var(--space-3);
     max-width: 34rem;
-    font-size: 0.975rem;
+    font-size: 0.9375rem;
     color: var(--c-ink-2);
   }
 
@@ -330,26 +313,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     margin-top: auto;
     padding-top: var(--space-5);
     list-style: none;
-  }
-
-  /* CTA-linket vises kun på det store hovedkort */
-  .case__cta {
-    display: none;
-    align-self: flex-start;
-    margin-top: var(--space-6);
-  }
-
-  .case[data-layout='lead'] .case__cta {
-    display: inline-flex;
-  }
-
-  /* Mobil: lidt tættere spatiering, så CTA'en kan stå på én linje med pilen –
-     og på de smalleste skærme deles den i to lige lange linjer i stedet for et enkelt ord alene */
-  @media (max-width: 599px) {
-    .case__cta {
-      letter-spacing: 0.1em;
-      text-wrap: balance;
-    }
   }
 
   /* Kort, der linkes til fra forsiden (/cases/#id), markeres diskret */
@@ -480,12 +443,8 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
   .cases__more p {
     max-width: 38rem;
     font-family: var(--f-serif);
-    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+    font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
     line-height: 1.4;
-  }
-
-  .cases__more em {
-    color: var(--c-gold-ink);
   }
 
   .cases__more .btn {
@@ -536,10 +495,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
       cards.forEach((card) => {
         card.hidden = !visible.includes(card);
       });
-      visible.forEach((card, k) => {
-        setLayout(card, k, shown);
-        card.classList.add('is-visible');
-      });
+      visible.forEach((card, k) => setLayout(card, k, shown));
 
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === key)));
 

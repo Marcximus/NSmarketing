@@ -18,21 +18,18 @@ const selected = [...picked, ...faq.filter((item) => !picked.includes(item))].sl
 
 const otherInquiries = [
   {
-    icon: 'briefcase' as const,
     title: 'Job & praktik',
     text: 'Vil du være en del af holdet? Se, hvem vi søger, eller send en uopfordret ansøgning.',
     href: '/karriere/',
     linkLabel: 'Se karriere',
   },
   {
-    icon: 'user' as const,
     title: 'Eksisterende kunde',
     text: 'Kontakt jeres faste kontaktperson direkte – eller ring til os, så stiller vi jer videre.',
     href: site.phoneHref,
     linkLabel: `Ring ${site.phone}`,
   },
   {
-    icon: 'star' as const,
     title: 'Presse & samarbejder',
     text: 'Skriv til os med en kort beskrivelse, så sørger vi for, at den rette person vender tilbage.',
     href: `${site.emailHref}?subject=${encodeURIComponent('Presse & samarbejder')}`,
@@ -44,16 +41,15 @@ const otherInquiries = [
 <section class="section section--white kfaq" id="faq" aria-labelledby="kfaq-titel">
   <div class="container">
     <div class="kfaq__grid">
-      <div class="kfaq__intro" data-reveal>
-        <p class="eyebrow">Spørgsmål & svar</p>
-        <h2 id="kfaq-titel">Godt at vide, <em>inden</em> I skriver</h2>
+      <div class="kfaq__intro">
+        <h2 id="kfaq-titel">Godt at vide, inden I skriver</h2>
         <p class="lead">De spørgsmål, vi oftest får i det første opkald. Resten svarer vi gerne på, når vi tales ved.</p>
         <a href="/pakkeloesninger/#faq" class="text-link kfaq__more">
           Se alle spørgsmål <Icon name="arrow" size={16} />
         </a>
       </div>
 
-      <div class="accordion kfaq__list" data-reveal style="--reveal-delay: .1s">
+      <div class="accordion kfaq__list">
         {
           selected.map((item, i) => (
             <details open={i === 0}>
@@ -67,18 +63,15 @@ const otherInquiries = [
       </div>
     </div>
 
-    <div class="kfaq__other" data-reveal>
+    <div class="kfaq__other">
       <h2 class="kfaq__other-title">Andre henvendelser</h2>
-      <ul class="kfaq__cells" role="list">
+      <ul class="ruled-list ruled-list--3 kfaq__cells" role="list">
         {
           otherInquiries.map((item) => (
-            <li class="kfaq__cell">
-              <span class="kfaq__cell-icon" aria-hidden="true">
-                <Icon name={item.icon} size={20} />
-              </span>
-              <h3 class="kfaq__cell-title">{item.title}</h3>
-              <p class="kfaq__cell-text">{item.text}</p>
-              <a href={item.href} class="text-link kfaq__cell-link">
+            <li>
+              <h3 class="ruled-list__title">{item.title}</h3>
+              <p class="ruled-list__text">{item.text}</p>
+              <a href={item.href} class="text-link ruled-list__action">
                 {item.linkLabel} <Icon name="arrow" size={16} />
               </a>
             </li>
@@ -109,7 +102,7 @@ const otherInquiries = [
   }
 
   .kfaq__more,
-  .kfaq__cell-link {
+  .kfaq__cells .ruled-list__action {
     min-height: 2.75rem;
   }
 
@@ -118,7 +111,7 @@ const otherInquiries = [
   }
 
   .kfaq__list .accordion-body p {
-    max-width: 40rem;
+    max-width: var(--measure);
   }
 
   /* ---------- Andre henvendelser ---------- */
@@ -127,86 +120,26 @@ const otherInquiries = [
   }
 
   .kfaq__other-title {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
     margin-bottom: var(--space-5);
-    font-family: var(--f-sans);
-    font-size: var(--fs-xs);
-    font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    line-height: 1.4;
-    text-transform: uppercase;
-    color: var(--c-gold-ink);
-  }
-
-  .kfaq__other-title::before {
-    content: '';
-    width: 2.25rem;
-    height: 1px;
-    background: var(--c-gold);
-  }
-
-  .kfaq__cells {
-    list-style: none;
-    display: grid;
-    border-top: 1px solid var(--c-line);
-  }
-
-  @media (min-width: 820px) {
-    .kfaq__cells {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .kfaq__cell {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-6) 0;
-    border-bottom: 1px solid var(--c-line);
-  }
-
-  @media (min-width: 820px) {
-    .kfaq__cell {
-      padding: var(--space-6) clamp(1.5rem, 3vw, 2.5rem);
-      border-bottom: 0;
-    }
-
-    .kfaq__cell:first-child {
-      padding-left: 0;
-    }
-
-    .kfaq__cell + .kfaq__cell {
-      border-left: 1px solid var(--c-line);
-    }
-  }
-
-  .kfaq__cell-icon {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-bottom: var(--space-2);
-    border: 1px solid var(--c-gold);
-    color: var(--c-gold-ink);
-  }
-
-  .kfaq__cell-title {
-    font-size: var(--fs-h4);
     font-family: var(--f-serif);
+    font-size: var(--fs-h3);
     line-height: var(--lh-snug);
   }
 
-  .kfaq__cell-text {
-    flex: 1;
-    max-width: 24rem;
-    font-size: 0.95rem;
-    color: var(--c-ink-2);
+  /* Punkterne er et trin under sektionens H2: serif i h4-størrelse. Linket lægges i bunden,
+     så de tre handlinger flugter, selv når teksterne har forskellig længde. */
+  .kfaq__cells > li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .kfaq__cell-link {
-    margin-top: var(--space-1);
+  .kfaq__cells .ruled-list__title {
+    font-size: var(--fs-h4);
+  }
+
+  .kfaq__cells .ruled-list__text {
+    flex: 1;
+    font-size: 0.9375rem;
   }
 </style>

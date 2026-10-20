@@ -179,12 +179,13 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     transition: color var(--dur) var(--ease);
   }
 
+  /* Numrene bevares: afsnittene krydsrefereres i teksten (fx "afsnit 05") */
   .toc__num {
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: 0.14em;
     color: var(--c-muted);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: tabular-nums lining-nums;
   }
 
   .toc__link:hover {
@@ -200,14 +201,15 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     color: var(--c-gold-ink);
   }
 
+  /* Markering af det aktive afsnit: tegnet med kant, så den også ses i Windows' høj kontrast */
   .toc__link::before {
     content: '';
     position: absolute;
     left: calc(-1 * var(--space-5));
     top: 50%;
-    width: 1px;
+    width: 0;
     height: 0;
-    background: var(--c-gold);
+    border-left: 1px solid var(--c-gold);
     transform: translateY(-50%);
     transition: height var(--dur) var(--ease);
   }
@@ -337,8 +339,9 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   }
 
   /* ---------- Typografi til lange tekster (gælder indhold i slot'en) ---------- */
+  /* Læsemål: ca. 70 tegn (global --measure, em-baseret). Tabeller, lister og faktabokse må gå bredere. */
   .legal__body :global(p) {
-    max-width: 68ch;
+    max-width: var(--measure);
     color: var(--c-ink-2);
   }
 
@@ -369,22 +372,16 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     color: var(--c-ink);
   }
 
+  /* Understregning, farve på stregen, offset og hover kommer fra global.css */
   .legal__body :global(a:not([class])) {
     color: var(--c-ink);
-    text-decoration-color: var(--c-gold);
-    text-underline-offset: 0.22em;
-    transition: color var(--dur) var(--ease);
-  }
-
-  .legal__body :global(a:not([class]):hover) {
-    color: var(--c-gold-ink);
   }
 
   .legal__body :global(.legal-list) {
     list-style: none;
     display: grid;
     gap: 0.6rem;
-    max-width: 68ch;
+    max-width: var(--measure);
     color: var(--c-ink-2);
   }
 
@@ -393,20 +390,20 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     padding-left: 1.6rem;
   }
 
+  /* Listemarkør som kant (ikke baggrund), så den overlever forced colors */
   .legal__body :global(.legal-list > li::before) {
     content: '';
     position: absolute;
     left: 0;
     top: 0.85em;
     width: 0.75rem;
-    height: 1px;
-    background: var(--c-gold);
+    height: 0;
+    border-top: 1px solid var(--c-gold);
+    background: none;
   }
 
+  /* Metalinje (data), derfor spærrede versaler – men uden guldstreg foran */
   .legal__body :global(.legal-updated) {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
     margin-top: var(--space-6);
     font-size: var(--fs-xs);
     font-weight: 500;
@@ -415,10 +412,13 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     color: var(--c-gold-ink);
   }
 
-  .legal__body :global(.legal-updated::before) {
-    content: '';
-    width: 2.25rem;
-    height: 1px;
-    background: var(--c-gold);
+  /* Windows' høj kontrast: plus/kryds på mobil-indholdsfortegnelsen er funktionelt og tegnes i systemfarven */
+  @media (forced-colors: active) {
+    .toc-mobile__count::after {
+      forced-color-adjust: none;
+      background:
+        linear-gradient(CanvasText, CanvasText) center / 100% 1.5px no-repeat,
+        linear-gradient(CanvasText, CanvasText) center / 1.5px 100% no-repeat;
+    }
   }
 </style>

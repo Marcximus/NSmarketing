@@ -1,31 +1,21 @@
-// Fælles indhold, der bruges på flere sider: ydelser, arbejdsproces, nøgletal, brancher, FAQ og udtalelser.
+// Fælles indhold, der bruges på flere sider: ydelser, arbejdsproces, løfter, brancher, FAQ og udtalelser.
 
-import type { IconName } from './icons';
-
-export const services: { number: string; title: string; text: string; icon: IconName }[] = [
+export const services: { title: string; text: string }[] = [
   {
-    number: '01',
     title: 'Strategi & styring',
     text: 'Vi lægger strategien, planlægger indholdet og står for den daglige drift – med klare mål for rækkevidde, engagement og salg.',
-    icon: 'compass',
   },
   {
-    number: '02',
     title: 'Produktion & content',
     text: 'Vores fotografer, videografer og redaktører kommer ud til jer og skaber billeder, reels og stories, der ligner jer – bare skarpere.',
-    icon: 'camera',
   },
   {
-    number: '03',
     title: 'Annoncering & vækst',
     text: 'Målrettet annoncering på Meta og TikTok, der omsætter opmærksomhed til henvendelser, bookinger og salg.',
-    icon: 'target',
   },
   {
-    number: '04',
     title: 'Analyse & rapportering',
     text: 'Hver måned får I en rapport, som vi gennemgår sammen. Så ved I altid, hvad der virker, og hvad vi gør næste måned.',
-    icon: 'chart',
   },
 ];
 
@@ -53,14 +43,15 @@ export const process: { number: string; title: string; text: string }[] = [
 ];
 
 // TODO: Bekræft at I kan stå inde for disse løfter
-// '24 t … på hverdage' svarer til "Vi svarer inden for én hverdag" på resten af sitet. Svartid for kunder
+// '24 timer på hverdage' svarer til "Vi svarer inden for én hverdag" på resten af sitet. Svartid for kunder
 // afhænger af pakken og står i sammenligningstabellen i packages.ts – den må aldrig være længere end dette.
 // '1–2 uger' matcher FAQ'en "Hvor hurtigt kan vi komme i gang?".
-export const promises: { value: string; label: string }[] = [
-  { value: '4', label: 'platforme vi mestrer' },
-  { value: '1', label: 'fast kontaktperson til jer' },
-  { value: '24 t', label: 'maks. svartid på hverdage' },
-  { value: '1–2', label: 'uger fra første møde til opstart' },
+// Løfterne skrives som sætninger, ikke som et tal-bånd.
+export const commitments: string[] = [
+  'Én fast kontaktperson til jer',
+  'Svar inden for 24 timer på hverdage',
+  'Opstart 1–2 uger efter første møde',
+  'Vi mestrer Instagram, Facebook, TikTok og LinkedIn',
 ];
 
 export const industries = [
@@ -72,17 +63,6 @@ export const industries = [
   'Ejendomme',
   'Liberale erhverv',
   'Sundhed & klinikker',
-];
-
-export const disciplines = [
-  'Social media management',
-  'Content creation',
-  'Reels & TikTok',
-  'Fotografering',
-  'Meta-annoncering',
-  'Influencermarketing',
-  'E-mailmarketing',
-  'SEO',
 ];
 
 // TODO: Bekræft svarene – især binding, opstart og rettigheder

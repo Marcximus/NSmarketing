@@ -1,5 +1,6 @@
 ---
-// Ledige stillinger (vises kun, når `openings` i ./careerRoles.ts har indhold) + "Bliv en del af vores netværk" med roller.
+// Ledige stillinger (vises kun, når `openings` i ./careerRoles.ts har indhold) + "Bliv en del af vores netværk"
+// med rollerne som redaktionelle rækker i samme mønster som stillingstavlen.
 // Tilføj kun rigtige stillinger – opfind ikke opslag.
 import Icon from '../Icon.astro';
 import { careerRoles, openings } from './careerRoles';
@@ -12,16 +13,15 @@ const hasOpenings = openings.length > 0;
   hasOpenings && (
     <section class="section openings" id="stillinger" aria-labelledby="openings-title">
       <div class="container openings__grid">
-        <div class="openings__head" data-reveal>
-          <p class="eyebrow">Ledige stillinger</p>
-          <h2 id="openings-title">Åbne <em>stillinger</em></h2>
+        <div class="openings__head">
+          <h2 id="openings-title">Åbne stillinger</h2>
           <p class="openings__lead">
             Se vores aktuelle opslag herunder – eller send os en uopfordret ansøgning, hvis du ikke finder den
             rette rolle.
           </p>
         </div>
 
-        <div class="board" data-reveal style="--reveal-delay: .08s">
+        <div class="board">
           <div class="board__head" aria-hidden="true">
             <span>Stilling</span>
             <span>Type</span>
@@ -55,10 +55,9 @@ const hasOpenings = openings.length > 0;
 
 <section class="section section--white kroles" id="netvaerk" aria-labelledby="kroles-title">
   <div class="container">
-    <div class="section-head section-head--split" data-reveal>
+    <div class="section-head section-head--split">
       <div>
-        <p class="eyebrow">{hasOpenings ? 'Freelance & samarbejde' : 'Vi rekrutterer løbende'}</p>
-        <h2 id="kroles-title">Bliv en del af vores <em>netværk</em></h2>
+        <h2 id="kroles-title">Bliv en del af vores netværk</h2>
       </div>
       <p class="lead">
         Vi samarbejder løbende med freelancere og kreative talenter, når vores kunder har brug for ekstra
@@ -66,16 +65,13 @@ const hasOpenings = openings.length > 0;
       </p>
     </div>
 
-    <ul class="kroles__grid" role="list">
+    <ul class="board__list roles" role="list">
       {
-        careerRoles.map((role, i) => (
-          <li class="krole" data-reveal style={`--reveal-delay: ${(i % 3) * 0.08}s`}>
-            <span class="krole__icon" aria-hidden="true">
-              <Icon name={role.icon} size={22} />
-            </span>
-            <h3 class="krole__title">{role.title}</h3>
-            <p class="krole__text">{role.text}</p>
-            <a href={applyHref(role.value)} class="text-link krole__link">
+        careerRoles.map((role) => (
+          <li class="board__row roles__row">
+            <h3 class="board__role">{role.title}</h3>
+            <p class="roles__text">{role.text}</p>
+            <a href={applyHref(role.value)} class="text-link board__link">
               Ansøg<span class="visually-hidden">: {role.title}</span>
               <Icon name="arrow" size={16} />
             </a>
@@ -140,7 +136,7 @@ const hasOpenings = openings.length > 0;
   }
 
   .board__meta {
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     color: var(--c-ink-2);
   }
 
@@ -161,7 +157,7 @@ const hasOpenings = openings.length > 0;
       padding: 1rem clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
       border-bottom: 1px solid var(--c-line);
       background: var(--c-paper);
-      font-size: 0.6875rem;
+      font-size: var(--fs-2xs);
       font-weight: 500;
       letter-spacing: var(--tracking-label);
       text-transform: uppercase;
@@ -169,75 +165,33 @@ const hasOpenings = openings.length > 0;
     }
   }
 
-  /* ---------- Roller ---------- */
-  .kroles__grid {
-    display: grid;
-    gap: 1px;
-    list-style: none;
-    background: var(--c-line);
-    border: 1px solid var(--c-line);
+  /* ---------- Roller: redaktionelle rækker (samme mønster som stillingstavlen, uden boks) ---------- */
+  .roles {
+    border-top: 1px solid var(--c-line);
   }
 
-  @media (min-width: 640px) {
-    .kroles__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  .roles > .roles__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2) var(--space-6);
+    padding: clamp(1.5rem, 1.2rem + 1vw, 2.25rem) 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  @media (min-width: 720px) {
+    .roles > .roles__row {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr) auto;
+      align-items: baseline;
     }
   }
 
-  @media (min-width: 1100px) {
-    .kroles__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .krole {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
-    background: var(--c-white);
-    transition: background-color var(--dur) var(--ease);
-  }
-
-  .krole:hover {
-    background: var(--c-paper);
-  }
-
-  .krole__icon {
-    display: grid;
-    place-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
-    border: 1px solid var(--c-gold);
-    background: var(--c-paper);
-    color: var(--c-gold-ink);
-    transition:
-      background-color var(--dur) var(--ease),
-      color var(--dur) var(--ease);
-  }
-
-  .krole:hover .krole__icon {
-    background: var(--c-brown-deep);
-    color: var(--c-gold-light);
-  }
-
-  .krole__title {
-    font-size: clamp(1.35rem, 1.2rem + 0.4vw, 1.6rem);
-  }
-
-  .krole__text {
-    margin-top: var(--space-3);
-    max-width: 26rem;
-    font-size: 0.975rem;
+  .roles__text {
+    max-width: var(--measure);
     color: var(--c-ink-2);
   }
 
-  .krole__text {
-    margin-bottom: var(--space-5);
-  }
-
-  .krole__link {
-    margin-top: auto;
+  @media (max-width: 719px) {
+    .roles .board__link {
+      margin-top: var(--space-2);
+    }
   }
 </style>

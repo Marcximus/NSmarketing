@@ -1,76 +1,56 @@
 ---
-// Gitter af små kort med ikon, titel og tekst. Teksten må indeholde simpel HTML.
-import Icon from '../Icon.astro';
-import type { IconName } from '../../data/icons';
-
+// Redaktionel liste til "Kort fortalt" og lignende: titel + tekst med en hårstreg over hvert punkt
+// (fælles .ruled-list fra global.css), ingen bokse og ingen ikoner. Teksten må indeholde simpel HTML.
 interface Props {
-  items: { icon: IconName; title: string; text: string }[];
+  items: { title: string; text: string }[];
   headingLevel?: 'h3' | 'h4';
 }
 
 const { items, headingLevel: H = 'h3' } = Astro.props;
 ---
 
-<ul class="legal-block lcards" role="list">
+<ul class="legal-block ruled-list ruled-list--2 lcards" role="list">
   {
     items.map((item) => (
       <li class="lcard">
-        <span class="lcard__icon" aria-hidden="true">
-          <Icon name={item.icon} size={22} />
-        </span>
-        <H class="lcard__title">{item.title}</H>
-        <p class="lcard__text" set:html={item.text} />
+        <H class="ruled-list__title lcard__title">{item.title}</H>
+        <p class="ruled-list__text lcard__text" set:html={item.text} />
       </li>
     ))
   }
 </ul>
 
 <style>
-  .lcards {
-    list-style: none;
-    display: grid;
-    gap: 1px;
-    background: var(--c-line);
-    border: 1px solid var(--c-line);
+  /* Læsetilstand: kortere afstand mellem punkterne end på markedsføringssiderne */
+  .lcards > .lcard {
+    padding-block: var(--space-5);
   }
 
-  .lcard {
-    display: grid;
-    align-content: start;
-    gap: var(--space-3);
-    padding: clamp(1.4rem, 1rem + 1vw, 1.9rem);
-    background: var(--c-white);
+  /* Sidste blok i et afsnit: afsnittets egen hårstreg lukker listen, så der ikke står to streger */
+  .lcards:last-child {
+    border-bottom: 0;
   }
 
-  .lcard__icon {
-    display: inline-flex;
-    color: var(--c-gold);
-    margin-bottom: var(--space-1);
-  }
-
+  /* Titel i brødtekstens skrift, så listen læses som en del af teksten og ikke som overskrifter */
   .lcard .lcard__title {
     margin: 0;
     font-family: var(--f-sans);
-    font-size: var(--fs-base);
+    font-size: var(--fs-md);
     font-weight: 500;
-    line-height: 1.35;
+    line-height: var(--lh-snug);
     letter-spacing: 0;
     color: var(--c-ink);
   }
 
   .lcard .lcard__text {
-    margin: 0;
-    font-size: var(--fs-sm);
-    line-height: 1.65;
+    margin-top: var(--space-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-body);
     color: var(--c-ink-2);
   }
 
-  @media (min-width: 640px) {
-    .lcards {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    /* Ulige antal: sidste kort fylder hele bredden */
+  /* Ulige antal i to kolonner: sidste punkt får hele bredden, så der ikke står et hul */
+  @media (min-width: 720px) {
     .lcard:last-child:nth-child(odd) {
       grid-column: 1 / -1;
     }

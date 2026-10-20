@@ -1,24 +1,24 @@
 ---
-// Arbejdsprocessen i fire trin på diskret marmorbaggrund.
+// Arbejdsprocessen i fire trin på marmor (sitets lyse marmorsektion). id="proces": om-os linker til /#proces.
+// Numrene bevares, fordi rækkefølgen er information – sat roman med lining-tal.
 import Icon from '../Icon.astro';
 import SectionHead from '../SectionHead.astro';
 import { process } from '../../data/content';
 ---
 
-<section class="section process">
-  <div class="process__bg" aria-hidden="true"></div>
+<section class="section process" id="proces">
+  <div class="marble" aria-hidden="true"></div>
   <div class="container">
     <SectionHead
-      eyebrow="Sådan arbejder vi"
-      title="Fra første møde til <em>målbare</em> resultater"
+      title="Fra første møde til målbare resultater"
       lead="En fast og gennemskuelig proces, så I altid ved, hvad der sker – og hvornår. I godkender, vi leverer."
       align="split"
     />
 
     <ol class="steps">
       {
-        process.map((step, i) => (
-          <li class="step" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+        process.map((step) => (
+          <li class="step">
             <span class="step__num" aria-hidden="true">
               {step.number}
             </span>
@@ -30,7 +30,7 @@ import { process } from '../../data/content';
       }
     </ol>
 
-    <div class="process__cta" data-reveal>
+    <div class="process__cta">
       <p>Det hele begynder med et uforpligtende møde.</p>
       <a href="/kontakt/" class="text-link">Book et møde <Icon name="arrow" size={16} /></a>
     </div>
@@ -39,24 +39,18 @@ import { process } from '../../data/content';
 
 <style>
   .process {
+    position: relative;
     isolation: isolate;
     overflow: hidden;
     background: var(--c-paper);
   }
 
-  .process__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--c-paper) 55%, transparent) 0%,
-        color-mix(in srgb, var(--c-paper) 78%, transparent) 100%
-      ),
-      url('../../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center;
+  .process .marble {
+    --marble-wash: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-paper) 55%, transparent),
+      color-mix(in srgb, var(--c-paper) 78%, transparent)
+    );
   }
 
   .steps {
@@ -83,40 +77,41 @@ import { process } from '../../data/content';
     display: block;
     font-family: var(--f-serif);
     font-variant-numeric: lining-nums;
-    font-size: clamp(3rem, 2.4rem + 1.8vw, 4.25rem);
-    font-style: italic;
+    font-size: clamp(2.75rem, 2.4rem + 1.8vw, 4.25rem);
+    font-style: normal;
     line-height: 1;
     color: var(--c-gold-ink);
   }
 
-  /* Hårstreg med lille guld-rude */
+  /* Hårstreg med lille guld-rude – tegnet med border, så den også ses i forced colors */
   .step__line {
     position: relative;
     display: block;
-    height: 1px;
+    height: 0;
     margin-block: 1.5rem 1.75rem;
-    background: var(--c-sand);
+    border-top: 1px solid var(--c-sand);
   }
 
   .step__line::before {
     content: '';
     position: absolute;
-    top: -3.5px;
+    top: -4px;
     left: 0;
     width: 7px;
     height: 7px;
+    border: 1px solid var(--c-gold);
     background: var(--c-gold);
     transform: rotate(45deg);
   }
 
   .step__title {
-    font-size: clamp(1.3rem, 1.15rem + 0.4vw, 1.5rem);
+    font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
   }
 
   .step__text {
     margin-top: var(--space-3);
     max-width: 22rem;
-    font-size: 0.975rem;
+    font-size: 0.9375rem;
     color: var(--c-ink-2);
   }
 

@@ -1,75 +1,74 @@
 ---
 import Icon from './Icon.astro';
-import { site, footerNav, legalNav } from '../data/site';
+import Logo from '../assets/logo-currentcolor.svg';
+import { site, footerNav, legalNav, socialLinks } from '../data/site';
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer on-dark">
   <div class="container">
-    <div class="site-footer__newsletter">
-      <div>
-        <p class="eyebrow">Nyhedsbrev</p>
-        <h2 class="h3">Inspiration til sociale medier – én gang om måneden.</h2>
-      </div>
-      <!-- Uden JS sendes formularen til formEndpoint eller som mail (aldrig som GET med e-mail i URL'en) -->
-      <form
-        class="newsletter"
-        data-form="newsletter"
-        method="post"
-        action={site.formEndpoint || `mailto:${site.email}`}
-        enctype={site.formEndpoint ? undefined : 'text/plain'}
-      >
-        <label for="newsletter-email" class="visually-hidden">Din e-mail</label>
-        <input
-          id="newsletter-email"
-          class="newsletter__input"
-          type="email"
-          name="email"
-          placeholder="Din e-mail"
-          autocomplete="email"
-          required
-        />
-        <div class="hp-field" aria-hidden="true">
-          <label for="newsletter-gotcha">Lad dette felt være tomt</label>
-          <input id="newsletter-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+    {/* Nyhedsbrevet vises først, når site.formEndpoint er sat – en tilmelding via mailprogrammet er vildledende. Kræver kundens Formspree/Web3Forms-endpoint. */}
+    {site.formEndpoint && (
+      <div class="site-footer__newsletter">
+        <div>
+          <h2 class="h3">Inspiration til sociale medier i nyhedsbrevet – én gang om måneden.</h2>
         </div>
-        <input type="hidden" name="_subject" value="Ny tilmelding til nyhedsbrev" />
-        <button type="submit" class="btn btn--gold">Tilmeld <Icon name="arrow" size={16} /></button>
-        <p class="newsletter__consent small">
-          Du kan altid afmelde dig igen. Læs, hvordan vi behandler din e-mail, i vores
-          <a href="/privatlivspolitik/">privatlivspolitik</a>.
-        </p>
-        <p class="newsletter__status small" role="status" aria-live="polite" data-form-status></p>
-      </form>
-    </div>
+        {/* Uden JS sendes formularen til formEndpoint (aldrig som GET med e-mail i URL'en) */}
+        <form
+          class="newsletter"
+          data-form="newsletter"
+          method="post"
+          action={site.formEndpoint || `mailto:${site.email}`}
+          enctype={site.formEndpoint ? undefined : 'text/plain'}
+        >
+          <label for="newsletter-email" class="visually-hidden">Din e-mail</label>
+          <input
+            id="newsletter-email"
+            class="newsletter__input"
+            type="email"
+            name="email"
+            placeholder="Din e-mail"
+            autocomplete="email"
+            required
+          />
+          <div class="hp-field" aria-hidden="true">
+            <label for="newsletter-gotcha">Lad dette felt være tomt</label>
+            <input id="newsletter-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+          </div>
+          <input type="hidden" name="_subject" value="Ny tilmelding til nyhedsbrev" />
+          <button type="submit" class="btn btn--gold">Tilmeld <Icon name="arrow" size={16} /></button>
+          <p class="newsletter__consent small">
+            Du kan altid afmelde dig igen. Læs, hvordan vi behandler din e-mail, i vores
+            <a href="/privatlivspolitik/">privatlivspolitik</a>.
+          </p>
+          <p class="newsletter__status small" role="status" aria-live="polite" data-form-status></p>
+        </form>
+      </div>
+    )}
 
     <div class="site-footer__grid">
       <div class="site-footer__brand">
-        <a href="/" aria-label={`${site.name} – til forsiden`}>
-          <img
-            src="/brand/silberg-creative-logo-white.svg"
-            alt=""
-            width="1168"
-            height="450"
-            class="site-footer__logo"
-            loading="lazy"
-          />
+        <a href="/" class="site-footer__home" aria-label={`${site.name} – til forsiden`}>
+          <Logo class="logo site-footer__logo" aria-hidden="true" focusable="false" />
         </a>
         <p class="muted small">
           SoMe-bureau med strategi, content, annoncering og rapportering – samlet ét sted.
         </p>
-        <ul class="site-footer__social">
-          {
-            site.social.map((s) => (
-              <li>
-                <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
-                  <Icon name={s.icon} size={18} />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+        {
+          /* Kun rigtige profil-links (se socialLinks i site.ts) */
+          socialLinks.length > 0 && (
+            <ul class="site-footer__social">
+              {socialLinks.map((s) => (
+                <li>
+                  <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
+                    <Icon name={s.icon} size={18} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </div>
 
       <div>
@@ -157,7 +156,7 @@ const year = new Date().getFullYear();
     display: grid;
     gap: 2rem;
     padding-block: clamp(3.5rem, 6vw, 5rem);
-    border-bottom: 1px solid rgba(205, 191, 174, 0.18);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-cream-muted) 18%, transparent);
   }
 
   .site-footer__newsletter .h3 {
@@ -189,7 +188,7 @@ const year = new Date().getFullYear();
   .newsletter__input {
     min-height: 3.25rem;
     padding: 0.85rem 1rem;
-    border: 1px solid rgba(205, 191, 174, 0.6);
+    border: 1px solid color-mix(in srgb, var(--c-cream-muted) 60%, transparent);
     border-radius: 0;
     background: transparent;
     color: var(--c-cream);
@@ -231,8 +230,10 @@ const year = new Date().getFullYear();
     color: var(--c-cream);
   }
 
-  .newsletter__consent a:hover {
-    color: var(--c-gold-light);
+  @media (hover: hover) {
+    .newsletter__consent a:hover {
+      color: var(--c-gold-light);
+    }
   }
 
   .newsletter__status {
@@ -271,9 +272,11 @@ const year = new Date().getFullYear();
     max-width: 22rem;
   }
 
-  .site-footer__logo {
+  /* Logoet arver creme fra .site-footer (currentColor) */
+  .site-footer__home {
+    display: block;
     width: 170px;
-    height: auto;
+    color: inherit;
   }
 
   .site-footer__social {
@@ -288,16 +291,18 @@ const year = new Date().getFullYear();
     justify-content: center;
     width: 44px;
     height: 44px;
-    border: 1px solid rgba(205, 191, 174, 0.3);
+    border: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
     color: var(--c-cream);
     transition:
       border-color 0.3s var(--ease),
       color 0.3s var(--ease);
   }
 
-  .site-footer__social a:hover {
-    border-color: var(--c-gold-light);
-    color: var(--c-gold-light);
+  @media (hover: hover) {
+    .site-footer__social a:hover {
+      border-color: var(--c-gold-light);
+      color: var(--c-gold-light);
+    }
   }
 
   .site-footer__title {
@@ -326,8 +331,10 @@ const year = new Date().getFullYear();
     transition: color 0.3s var(--ease);
   }
 
-  .site-footer__list a:hover {
-    color: var(--c-gold-light);
+  @media (hover: hover) {
+    .site-footer__list a:hover {
+      color: var(--c-gold-light);
+    }
   }
 
   .site-footer__list :global(svg) {
@@ -364,7 +371,7 @@ const year = new Date().getFullYear();
     justify-content: space-between;
     gap: 1rem 2rem;
     padding-block: 1.75rem;
-    border-top: 1px solid rgba(205, 191, 174, 0.18);
+    border-top: 1px solid color-mix(in srgb, var(--c-cream-muted) 18%, transparent);
     color: var(--c-cream-muted);
     font-size: 0.8125rem;
   }
@@ -380,7 +387,23 @@ const year = new Date().getFullYear();
     text-decoration: none;
   }
 
-  .site-footer__bottom a:hover {
-    color: var(--c-gold-light);
+  @media (hover: hover) {
+    .site-footer__bottom a:hover {
+      color: var(--c-gold-light);
+    }
+  }
+
+  /* Touch: footer-links får mindst 44 px trykflade (i dag ca. 24 px) */
+  @media (pointer: coarse) {
+    .site-footer__list a,
+    .site-footer__bottom a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .site-footer__list {
+      gap: 0.25rem;
+    }
   }
 </style>

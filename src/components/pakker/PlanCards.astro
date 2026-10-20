@@ -3,8 +3,6 @@
 // Rækkerne i kortene flugter på desktop (CSS subgrid), så navne, priser, nøgletal og knapper står på linje.
 import Icon from '../Icon.astro';
 import { packages, pricingNote, formatPrice } from '../../data/packages';
-
-const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <section class="section plans-section" id="pakker" aria-labelledby="pakker-titel">
@@ -13,19 +11,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
     <div class="plans">
       {
-        packages.map((p, i) => (
+        packages.map((p) => (
           <article
             class:list={['plan', `plan--${p.id}`, p.featured && 'plan--featured on-dark']}
             aria-labelledby={`plan-${p.id}`}
-            data-reveal
-            style={`--reveal-delay: ${i * 0.08}s`}
           >
-            <div class="plan__top">
-              <span class="plan__index" aria-hidden="true">
-                {pad(i + 1)}
-              </span>
-              {p.badge && <span class="plan__badge">{p.badge}</span>}
-            </div>
+            {/* Guldfane i kortets topkant (absolut placeret – tager ingen række i subgrid'et) */}
+            {p.badge && <span class="plan__badge">{p.badge}</span>}
 
             <header class="plan__head">
               <h3 class="plan__name" id={`plan-${p.id}`}>
@@ -53,7 +45,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
               ))}
             </dl>
 
-            {/* Ét direkte barn, så kortet stadig har præcis 7 rækker i subgrid'et */}
+            {/* Ét direkte barn, så kortet stadig har præcis 6 rækker i subgrid'et */}
             <div class="plan__list">
               {p.plusLabel && <p class="plan__plus">{p.plusLabel}</p>}
               <ul class="check-list">
@@ -79,7 +71,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
       }
     </div>
 
-    <p class="plans__note" data-reveal>{pricingNote}</p>
+    <p class="plans__note">{pricingNote}</p>
   </div>
 </section>
 
@@ -111,14 +103,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
     .plans {
       max-width: none;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-template-rows: repeat(7, auto);
+      grid-template-rows: repeat(6, auto);
       column-gap: clamp(1rem, 1.6vw, 1.75rem);
       row-gap: 0;
     }
 
     /* .plans > .plan: skal vinde over grundreglen .plan { display: flex } længere nede */
     .plans > .plan {
-      grid-row: span 7;
+      grid-row: span 6;
       display: grid;
       grid-template-rows: subgrid;
       row-gap: 0;
@@ -158,31 +150,15 @@ const pad = (n: number) => String(n).padStart(2, '0');
     color: var(--c-cream);
   }
 
-  /* Top: nummer + badge */
-  .plan__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    min-height: 1.9rem;
-    margin-bottom: 1.5rem; /* holder første pris inden for første skærmbillede ved 1440×900 */
-  }
-
-  .plan__index {
-    font-size: var(--fs-xs);
-    font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    color: var(--plan-muted);
-  }
-
+  /* Badge: guldfane i topkanten (samme mønster som forsidens pakkekort) */
   .plan__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.75rem;
+    position: absolute;
+    top: 0;
+    right: var(--plan-pad);
+    padding: 0.45rem 0.8rem;
     background: var(--c-gold-light);
     color: var(--c-brown-deep);
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -191,7 +167,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   /* Navn */
   .plan__name {
-    font-size: clamp(2.4rem, 1.9rem + 1.3vw, 3.1rem);
+    font-size: clamp(2.4rem, 1.9rem + 1.3vw, 3.25rem);
     line-height: 1;
   }
 
@@ -235,8 +211,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   .plan__amount {
     font-family: var(--f-serif);
-    font-variant-numeric: lining-nums;
-    font-size: clamp(2.6rem, 2.1rem + 1.2vw, 3.3rem);
+    font-variant-numeric: lining-nums tabular-nums;
+    font-size: clamp(2.5rem, 2.1rem + 1.2vw, 3.25rem);
     line-height: 1;
     letter-spacing: -0.02em;
   }
@@ -284,12 +260,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
     margin: 0;
     font-family: var(--f-serif);
     font-variant-numeric: lining-nums;
-    font-size: 1.85rem;
+    font-size: 1.75rem; /* som forsidens pakkekort */
     line-height: 1;
   }
 
   .plan__summary dt {
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     line-height: 1.35;
     letter-spacing: 0.06em;
@@ -310,7 +286,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   /* "Alt i Silver, plus:" – gør forskellen mellem pakkerne let at skimme */
   .plan__plus {
     margin-bottom: 0.9rem;
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
@@ -376,10 +352,6 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   /* Mobil: lidt strammere lodret rytme i de stablede kort, så første pris ses uden at scrolle */
   @media (max-width: 699px) {
-    .plan__top {
-      margin-bottom: 1.25rem;
-    }
-
     .plan__price {
       margin-top: 1.5rem;
       padding-top: 1.25rem;
@@ -408,17 +380,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       grid-template-areas:
-        'top top'
         'head summary'
         'ideal list'
         'price list'
         'actions list';
-      grid-template-rows: auto auto auto auto 1fr;
+      grid-template-rows: auto auto auto 1fr;
       column-gap: clamp(2rem, 5vw, 3rem);
-    }
-
-    .plan__top {
-      grid-area: top;
     }
 
     .plan__head {
@@ -447,6 +414,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
     .plan__actions {
       grid-area: actions;
       align-content: end;
+    }
+  }
+
+  /* Stablede kort: lidt ekstra luft i toppen af kortet med badge, så fanen ikke rører navn eller nøgletal */
+  @media (max-width: 999px) {
+    .plan:has(> .plan__badge) {
+      padding-top: calc(var(--plan-pad) + 1rem);
     }
   }
 

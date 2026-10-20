@@ -1,16 +1,15 @@
 ---
-// Historie og mission: billedkollage i guldramme, tekst, mission og servicegarantier.
+// Historie og mission: billedkollage i guldramme, tekst og mission. Løfterne har ét hjem på forsiden.
 // Bevidst neutral formulering – ingen navne eller årstal, før de er bekræftet.
 import { Image } from 'astro:assets';
 import studioImage from '../../assets/images/studio.jpg';
 import detailImage from '../../assets/images/creator-hands.jpg';
-import { promises } from '../../data/content';
 ---
 
 <section class="section story" id="historie" aria-labelledby="story-title">
   <div class="container">
     <div class="story__grid">
-      <div class="story__media" data-reveal>
+      <div class="story__media">
         <div class="frame-gold story__frame">
           <div class="media story__main">
             <Image
@@ -21,7 +20,7 @@ import { promises } from '../../data/content';
             />
           </div>
         </div>
-        <div class="media story__detail" data-reveal style="--reveal-delay: .18s">
+        <div class="media story__detail">
           <Image
             src={detailImage}
             alt="Hænder holder et analogt kamera klar til at tage et billede"
@@ -31,9 +30,8 @@ import { promises } from '../../data/content';
         </div>
       </div>
 
-      <div class="story__content" data-reveal style="--reveal-delay: .08s">
-        <p class="eyebrow">Vores historie</p>
-        <h2 id="story-title">Sociale medier, der er lige så <em>gennemførte</em> som jeres forretning</h2>
+      <div class="story__content">
+        <h2 id="story-title">Sociale medier, der er lige så gennemførte som jeres forretning</h2>
         <div class="story__text">
           <p class="lead">
             Silberg Creative blev grundlagt med en enkel ambition: at give danske virksomheder et udtryk på
@@ -54,26 +52,12 @@ import { promises } from '../../data/content';
           <p class="story__mission-label">Vores mission</p>
           <blockquote>
             <p>
-              At gøre jeres sociale medier til en af jeres <em>stærkeste</em> salgskanaler – uden at det
+              At gøre jeres sociale medier til en af jeres stærkeste salgskanaler – uden at det
               koster jer tid.
             </p>
           </blockquote>
         </figure>
       </div>
-    </div>
-
-    <div class="story__facts" data-reveal>
-      <p class="story__facts-label">Det kan I regne med</p>
-      <dl class="story__facts-list">
-        {
-          promises.map((p) => (
-            <div class="fact">
-              <dt class="fact__label">{p.label}</dt>
-              <dd class="fact__value">{p.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
     </div>
   </div>
 </section>
@@ -143,6 +127,7 @@ import { promises } from '../../data/content';
   }
 
   .story__text p:not(.lead) {
+    max-width: var(--measure);
     color: var(--c-ink-2);
   }
 
@@ -172,92 +157,5 @@ import { promises } from '../../data/content';
     font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem);
     line-height: 1.4;
     color: var(--c-ink);
-  }
-
-  .story__mission em {
-    color: var(--c-gold-ink);
-  }
-
-  /* ---------- Servicegarantier ---------- */
-  .story__facts {
-    display: grid;
-    gap: var(--space-5);
-    margin-top: clamp(4rem, 8vw, 7rem);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--c-line);
-  }
-
-  @media (min-width: 1024px) {
-    .story__facts {
-      grid-template-columns: 14rem 1fr;
-      gap: var(--space-7);
-      align-items: start;
-    }
-  }
-
-  .story__facts-label {
-    padding-top: 0.35rem;
-    font-size: var(--fs-xs);
-    font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--c-gold-ink);
-  }
-
-  .story__facts-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0;
-  }
-
-  @media (min-width: 720px) {
-    .story__facts-list {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-
-  .fact {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 0.4rem;
-    padding: var(--space-4) var(--space-4) var(--space-5) 0;
-  }
-
-  @media (min-width: 720px) {
-    .fact {
-      padding: 0 var(--space-5);
-      border-left: 1px solid var(--c-line);
-    }
-
-    .fact:first-child {
-      padding-left: 0;
-      border-left: 0;
-    }
-  }
-
-  @media (max-width: 719px) {
-    .fact:nth-child(even) {
-      padding-left: var(--space-5);
-      border-left: 1px solid var(--c-line);
-    }
-
-    .fact:nth-child(n + 3) {
-      border-top: 1px solid var(--c-line);
-    }
-  }
-
-  .fact__value {
-    margin: 0;
-    font-family: var(--f-serif);
-    font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3.25rem);
-    line-height: 1;
-    color: var(--c-ink);
-  }
-
-  .fact__label {
-    font-size: var(--fs-sm);
-    line-height: 1.45;
-    color: var(--c-muted);
   }
 </style>

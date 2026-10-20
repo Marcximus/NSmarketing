@@ -42,7 +42,7 @@ const { items } = Astro.props;
   }
 
   .lterms__note {
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -51,12 +51,14 @@ const { items } = Astro.props;
 
   .lterms__term {
     font-family: var(--f-serif);
-    font-size: 1.1875rem;
+    font-size: var(--fs-md);
     line-height: 1.3;
     color: var(--c-ink);
   }
 
+  /* Forklaringen holder læsemålet – også på tablet, hvor kolonnen ellers bliver ca. 40em bred */
   dd {
+    max-width: var(--measure);
     margin: 0;
     font-size: 0.9375rem;
     line-height: 1.7;
@@ -65,7 +67,6 @@ const { items } = Astro.props;
 
   dd :global(a) {
     color: var(--c-ink);
-    text-decoration-color: var(--c-gold);
   }
 
   @media (min-width: 720px) {

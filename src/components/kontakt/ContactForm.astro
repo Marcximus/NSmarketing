@@ -11,8 +11,7 @@ import { addonCategories } from '../../data/addons';
 
 <div class="cf">
   <div class="cf__head">
-    <p class="eyebrow">Skriv til os</p>
-    <h2 id="kontakt-formular-titel" class="cf__title">Fortæl os lidt om <em>jer</em></h2>
+    <h2 id="kontakt-formular-titel" class="cf__title">Fortæl os lidt om jer</h2>
     <p class="cf__intro">
       Jo mere vi ved på forhånd, jo bedre kan vi forberede det første møde. Et par linjer er rigeligt.
     </p>
@@ -142,17 +141,13 @@ import { addonCategories } from '../../data/addons';
     border-bottom: 1px solid var(--c-line);
   }
 
-  .cf__head .eyebrow {
-    margin-bottom: var(--space-4);
-  }
-
   .cf__title {
     font-size: var(--fs-h3);
     line-height: var(--lh-snug);
   }
 
   .cf__intro {
-    max-width: 34rem;
+    max-width: var(--measure);
     margin-top: var(--space-3);
     color: var(--c-ink-2);
   }
@@ -199,11 +194,11 @@ import { addonCategories } from '../../data/addons';
     color: var(--c-ink);
   }
 
-  .cf__consent a:hover {
-    color: var(--c-gold-ink);
+  @media (hover: hover) {
+    .cf__consent a:hover {
+      color: var(--c-gold-ink);
+    }
   }
-
-  /* Honeypot – skjult for mennesker og skærmlæsere, synlig for spam-robotter */
 
   .cf__actions {
     display: flex;
@@ -227,10 +222,12 @@ import { addonCategories } from '../../data/addons';
     color: var(--c-gold);
   }
 
+  /* Status (fx "Tryk send i mailen"): en stille hårstregsramme, ingen farvet sidestribe */
   .cf__status:not(:empty) {
+    max-width: var(--measure);
     margin-top: var(--space-4);
     padding: 0.85rem 1rem;
-    border-left: 2px solid var(--c-gold);
+    border: 1px solid var(--c-gold);
     background: var(--c-paper);
     color: var(--c-ink);
   }

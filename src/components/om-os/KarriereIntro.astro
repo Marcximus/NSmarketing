@@ -1,9 +1,7 @@
 ---
 // Karriere: hvad det vil sige at arbejde med os + hvad vi værdsætter.
 import { Image } from 'astro:assets';
-import Icon from '../Icon.astro';
 import handsImage from '../../assets/images/creator-hands.jpg';
-import type { IconName } from '../../data/icons';
 
 const expectations = [
   'Varierede opgaver for virksomheder i mange forskellige brancher',
@@ -12,35 +10,30 @@ const expectations = [
   'Indhold i høj kvalitet, du kan være stolt af at vise frem',
 ];
 
-const values: { title: string; text: string; icon: IconName }[] = [
+const values: { title: string; text: string }[] = [
   {
     title: 'Sans for æstetik',
     text: 'Du har et skarpt øje for detaljer, lys og komposition – og ved, at kvaliteten ligger i det, de fleste overser.',
-    icon: 'sparkle',
   },
   {
     title: 'Ansvar og ordentlighed',
     text: 'Du holder, hvad du lover. Vores kunder skal kunne regne med os, og det starter hos hver enkelt af os.',
-    icon: 'shield',
   },
   {
     title: 'Nysgerrighed',
     text: 'Platforme, formater og trends ændrer sig hele tiden. Du er på forkant – og deler gerne det, du lærer.',
-    icon: 'compass',
   },
   {
     title: 'Holdånd',
     text: 'Vi lykkes sammen. Du giver og modtager gerne sparring og glæder dig over andres gode idéer.',
-    icon: 'users',
   },
 ];
 ---
 
 <section class="section kintro" aria-labelledby="kintro-title">
   <div class="container kintro__grid">
-    <div class="kintro__content" data-reveal style="--reveal-delay: .08s">
-      <p class="eyebrow">Hos Silberg Creative</p>
-      <h2 id="kintro-title">Kreativt håndværk med <em>høje</em> standarder</h2>
+    <div class="kintro__content">
+      <h2 id="kintro-title">Kreativt håndværk med høje standarder</h2>
       <p class="lead">
         Vi skaber indhold til virksomheder, der går op i, hvordan de fremstår – og vi går lige så meget op i
         det selv. Strateger, fotografer, content creators og grafikere arbejder tæt sammen om hver eneste
@@ -52,7 +45,7 @@ const values: { title: string; text: string; icon: IconName }[] = [
       </ul>
     </div>
 
-    <div class="kintro__media" data-reveal>
+    <div class="kintro__media">
       <div class="frame-gold">
         <div class="media kintro__image">
           <Image
@@ -69,10 +62,9 @@ const values: { title: string; text: string; icon: IconName }[] = [
 
 <section class="section section--beige kvalues" aria-labelledby="kvalues-title">
   <div class="container">
-    <div class="section-head section-head--split" data-reveal>
+    <div class="section-head section-head--split">
       <div>
-        <p class="eyebrow">Hvem vi leder efter</p>
-        <h2 id="kvalues-title">Det <em>værdsætter</em> vi</h2>
+        <h2 id="kvalues-title">Det værdsætter vi</h2>
       </div>
       <p class="lead">
         Erfaring og et stærkt portfolio betyder meget. Men det er måden, du arbejder på, der gør forskellen –
@@ -80,17 +72,12 @@ const values: { title: string; text: string; icon: IconName }[] = [
       </p>
     </div>
 
-    <ul class="kvalues__list" role="list">
+    <ul class="ruled-list ruled-list--2 kvalues__list" role="list">
       {
-        values.map((value, i) => (
-          <li class="kvalue" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
-            <span class="kvalue__icon" aria-hidden="true">
-              <Icon name={value.icon} size={22} />
-            </span>
-            <div>
-              <h3 class="kvalue__title">{value.title}</h3>
-              <p class="kvalue__text">{value.text}</p>
-            </div>
+        values.map((value) => (
+          <li>
+            <h3 class="ruled-list__title">{value.title}</h3>
+            <p class="ruled-list__text">{value.text}</p>
           </li>
         ))
       }
@@ -159,57 +146,5 @@ const values: { title: string; text: string; icon: IconName }[] = [
     .kintro__image {
       aspect-ratio: 4 / 5;
     }
-  }
-
-  /* ---------- Værdier ---------- */
-  .kvalues__list {
-    display: grid;
-    list-style: none;
-    border-top: 1px solid var(--c-sand);
-  }
-
-  @media (min-width: 820px) {
-    .kvalues__list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  .kvalue {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-5);
-    padding-block: var(--space-6);
-    border-bottom: 1px solid var(--c-sand);
-  }
-
-  @media (min-width: 820px) {
-    .kvalue {
-      padding: var(--space-7) var(--space-6) var(--space-7) 0;
-    }
-
-    .kvalue:nth-child(even) {
-      padding-left: var(--space-6);
-      border-left: 1px solid var(--c-sand);
-    }
-  }
-
-  .kvalue__icon {
-    display: grid;
-    place-items: center;
-    width: 3.25rem;
-    height: 3.25rem;
-    border: 1px solid var(--c-gold);
-    color: var(--c-gold-ink);
-  }
-
-  .kvalue__title {
-    font-size: clamp(1.3rem, 1.15rem + 0.4vw, 1.5rem);
-  }
-
-  .kvalue__text {
-    margin-top: var(--space-2);
-    max-width: 30rem;
-    font-size: 0.975rem;
-    color: var(--c-ink-2);
   }
 </style>

@@ -1,7 +1,8 @@
 ---
 // Sammenligningstabel (src/data/packages.ts → comparison).
 // Desktop/tablet: én samlet tabel med sticky kolonneoverskrifter.
-// Mobil (med JS): en pakkevælger viser én pakke ad gangen – uden JS kan tabellen scrolles vandret i sin egen boks.
+// Mobil og telefon på tværs (med JS): en pakkevælger viser én pakke ad gangen – uden JS kan tabellen scrolles
+// vandret i sin egen boks. Media-queryen står både i CSS'en og i scriptet (PICKER_QUERY) og skal holdes ens.
 import Icon from '../Icon.astro';
 import SectionHead from '../SectionHead.astro';
 import { packages, comparison, formatPrice } from '../../data/packages';
@@ -31,13 +32,12 @@ const colClass = (id: string, extra?: string | false) => [
 <section class="section section--white cmp-section" id="sammenlign">
   <div class="container">
     <SectionHead
-      eyebrow="Sammenlign"
-      title="Hele indholdet – <em>side om side</em>"
+      title="Hele indholdet&nbsp;– side om side"
       lead="Alt, hvad der indgår i hver pakke, samlet ét sted. Så kan I se præcis, hvad I får – og hvad der er forskellen."
       align="split"
     />
 
-    <div class="cmp" data-cmp data-active={defaultPlan} data-reveal>
+    <div class="cmp" data-cmp data-active={defaultPlan}>
       <div class="cmp__picker" role="group" aria-label="Vælg hvilken pakke tabellen viser">
         {
           packages.map((p) => (
@@ -168,7 +168,8 @@ const colClass = (id: string, extra?: string | false) => [
     const cells = [...root.querySelectorAll<HTMLElement>('[data-col]')];
     const caption = root.querySelector<HTMLElement>('[data-cmp-caption]');
     const footCells = [...root.querySelectorAll<HTMLTableCellElement>('tfoot td[data-col]')];
-    const mobile = window.matchMedia('(max-width: 719px)');
+    // Samme query som pakkevælgerens CSS-blok: smalle skærme og telefoner på tværs
+    const mobile = window.matchMedia('(max-width: 719px), (orientation: landscape) and (max-height: 500px)');
 
     const show = (id: string | undefined) => {
       const button = buttons.find((b) => b.dataset.pick === id);
@@ -285,16 +286,16 @@ const colClass = (id: string, extra?: string | false) => [
     padding: 0.25rem 0.6rem;
     background: var(--c-gold-light);
     color: var(--c-brown-deep);
-    font-size: 0.625rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
   }
 
   .cmp__name {
     display: block;
     font-family: var(--f-serif);
-    font-size: clamp(1.4rem, 1.1rem + 0.8vw, 1.85rem);
+    font-size: clamp(1.4rem, 1.1rem + 0.8vw, 1.75rem);
     line-height: 1.1;
   }
 
@@ -357,12 +358,14 @@ const colClass = (id: string, extra?: string | false) => [
     color: var(--c-gold-ink);
   }
 
+  /* Tegnes som kant (ikke baggrund), så stregen også ses i forced colors */
   .cmp__no {
     display: inline-block;
     width: 0.9rem;
-    height: 1px;
+    height: 0;
     vertical-align: middle;
-    background: var(--c-muted);
+    border-top: 1px solid var(--c-muted);
+    background: none;
   }
 
   .cmp__text {
@@ -382,6 +385,15 @@ const colClass = (id: string, extra?: string | false) => [
     color: var(--c-ink);
   }
 
+  /* Touch: "Tillæg"-linket får et trykmål på mindst 44 px */
+  @media (pointer: coarse) {
+    .cmp__addon {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+
   /* Bund med knapper */
   .cmp__table tfoot th,
   .cmp__table tfoot td {
@@ -394,12 +406,19 @@ const colClass = (id: string, extra?: string | false) => [
     padding-inline: 0.75rem;
   }
 
-  /* ---------- Pakkevælger (kun mobil med JS) ---------- */
+  /* Lave skærme: klæbende kolonneoverskrifter ville dække for meget af højden */
+  @media (max-height: 560px) {
+    .cmp__table thead th {
+      position: static;
+    }
+  }
+
+  /* ---------- Pakkevælger (mobil og telefon på tværs, med JS) ---------- */
   .cmp__picker {
     display: none;
   }
 
-  @media (max-width: 719px) {
+  @media (max-width: 719px), (orientation: landscape) and (max-height: 500px) {
     /* Uden JS: tabellen scroller vandret i sin egen boks med fast etiketkolonne */
     .cmp__scroll {
       overflow-x: auto;
@@ -489,6 +508,12 @@ const colClass = (id: string, extra?: string | false) => [
       padding-inline: 0;
       text-align: left;
     }
+
+    /* Gruppetitlen står alene i rækken (de øvrige celler er skjult) – lad den ombryde */
+    :global(.js) .cmp__group th span {
+      white-space: normal;
+      contain: none;
+    }
   }
 
   .cmp__pick {
@@ -511,14 +536,31 @@ const colClass = (id: string, extra?: string | false) => [
 
   .cmp__pick-name {
     font-family: var(--f-serif);
-    font-size: 1.2rem;
+    font-size: var(--fs-md);
     line-height: 1.1;
   }
 
   .cmp__pick-price {
-    font-size: 0.75rem;
-    font-variant-numeric: lining-nums;
+    font-size: var(--fs-xs);
+    font-variant-numeric: lining-nums tabular-nums;
     color: var(--c-muted);
+  }
+
+  /* Telefon på tværs: header + klæbende vælger må højst dække ca. 30 % af højden –
+     navn og pris står på én linje i en lavere knap */
+  @media (orientation: landscape) and (max-height: 500px) {
+    :global(.js) .cmp__picker {
+      padding-block: 0.1875rem;
+    }
+
+    .cmp__pick {
+      grid-auto-flow: column;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0.6rem;
+      min-height: 2.75rem;
+      padding-block: 0.25rem;
+    }
   }
 
   .cmp__pick[aria-pressed='true'] {

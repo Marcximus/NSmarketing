@@ -13,11 +13,9 @@ const steps = [
 ---
 
 <section class="section apply" id="ansoeg" aria-labelledby="apply-title">
-  <div class="apply__bg" aria-hidden="true"></div>
   <div class="container apply__grid">
-    <div class="apply__info" data-reveal>
-      <p class="eyebrow">Ansøgning</p>
-      <h2 id="apply-title">Send os en <em>ansøgning</em></h2>
+    <div class="apply__info">
+      <h2 id="apply-title">Send os en ansøgning</h2>
       <p class="lead">
         Uanset om du søger fast arbejde, freelanceopgaver eller en praktikplads, starter det hele her.
       </p>
@@ -44,7 +42,7 @@ const steps = [
       </p>
     </div>
 
-    <div class="apply__panel" data-reveal style="--reveal-delay: .08s">
+    <div class="apply__panel">
       <form
         class="apply-form"
         data-form="karriere"
@@ -130,24 +128,7 @@ const steps = [
 
 <style>
   .apply {
-    overflow: hidden;
-    isolation: isolate;
     background: var(--c-beige);
-  }
-
-  .apply__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--c-beige) 86%, transparent) 0%,
-        color-mix(in srgb, var(--c-beige) 94%, transparent) 100%
-      ),
-      url('../../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center;
   }
 
   .apply__grid {
@@ -189,10 +170,12 @@ const steps = [
     border-bottom: 1px solid var(--c-sand);
   }
 
+  /* Rækkefølgen er information – derfor numre, sat roman med lining-tal */
   .apply__step-num {
     font-family: var(--f-serif);
     font-size: 1.35rem;
-    font-style: italic;
+    font-style: normal;
+    font-variant-numeric: lining-nums;
     line-height: 1.2;
     color: var(--c-gold-ink);
   }
@@ -207,7 +190,7 @@ const steps = [
 
   .apply__step-text {
     margin-top: 0.25rem;
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     color: var(--c-ink-2);
   }
 
@@ -264,8 +247,6 @@ const steps = [
   .apply-form__consent a:hover {
     color: var(--c-gold-ink);
   }
-
-  /* Honeypot – skjult for mennesker, synlig for spam-robotter */
 
   .apply-form__actions {
     display: flex;

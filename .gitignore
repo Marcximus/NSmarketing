@@ -16,3 +16,6 @@ npm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# Impeccable – lokale indstillinger
+.impeccable/config.local.json

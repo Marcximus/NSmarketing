@@ -11,9 +11,8 @@ const keyPoints = includedInAll.slice(0, 4);
 
 <section class="section intro" id="intro" aria-labelledby="intro-title">
   <div class="container intro__grid">
-    <div class="intro__content" data-reveal style="--reveal-delay: .08s">
-      <p class="eyebrow">Jeres eget team</p>
-      <h2 id="intro-title">Jeres egen Social Media Manager – og et helt <em>team</em> i ryggen</h2>
+    <div class="intro__content">
+      <h2 id="intro-title">Jeres egen Social Media Manager – og et helt team i ryggen</h2>
       <p class="lead">
         I får én fast kontaktperson, der kender jeres forretning indefra. Bag jeres Social Media Manager
         står strateger, fotografer, content creators, grafikere og performance-specialister – klar, når
@@ -28,7 +27,7 @@ const keyPoints = includedInAll.slice(0, 4);
       </ul>
       <a href="/om-os/#team" class="text-link">Mød teamet bag <Icon name="arrow" size={16} /></a>
     </div>
-    <div class="intro__media" data-reveal>
+    <div class="intro__media">
       <div class="frame-gold">
         <div class="media intro__image">
           <Image
@@ -40,7 +39,7 @@ const keyPoints = includedInAll.slice(0, 4);
         </div>
       </div>
 
-      <div class="intro__team" data-reveal style="--reveal-delay: .15s">
+      <div class="intro__team">
         <p class="intro__team-label">Jeres team</p>
         <ul>
           {
@@ -148,7 +147,7 @@ const keyPoints = includedInAll.slice(0, 4);
     padding-bottom: 0.9rem;
     margin-bottom: 0.4rem;
     border-bottom: 1px solid var(--c-line);
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
@@ -220,6 +219,7 @@ const keyPoints = includedInAll.slice(0, 4);
   }
 
   .intro__text {
+    max-width: var(--measure);
     margin-top: var(--space-5);
     color: var(--c-ink-2);
   }

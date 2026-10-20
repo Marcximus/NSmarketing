@@ -7,29 +7,28 @@ import { site } from '../../data/site';
 
 <section class="section section--beige faq" id="faq" aria-labelledby="faq-titel">
   <div class="container faq__grid">
-    <div class="faq__intro" data-reveal>
-      <p class="eyebrow">Spørgsmål & svar</p>
-      <h2 id="faq-titel">Godt at vide, <em>før</em> I vælger</h2>
+    <div class="faq__intro">
+      <h2 id="faq-titel">Godt at vide, før I vælger</h2>
       <p class="lead">
         Her er svarene på det, vi oftest bliver spurgt om. Finder I ikke svaret, så skriv eller ring – vi svarer gerne.
       </p>
       <ul class="faq__contact" role="list">
         <li>
           <a href={site.phoneHref}>
-            <span class="faq__contact-icon" aria-hidden="true"><Icon name="phone" size={16} /></span>
+            <Icon name="phone" size={18} class="faq__contact-icon" />
             <span><span class="faq__contact-label">Ring til os</span>{site.phone}</span>
           </a>
         </li>
         <li>
           <a href={site.emailHref}>
-            <span class="faq__contact-icon" aria-hidden="true"><Icon name="mail" size={16} /></span>
+            <Icon name="mail" size={18} class="faq__contact-icon" />
             <span><span class="faq__contact-label">Skriv til os</span>{site.email}</span>
           </a>
         </li>
       </ul>
     </div>
 
-    <div class="accordion faq__list" data-reveal style="--reveal-delay: .1s">
+    <div class="accordion faq__list">
       {
         faq.map((item, i) => (
           <details open={i === 0}>
@@ -64,7 +63,6 @@ import { site } from '../../data/site';
   }
 
   .faq__intro .lead {
-    max-width: 28rem;
     margin-top: var(--space-5);
   }
 
@@ -88,18 +86,16 @@ import { site } from '../../data/site';
     transition: color var(--dur) var(--ease);
   }
 
-  .faq__contact a:hover {
-    color: var(--c-gold-ink);
+  @media (hover: hover) {
+    .faq__contact a:hover {
+      color: var(--c-gold-ink);
+    }
   }
 
-  .faq__contact-icon {
-    display: grid;
-    place-items: center;
+  /* Ikonet står frit (ingen ramme) i guld ved kontaktlinjen */
+  .faq__contact :global(.faq__contact-icon) {
     flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--c-gold);
-    color: var(--c-gold-ink);
+    color: var(--c-gold);
   }
 
   .faq__contact-label {
@@ -117,7 +113,4 @@ import { site } from '../../data/site';
     border-color: var(--c-sand);
   }
 
-  .faq__list .accordion-body p {
-    max-width: 40rem;
-  }
 </style>

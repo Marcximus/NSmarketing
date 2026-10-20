@@ -13,14 +13,15 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
 
 <section class="section section--white home-cases">
   <div class="container">
-    <div class="home-cases__head" data-reveal>
-      <div>
-        <p class="eyebrow">{examplesOnly ? 'Eksempler på forløb' : 'Udvalgte cases'}</p>
-        <h2>Indhold, der får folk til at <em>stoppe op</em></h2>
-      </div>
+    <div class="home-cases__head">
+      <h2>Indhold, der får folk til at stoppe op</h2>
       <div class="home-cases__intro">
         <p class="lead">
-          Fra restauranter til klinikker: Vi skaber indhold, der passer til branchen – og til jeres kunder.
+          {
+            examplesOnly
+              ? 'Eksempler på forløb fra restauranter til klinikker: Vi skaber indhold, der passer til branchen – og til jeres kunder.'
+              : 'Fra restauranter til klinikker: Vi skaber indhold, der passer til branchen – og til jeres kunder.'
+          }
         </p>
         <a href="/cases/" class="text-link">Se alle cases <Icon name="arrow" size={16} /></a>
       </div>
@@ -28,11 +29,11 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
 
     <ul class="home-cases__grid">
       {
-        featured.map((c, i) => {
+        featured.map((c) => {
           const heading = c.placeholder ? c.industry : c.client;
           const meta = c.placeholder ? `Eksempel · ${c.location}` : `${c.industry} · ${c.location}`;
           return (
-            <li class="case" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+            <li class="case">
               <div class="media media--zoom case__media">
                 <Image src={c.image} alt={c.imageAlt} widths={[480, 720, 960]} sizes="(min-width: 960px) 30vw, 92vw" />
               </div>
@@ -148,7 +149,7 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -164,7 +165,7 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
 
   .case__title {
     margin-top: 1.25rem;
-    font-size: clamp(1.45rem, 1.25rem + 0.6vw, 1.75rem);
+    font-size: clamp(1.4rem, 1.25rem + 0.6vw, 1.75rem);
   }
 
   .case__link {
@@ -183,13 +184,15 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
     z-index: 1;
   }
 
-  .case:hover .case__link {
-    color: var(--c-gold-ink);
-    background-size: 100% 1px;
-  }
+  @media (hover: hover) {
+    .case:hover .case__link {
+      color: var(--c-gold-ink);
+      background-size: 100% 1px;
+    }
 
-  .case:hover .case__media :global(img) {
-    transform: scale(1.04);
+    .case:hover .case__media :global(img) {
+      transform: scale(1.04);
+    }
   }
 
   .case:has(.case__link:focus-visible) {
@@ -202,8 +205,9 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
   }
 
   .case__excerpt {
+    max-width: var(--measure);
     margin-top: var(--space-3);
-    font-size: 0.975rem;
+    font-size: 0.9375rem;
     color: var(--c-ink-2);
   }
 

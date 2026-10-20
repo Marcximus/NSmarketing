@@ -1,8 +1,6 @@
 ---
-// Overskriftsblok til sektioner: eyebrow + titel + valgfri lead.
-// Titlen må indeholde <em> for kursiv guld-accent, fx "Sociale medier med <em>kant</em>".
+// Overskriftsblok til sektioner: titel + valgfri lead. Ingen kicker over overskriften (Impeccable craft-floor), og titlen skrives uden <em>.
 interface Props {
-  eyebrow?: string;
   title: string;
   lead?: string;
   align?: 'left' | 'center' | 'split';
@@ -10,7 +8,7 @@ interface Props {
   class?: string;
 }
 
-const { eyebrow, title, lead, align = 'left', as: Tag = 'h2', class: className } = Astro.props;
+const { title, lead, align = 'left', as: Tag = 'h2', class: className } = Astro.props;
 const classes = [
   'section-head',
   align === 'center' && 'section-head--center',
@@ -19,9 +17,8 @@ const classes = [
 ];
 ---
 
-<div class:list={classes} data-reveal>
+<div class:list={classes}>
   <div>
-    {eyebrow && <p class:list={['eyebrow', align === 'center' && 'eyebrow--center']}>{eyebrow}</p>}
     <Tag set:html={title} />
   </div>
   {lead && <p class="lead">{lead}</p>}

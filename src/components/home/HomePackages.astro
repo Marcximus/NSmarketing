@@ -8,20 +8,17 @@ import { packages, formatPrice } from '../../data/packages';
 <section class="section section--beige pkgs">
   <div class="container">
     <SectionHead
-      eyebrow="Pakkeløsninger"
-      title="Tre pakker. Ét&nbsp;klart <em>overblik</em>."
+      title="Tre pakker. Ét&nbsp;klart overblik."
       lead="Faste månedlige priser og ingen skjulte gebyrer. Vælg det niveau, der matcher jeres ambitioner – og byg på med tillægsydelser, når behovet opstår."
       align="center"
     />
 
     <div class="pkgs__grid">
       {
-        packages.map((p, i) => (
+        packages.map((p) => (
           <article
             class:list={['pkg', `pkg--${p.id}`, p.featured && 'pkg--featured', p.featured && 'on-dark']}
             aria-labelledby={`pkg-${p.id}`}
-            data-reveal
-            style={`--reveal-delay: ${i * 0.1}s`}
           >
             {p.badge && <p class="pkg__badge">{p.badge}</p>}
 
@@ -60,7 +57,7 @@ import { packages, formatPrice } from '../../data/packages';
       }
     </div>
 
-    <div class="pkgs__foot" data-reveal>
+    <div class="pkgs__foot">
       <a href="/pakkeloesninger/" class="btn">Sammenlign pakkerne <Icon name="arrow" size={16} /></a>
       <p class="pkgs__note">
         Alle priser er ekskl. moms. Statister, e-mailmarketing, SEO og meget mere kan lægges oven i enhver
@@ -142,7 +139,7 @@ import { packages, formatPrice } from '../../data/packages';
     right: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
     padding: 0.45rem 0.8rem;
     background: var(--c-gold-light);
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -150,13 +147,13 @@ import { packages, formatPrice } from '../../data/packages';
   }
 
   .pkg__name {
-    font-size: clamp(2.1rem, 1.7rem + 1vw, 2.6rem);
+    font-size: clamp(2.1rem, 1.7rem + 1vw, 2.5rem);
     line-height: 1;
   }
 
   .pkg__tagline {
     margin-top: 0.75rem;
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     font-weight: 500;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
@@ -192,15 +189,19 @@ import { packages, formatPrice } from '../../data/packages';
 
   .pkg__amount {
     font-family: var(--f-serif);
-    font-variant-numeric: lining-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     font-size: clamp(2.4rem, 2rem + 1vw, 2.9rem);
     line-height: 1;
     letter-spacing: -0.02em;
   }
 
+  /* Samme datamærke som pakkesidens kort (PlanCards .plan__vat) */
   .pkg__vat {
-    margin-top: 0.35rem;
-    font-size: 0.8125rem;
+    margin-top: 0.4rem;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
     color: var(--c-muted);
   }
 
@@ -235,7 +236,7 @@ import { packages, formatPrice } from '../../data/packages';
   }
 
   .pkg__summary dt {
-    font-size: 0.6875rem;
+    font-size: var(--fs-2xs);
     line-height: 1.35;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -268,7 +269,8 @@ import { packages, formatPrice } from '../../data/packages';
     margin-top: auto;
   }
 
-  /* Tablet: kortene ligger som brede rækker med to kolonner */
+  /* Tablet: kortene ligger som brede rækker – navn og tagline til venstre og prisen til højre øverst,
+     nøgletal og knap nederst. Badget sidder som på desktop i topkanten over prisen. */
   @media (min-width: 640px) and (max-width: 959px) {
     .pkgs__grid {
       max-width: none;
@@ -276,11 +278,13 @@ import { packages, formatPrice } from '../../data/packages';
 
     .pkg {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) auto;
       grid-template-areas:
-        'head summary'
-        'pricing btn';
+        'head pricing'
+        'summary btn';
+      align-items: end;
       column-gap: clamp(2rem, 5vw, 3rem);
+      row-gap: 1.75rem;
     }
 
     .pkg__head {
@@ -289,26 +293,29 @@ import { packages, formatPrice } from '../../data/packages';
 
     .pkg__pricing {
       grid-area: pricing;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      text-align: right;
+    }
+
+    .pkg__price {
+      justify-content: flex-end;
     }
 
     .pkg__summary {
       grid-area: summary;
-      align-self: end;
       margin: 0;
     }
 
     .pkg .btn {
       grid-area: btn;
-      align-self: end;
+      min-width: 15rem;
     }
 
-    .pkg__badge {
-      right: auto;
-      left: calc(50% + clamp(1rem, 2.5vw, 1.5rem));
-    }
-
-    .pkg--featured .pkg__summary {
-      margin-top: 1.5rem;
+    /* Luft mellem badget i topkanten og prisen */
+    .pkg--featured {
+      padding-top: calc(clamp(2rem, 1.5rem + 1.5vw, 2.75rem) + 1.25rem);
     }
   }
 

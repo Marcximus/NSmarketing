@@ -41,6 +41,15 @@ export const site = {
   formEndpoint: '',
 } as const;
 
+/** Sociale profiler, der vises på sitet: kun links med en rigtig profilsti – ikke bare platformens forside. Så snart kunden indsætter fx https://www.instagram.com/silbergcreative/, vises ikonet automatisk. */
+export const socialLinks = site.social.filter((s) => {
+  try {
+    return new URL(s.href).pathname.replace(/\/+$/, '') !== '';
+  } catch {
+    return false;
+  }
+});
+
 export type NavItem = { label: string; href: string };
 
 export const mainNav: NavItem[] = [

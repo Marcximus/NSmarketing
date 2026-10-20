@@ -1,140 +1,83 @@
 ---
-// Mørkebrunt bånd med vores servicegarantier (promises) som store serif-tal.
-import { promises } from '../../data/content';
+// Mørkebrunt bånd med vores løfter (commitments) som sætninger – ikke som tal-bånd.
+import { commitments } from '../../data/content';
 ---
 
 <section class="section section--brown promises" aria-labelledby="promises-title">
-  <div class="promises__marble" aria-hidden="true"></div>
   <div class="container promises__grid">
-    <div class="promises__head" data-reveal>
-      <p class="eyebrow">Det kan I regne med</p>
-      <h2 id="promises-title" class="h3 promises__title">
-        Et samarbejde med <em>faste</em> rammer – fra første dag
-      </h2>
-    </div>
+    <h2 id="promises-title" class="h3 promises__title">
+      Et samarbejde med faste rammer – fra første dag
+    </h2>
 
-    <dl class="promises__list">
-      {
-        promises.map((p, i) => (
-          <div class="promise" data-reveal style={`--reveal-delay: ${0.08 + i * 0.08}s`}>
-            <dt class="promise__label">{p.label}</dt>
-            <dd class="promise__value">{p.value}</dd>
-          </div>
-        ))
-      }
-    </dl>
+    <ul class="commitments" role="list">
+      {commitments.map((c) => <li>{c}</li>)}
+    </ul>
   </div>
 </section>
 
 <style>
   .promises {
-    --promise-line: color-mix(in srgb, var(--c-cream) 16%, transparent);
-
-    overflow: hidden;
-    isolation: isolate;
     padding-block: clamp(4rem, 3rem + 4vw, 6.5rem);
-  }
-
-  /* Meget diskret marmor-glød i baggrunden */
-  .promises__marble {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: url('../../assets/images/marble.jpg');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.06;
-    mix-blend-mode: screen;
   }
 
   .promises__grid {
     display: grid;
-    gap: clamp(2.5rem, 5vw, 3.5rem);
+    gap: clamp(2rem, 4vw, 3rem);
   }
 
-  @media (min-width: 1100px) {
+  @media (min-width: 900px) {
     .promises__grid {
-      grid-template-columns: 0.75fr 2fr;
-      align-items: end;
-      gap: 5rem;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      align-items: start;
+      gap: clamp(3rem, 5vw, 5rem);
     }
-  }
-
-  .promises__head .eyebrow {
-    margin-bottom: var(--space-4);
   }
 
   .promises__title {
     max-width: 16ch;
-    font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
+    font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.25rem);
     line-height: 1.2;
     color: var(--c-cream);
   }
 
-  .promises__title :global(em),
-  .promises__title em {
-    font-style: italic;
-    color: var(--c-gold-light);
-  }
-
-  .promises__list {
+  /* Mobil: én kolonne med hårstreg over hvert løfte */
+  .commitments {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0;
-    border-top: 1px solid var(--promise-line);
+    list-style: none;
+    border-bottom: 1px solid var(--line-on-dark);
   }
 
-  /* Fire kolonner først fra 1024 px, så de spærrede labels ikke brækker over tre linjer */
-  @media (min-width: 1024px) {
-    .promises__list {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      border-top: 0;
-    }
-  }
-
-  /* Visuelt: tal øverst, label under (dt/dd-rækkefølgen bevares for skærmlæsere) */
-  .promise {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    padding: 1.75rem 1.25rem 1.75rem 0;
-    border-bottom: 1px solid var(--promise-line);
-  }
-
-  .promise:nth-child(even) {
-    padding-left: 1.25rem;
-    border-left: 1px solid var(--promise-line);
-  }
-
-  @media (min-width: 1024px) {
-    .promise,
-    .promise:nth-child(even) {
-      padding: 0.5rem 1.5rem 0.25rem;
-      border-bottom: 0;
-      border-left: 1px solid var(--promise-line);
-    }
-  }
-
-  .promise__value {
-    margin: 0;
+  .commitments li {
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line-on-dark);
     font-family: var(--f-serif);
-    font-variant-numeric: lining-nums;
-    font-size: clamp(2.6rem, 1.6rem + 3vw, 4.25rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
+    font-size: clamp(1.15rem, 0.95rem + 0.6vw, 1.5rem);
+    line-height: 1.3;
+    text-wrap: balance;
     color: var(--c-cream);
   }
 
-  .promise__label {
-    max-width: 12rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 1.5;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    overflow-wrap: anywhere;
-    color: var(--c-cream-muted);
+  /* ≥ 900 px: løfterne i et 2×2-grid med lodrette og vandrette hårstreger */
+  @media (min-width: 900px) {
+    .commitments {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-bottom: 0;
+    }
+
+    .commitments li {
+      padding: 1.5rem;
+    }
+
+    .commitments li:nth-child(odd) {
+      padding-left: 0;
+    }
+
+    .commitments li:nth-child(even) {
+      border-left: 1px solid var(--line-on-dark);
+    }
+
+    .commitments li:nth-last-child(-n + 2) {
+      border-bottom: 1px solid var(--line-on-dark);
+    }
   }
 </style>

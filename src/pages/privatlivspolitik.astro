@@ -37,22 +37,18 @@ const t = Object.fromEntries(toc.map((item, i) => [item.id, { ...item, number: i
 
 const summary = [
   {
-    icon: 'user',
     title: 'Kun det, du selv giver os',
     text: 'Vi indsamler kun de oplysninger, du giver os, når du udfylder en formular, skriver eller ringer – og de tekniske oplysninger, der er nødvendige for at vise hjemmesiden.',
   },
   {
-    icon: 'shield',
     title: 'Aldrig solgt',
     text: `Vi sælger aldrig dine oplysninger og deler dem kun, når det er nødvendigt for at hjælpe dig – læs mere i <a href="#${t.modtagere.id}">afsnit ${String(t.modtagere.number).padStart(2, '0')}</a>.`,
   },
   {
-    icon: 'key',
     title: 'Ingen sporing',
     text: 'Hjemmesiden sætter ingen cookies til statistik eller markedsføring og bruger ingen sporingsværktøjer.',
   },
   {
-    icon: 'check',
     title: 'Du bestemmer',
     text: `Du kan altid få indsigt i, rette eller få slettet dine oplysninger – skriv til ${mail}.`,
   },
@@ -60,42 +56,34 @@ const summary = [
 
 const sources = [
   {
-    icon: 'chat',
     title: 'Kontaktformularen',
     text: 'Navn, e-mail og din besked – og de felter, du vælger at udfylde: virksomhed, telefonnummer, den pakke, du er interesseret i, og hvad henvendelsen drejer sig om.',
   },
   {
-    icon: 'phone',
     title: '”Ring mig op”',
     text: 'Navn, telefonnummer og det tidspunkt, du helst vil ringes op.',
   },
   {
-    icon: 'briefcase',
     title: 'Ansøgninger via karrieresiden',
     text: 'Navn, e-mail, telefonnummer, den rolle, du søger, link til portfolio eller profil og det, du fortæller om dig selv. Sender du CV eller andre bilag på mail, behandler vi også dem.',
   },
   {
-    icon: 'mail',
     title: 'Nyhedsbrevet',
     text: 'Din e-mailadresse og oplysninger om din tilmelding, fx hvornår du tilmeldte dig.',
   },
   {
-    icon: 'chat',
     title: 'E-mail og telefon',
     text: 'Når du skriver eller ringer til os, behandler vi det, du fortæller – typisk navn, kontaktoplysninger, virksomhed og indholdet af henvendelsen.',
   },
   {
-    icon: 'layout',
     title: 'Besøg på hjemmesiden',
     text: 'Vores hostingudbyder registrerer tekniske oplysninger som IP-adresse, browsertype, tidspunkt og den side, du besøger, i en serverlog. De bruges kun til drift og sikkerhed – ikke til statistik eller markedsføring.',
   },
   {
-    icon: 'instagram',
     title: 'Sociale medier',
     text: 'Når du følger, kommenterer eller skriver til os på fx Instagram, Facebook, TikTok eller LinkedIn, behandler vi det, du deler med os dér. Platformene behandler også selv oplysninger om dig efter deres egne privatlivspolitikker, og for den statistik, de giver os om vores profiler, kan vi være fælles dataansvarlige med platformen.',
   },
   {
-    icon: 'users',
     title: 'Når I er kunde hos os',
     text: 'Vi behandler kontaktoplysninger på jeres kontaktpersoner samt oplysninger om aftale, fakturering og betaling. Behandler vi personoplysninger på jeres vegne – fx på jeres sociale medier, i annoncer eller nyhedsbreve – gør vi det som databehandler efter en databehandleraftale med jer.',
   },
@@ -209,8 +197,7 @@ const rights = [
   description={`Læs, hvordan ${site.name} indsamler, bruger og beskytter personoplysninger – og hvilke rettigheder du har efter databeskyttelsesreglerne (GDPR).`}
 >
   <PageHero
-    eyebrow="Privatlivspolitik"
-    title="Sådan passer vi på <em>dine oplysninger</em>"
+    title="Sådan passer vi på dine oplysninger"
     lead="Her kan du læse, hvilke personoplysninger vi indsamler, hvorfor vi gør det, og hvilke rettigheder du har. Vi har skrevet det så klart, vi kan – uden at gå på kompromis med det juridiske."
     align="center"
   >
@@ -234,7 +221,7 @@ const rights = [
         til at kontakte os.
       </p>
       <LegalFacts
-        eyebrow="Dataansvarlig"
+        role="Dataansvarlig"
         title={site.name}
         rows={[
           site.cvr ? { label: 'CVR', value: site.cvr } : { label: 'CVR', placeholder: 'CVR-nummer' },
@@ -359,7 +346,7 @@ const rights = [
         kan finde en løsning. Du har også altid ret til at klage til Datatilsynet.
       </p>
       <LegalFacts
-        eyebrow="Klageinstans"
+        role="Klageinstans"
         title="Datatilsynet"
         rows={[
           { label: 'Adresse', value: 'Carl Jacobsens Vej 35, 2500 Valby' },

@@ -34,29 +34,26 @@ const t = Object.fromEntries(toc.map((item, i) => [item.id, { ...item, number: i
 
 const summary = [
   {
-    icon: 'chart',
     title: 'Ingen statistik eller marketing',
     text: 'Vi bruger ikke Google Analytics, Meta Pixel eller lignende værktøjer, der måler eller følger dit besøg.',
   },
   {
-    icon: 'shield',
     title: 'Ingen tredjepartsscripts',
     text: 'Siden henter ikke scripts, videoer, kort eller sociale plugins fra andre tjenester.',
   },
   {
-    icon: 'pen',
     title: 'Selvhostede skrifttyper',
     text: 'Skrifttyperne ligger på vores egen server, så dit besøg ikke deles med fx Google Fonts.',
   },
 ] as const;
 
-const tagNo = '<span class="ctag">Bruges ikke</span>';
+const tagNo = '<span class="tag">Bruges ikke</span>';
 
 const categories = [
   [
     'Nødvendige',
     'Får hjemmesiden til at virke og beskytter den mod misbrug.',
-    '<span class="ctag ctag--gold">Kun teknisk nødvendige</span><span class="ctag-note">Vi sætter ingen selv. Vores hostingudbyder kan i særlige tilfælde sætte en teknisk nødvendig cookie, fx for at beskytte siden mod angreb. Den slags kræver ikke samtykke.</span>',
+    '<span class="tag tag--gold">Kun teknisk nødvendige</span><span class="ctag-note">Vi sætter ingen selv. Vores hostingudbyder kan i særlige tilfælde sætte en teknisk nødvendig cookie, fx for at beskytte siden mod angreb. Den slags kræver ikke samtykke.</span>',
   ],
   ['Præferencer', 'Husker dine valg, fx sprog eller region.', tagNo],
   ['Statistik', 'Måler, hvordan besøgende bruger hjemmesiden.', tagNo],
@@ -101,8 +98,7 @@ const browsers = [
     ===================================================================================
   -->
   <PageHero
-    eyebrow="Cookiepolitik"
-    title="Ingen sporing – og derfor <em>intet cookiebanner</em>"
+    title="Ingen sporing – og derfor intet cookiebanner"
     lead="Vi har bygget hjemmesiden uden cookies til statistik og marketing. Du kan læse i ro, uden at dit besøg bliver målt, fulgt eller delt med andre."
     align="center"
   >
@@ -207,33 +203,8 @@ const browsers = [
 </BaseLayout>
 
 <style>
-  /* Statusmærke i tabellen "Cookies på hjemmesiden" (indsættes som HTML i tabelcellen) */
-  :global(.ctag) {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.2rem 0.65rem;
-    border: 1px solid var(--c-sand);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--c-ink-2);
-    white-space: nowrap;
-  }
-
-  :global(.ctag)::before {
-    content: '';
-    width: 0.6rem;
-    height: 1px;
-    background: var(--c-gold);
-  }
-
-  :global(.ctag--gold) {
-    border-color: var(--c-gold);
-    color: var(--c-gold-ink);
-  }
-
+  /* Statusmærkerne i tabellen "Cookies på hjemmesiden" bruger den fælles .tag (global.css).
+     Forklaringen under mærket står som almindelig tekst. */
   :global(.ctag-note) {
     display: block;
     margin-top: 0.6rem;

@@ -1,29 +1,23 @@
 ---
-// Fire arbejdsprincipper på beige baggrund.
-import Icon from '../Icon.astro';
+// Fire arbejdsprincipper på beige baggrund – redaktionel liste med hårstreger (ingen rækkefølge, derfor ul).
 import SectionHead from '../SectionHead.astro';
-import type { IconName } from '../../data/icons';
 
-const principles: { title: string; text: string; icon: IconName }[] = [
+const principles: { title: string; text: string }[] = [
   {
     title: 'Æstetik med formål',
     text: 'Smukt indhold er kun halvdelen. Alt, vi skaber, har et mål – flere følgere, der bliver til henvendelser, bookinger og salg.',
-    icon: 'sparkle',
   },
   {
     title: 'Et fast team, der kender jer',
     text: 'I får én fast kontaktperson og et team, der lærer jeres brand, tone og kunder at kende. Ingen nye ansigter hver måned.',
-    icon: 'users',
   },
   {
     title: 'Gennemsigtighed i tal',
     text: 'Hver måned får I en rapport i et sprog, alle kan forstå. Vi viser, hvad der virker – og hvad vi justerer næste gang.',
-    icon: 'chart',
   },
   {
     title: 'Nemt for jer',
     text: 'Vi står for planlægning, produktion og opfølgning. I siger god for indholdet – og bruger tiden på det, I er bedst til.',
-    icon: 'clock',
   },
 ];
 ---
@@ -31,115 +25,20 @@ const principles: { title: string; text: string; icon: IconName }[] = [
 <section class="section section--beige principles">
   <div class="container">
     <SectionHead
-      eyebrow="Sådan tænker vi"
-      title="Fire principper bag <em>alt</em>, vi laver"
+      title="Fire principper bag alt, vi laver"
       lead="Uanset om vi planlægger en kampagne, filmer en reel eller gennemgår jeres tal, arbejder vi ud fra de samme fire principper."
       align="split"
     />
 
-    <ol class="principles__list" role="list">
+    <ul class="ruled-list ruled-list--2 principles__list" role="list">
       {
-        principles.map((item, i) => (
-          <li class="principle" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
-            <div class="principle__top">
-              <span class="principle__num" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <Icon name={item.icon} size={26} class="principle__icon" />
-            </div>
-            <h3 class="principle__title">{item.title}</h3>
-            <p class="principle__text">{item.text}</p>
+        principles.map((item) => (
+          <li>
+            <h3 class="ruled-list__title">{item.title}</h3>
+            <p class="ruled-list__text">{item.text}</p>
           </li>
         ))
       }
-    </ol>
+    </ul>
   </div>
 </section>
-
-<style>
-  .principles__list {
-    display: grid;
-    list-style: none;
-    border-top: 1px solid var(--c-sand);
-  }
-
-  @media (min-width: 720px) {
-    .principles__list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .principles__list {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-
-  .principle {
-    padding: var(--space-6) 0 var(--space-7);
-    border-bottom: 1px solid var(--c-sand);
-  }
-
-  @media (min-width: 720px) {
-    .principle {
-      padding: var(--space-7) var(--space-6) var(--space-7) var(--space-6);
-    }
-
-    .principle:nth-child(odd) {
-      padding-left: 0;
-    }
-
-    .principle:nth-child(even) {
-      border-left: 1px solid var(--c-sand);
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .principle {
-      padding: var(--space-7) var(--space-5) var(--space-6);
-      border-bottom: 0;
-    }
-
-    .principle:nth-child(odd) {
-      padding-left: var(--space-5);
-    }
-
-    .principle:first-child {
-      padding-left: 0;
-    }
-
-    .principle + .principle {
-      border-left: 1px solid var(--c-sand);
-    }
-  }
-
-  .principle__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-6);
-  }
-
-  .principle__num {
-    font-family: var(--f-serif);
-    font-size: 1.5rem;
-    font-style: italic;
-    line-height: 1;
-    color: var(--c-gold-ink);
-  }
-
-  .principle :global(.principle__icon) {
-    color: var(--c-gold);
-  }
-
-  .principle__title {
-    font-size: clamp(1.35rem, 1.2rem + 0.4vw, 1.55rem);
-  }
-
-  .principle__text {
-    margin-top: var(--space-3);
-    max-width: 26rem;
-    font-size: 0.975rem;
-    color: var(--c-ink-2);
-  }
-</style>

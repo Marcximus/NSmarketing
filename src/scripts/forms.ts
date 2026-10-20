@@ -1,6 +1,9 @@
 // Håndterer alle formularer med data-form="navn".
-// Er site.formEndpoint sat (fx Formspree/Web3Forms), sendes formularen dertil.
-// Ellers åbnes brugerens mailprogram med en udfyldt mail som fallback.
+// Er site.formEndpoint sat (fx Formspree/Web3Forms), sendes formularen dertil, og først når serveren har
+// svaret OK, vises en tak.
+// Ellers åbnes brugerens mailprogram med en udfyldt mail som fallback. Statusbeskeden er ærlig: intet er
+// sendt endnu, så den beder brugeren trykke send i mailen (ingen "Tak" før noget er afsendt) og nævner
+// e-mailadressen, hvis mailprogrammet ikke åbner.
 // Uden JS bruger formularerne deres egen action (formEndpoint eller mailto) og browserens validering.
 
 import { site } from '../data/site';
@@ -30,7 +33,14 @@ function successText(form: HTMLFormElement, type: string): string {
 const messages = {
   sending: 'Sender …',
   error: `Noget gik galt. Prøv igen, eller skriv direkte til ${site.email}.`,
-  mailto: 'Dit mailprogram åbner nu med beskeden udfyldt – tryk send for at sende den til os.',
+};
+
+/** Status i mailto-fallbacken pr. formulartype: intet er sendt, før brugeren trykker send i mailen */
+const mailtoText: Record<string, string> = {
+  kontakt: 'Jeres mailprogram åbner nu med beskeden udfyldt. Tryk send i mailen – så vender vi tilbage inden for én hverdag.',
+  opkald: 'Jeres mailprogram åbner nu med opkaldsønsket udfyldt. Tryk send i mailen – så ringer vi jer op.',
+  karriere: 'Dit mailprogram åbner nu med ansøgningen udfyldt. Tryk send i mailen – så læser vi den og vender tilbage.',
+  newsletter: 'Dit mailprogram åbner nu med tilmeldingen udfyldt. Tryk send i mailen for at blive tilmeldt.',
 };
 
 /** Felter, der må forudfyldes fra URL'en pr. formulartype, fx /kontakt/?pakke=gold eller /karriere/?rolle=Praktikant */
@@ -216,7 +226,6 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
 
     const data = new FormData(form);
     if (data.get('_gotcha')) return; // spam-felt
-    const done = successText(form, type);
 
     if (!site.formEndpoint) {
       const body = [...data.entries()]
@@ -224,7 +233,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
         .map(([key, value]) => `${mailLabel(form, key)}: ${mailValue(form, key, String(value))}`)
         .join('\n');
       window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(mailSubject(form, data))}&body=${encodeURIComponent(body)}`;
-      setStatus(`${messages.mailto} ${done}`);
+      setStatus(`${mailtoText[type] ?? mailtoText.kontakt} Åbnede der ikke en mail? Skriv direkte til ${site.email}.`);
       return;
     }
 
@@ -237,6 +246,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
         headers: { Accept: 'application/json' },
       });
       if (!response.ok) throw new Error(String(response.status));
+      const done = successText(form, type); // læses før reset, da opkaldsteksten følger det valgte tidspunkt
       form.reset();
       setStatus(done);
     } catch {
