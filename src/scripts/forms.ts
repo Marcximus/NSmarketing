@@ -1,5 +1,5 @@
 // Håndterer alle formularer med data-form="navn".
-// Er site.formEndpoint sat (fx Formspree/Web3Forms), sendes formularen dertil, og først når serveren har
+// Er site.formEndpoint sat (fx Formspree), sendes formularen dertil, og først når serveren har
 // svaret OK, vises en tak.
 // Ellers åbnes brugerens mailprogram med en udfyldt mail som fallback. Statusbeskeden er ærlig: intet er
 // sendt endnu, så den beder brugeren trykke send i mailen (ingen "Tak" før noget er afsendt) og nævner

@@ -8,7 +8,7 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer on-dark">
   <div class="container">
-    {/* Nyhedsbrevet vises først, når site.formEndpoint er sat – en tilmelding via mailprogrammet er vildledende. Kræver kundens Formspree/Web3Forms-endpoint. */}
+    {/* Nyhedsbrevet vises først, når site.formEndpoint er sat – en tilmelding via mailprogrammet er vildledende. Kræver kundens Formspree-endpoint. */}
     {site.formEndpoint && (
       <div class="site-footer__newsletter">
         <div>

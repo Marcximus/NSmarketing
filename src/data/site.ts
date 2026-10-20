@@ -36,7 +36,9 @@ export const site = {
     { label: 'TikTok', href: 'https://www.tiktok.com/', icon: 'tiktok' },
   ],
 
-  // Formularer sendes hertil (fx Formspree eller Web3Forms). Tom streng = åbner mailprogram som fallback.
+  // Formularer sendes hertil, fx et gratis Formspree-endpoint ('https://formspree.io/f/xxxxxxx').
+  // Tjenester der kræver en ekstra nøgle i formularen (fx Web3Forms' access_key) understøttes ikke uden kodeændring.
+  // Tom streng = åbner mailprogram som fallback.
   // TODO: Opret gratis endpoint og indsæt URL'en her.
   formEndpoint: '',
 } as const;
