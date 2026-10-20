@@ -140,7 +140,7 @@ const [feature, ...rest] = testimonials;
     display: grid;
     margin-top: clamp(3.5rem, 2.5rem + 4vw, 6rem);
     list-style: none;
-    border-top: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+    border-top: 1px solid rgb(var(--c-cream-muted-rgb) / 0.3);
   }
 
   .case-quotes__item {
@@ -148,7 +148,7 @@ const [feature, ...rest] = testimonials;
   }
 
   .case-quotes__list > li + li .case-quotes__item {
-    border-top: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+    border-top: 1px solid rgb(var(--c-cream-muted-rgb) / 0.3);
   }
 
   .case-quotes__item blockquote p {
@@ -189,7 +189,7 @@ const [feature, ...rest] = testimonials;
       border-top: 0;
       padding-left: 2.5rem;
       padding-right: 0;
-      border-left: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+      border-left: 1px solid rgb(var(--c-cream-muted-rgb) / 0.3);
     }
   }
 </style>

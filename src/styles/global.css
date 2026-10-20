@@ -22,10 +22,22 @@
   --c-gold-light: #d4b98a; /* guld som tekst på mørke flader (AA) */
   --c-cream: #f3eee7; /* tekst på mørke flader */
   --c-cream-muted: #cdbfae; /* dæmpet tekst på mørke flader (AA) */
+
+  /* RGB-kanaler til gennemsigtige varianter: rgb(var(--c-x-rgb) / 0.5). Samme farver som ovenfor,
+     men virker også i Safari < 16.2, der ikke kender color-mix(). */
+  --c-beige-rgb: 239 231 220;
+  --c-brown-rgb: 58 42 33;
+  --c-brown-deep-rgb: 36 25 20;
+  --c-cream-rgb: 243 238 231;
+  --c-cream-muted-rgb: 205 191 174;
+  --c-gold-rgb: 176 141 87;
+  --c-gold-light-rgb: 212 185 138;
+  --c-line-rgb: 228 219 207;
+  --c-paper-rgb: 250 247 242;
   --c-field: #8a7d70; /* kant på formularfelter – 4,0:1 på hvid, 3,7:1 på paper (WCAG 1.4.11) */
   --c-error: #9b2c2c; /* fejltekst og -kant på lyse flader – 7,5:1 på hvid, 7,0:1 på paper */
   --c-error-on-dark: #f2b8a8; /* fejltekst og -kant på mørke flader – 10,0:1 på brown-deep, 8,0:1 på brown */
-  --line-on-dark: color-mix(in srgb, var(--c-cream) 16%, transparent); /* hårstreger på mørke flader */
+  --line-on-dark: rgb(var(--c-cream-rgb) / 0.16); /* hårstreger på mørke flader */
 
   /* Typografi */
   --f-serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
@@ -76,7 +88,7 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --dur: 0.45s;
-  --shadow-soft: 0 24px 60px -30px color-mix(in srgb, var(--c-brown-deep) 35%, transparent);
+  --shadow-soft: 0 24px 60px -30px rgb(var(--c-brown-deep-rgb) / 0.35);
 
   /* Paletten er pinned lys – browserens egne flader (formularer, scrollbars) følger den */
   color-scheme: only light;
@@ -95,17 +107,16 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-behavior: smooth;
   /* Browser-overflader i paletten. scrollbar-color arves af indre scroll-containere
      (fx tillægsydelsernes kategoristrimmel og sammenligningstabellen). */
   scrollbar-color: color-mix(in srgb, var(--c-brown) 40%, var(--c-paper)) var(--c-paper);
-  -webkit-tap-highlight-color: color-mix(in srgb, var(--c-gold) 22%, transparent);
+  -webkit-tap-highlight-color: rgb(var(--c-gold-rgb) / 0.22);
 }
 
 /* Mørke flader: lysere guld-caret og scrollbar */
 :is(.on-dark, .section--brown, .section--deep) {
   caret-color: var(--c-gold-light);
-  scrollbar-color: color-mix(in srgb, var(--c-gold-light) 55%, transparent) transparent;
+  scrollbar-color: rgb(var(--c-gold-light-rgb) / 0.55) transparent;
 }
 
 /* Ankre og tastaturfokus må ikke lande under den sticky header. Det løses med scroll-margin på
@@ -302,6 +313,7 @@ a {
   color: inherit;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25em;
+  text-decoration-color: var(--c-gold); /* fallback for Safari < 16.2 */
   text-decoration-color: color-mix(in srgb, currentColor 35%, var(--c-gold));
 }
 
@@ -591,7 +603,7 @@ a {
 .btn--outline-light {
   --btn-bg: transparent;
   --btn-fg: var(--c-cream);
-  --btn-border: color-mix(in srgb, var(--c-cream) 55%, transparent);
+  --btn-border: rgb(var(--c-cream-rgb) / 0.55);
   --btn-bg-hover: var(--c-cream);
   --btn-fg-hover: var(--c-brown-deep);
   --btn-border-hover: var(--c-cream);
@@ -982,8 +994,8 @@ a {
       --marble-wash,
       linear-gradient(
         180deg,
-        color-mix(in srgb, var(--c-paper) 58%, transparent),
-        color-mix(in srgb, var(--c-paper) 80%, transparent)
+        rgb(var(--c-paper-rgb) / 0.58),
+        rgb(var(--c-paper-rgb) / 0.8)
       )
     ),
     url('../assets/images/marble.jpg');
@@ -1025,8 +1037,15 @@ a {
   }
 }
 
+/* Glidende scroll først efter load (klassen sættes i BaseLayout), så et direkte link til et #anker
+   lander præcist i stedet for at animere mod et mål, der flytter sig, mens skrifttyperne indlæses */
+html.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html,
+  html.smooth-scroll {
     scroll-behavior: auto;
   }
 

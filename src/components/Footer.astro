@@ -156,7 +156,7 @@ const year = new Date().getFullYear();
     display: grid;
     gap: 2rem;
     padding-block: clamp(3.5rem, 6vw, 5rem);
-    border-bottom: 1px solid color-mix(in srgb, var(--c-cream-muted) 18%, transparent);
+    border-bottom: 1px solid rgb(var(--c-cream-muted-rgb) / 0.18);
   }
 
   .site-footer__newsletter .h3 {
@@ -188,7 +188,7 @@ const year = new Date().getFullYear();
   .newsletter__input {
     min-height: 3.25rem;
     padding: 0.85rem 1rem;
-    border: 1px solid color-mix(in srgb, var(--c-cream-muted) 60%, transparent);
+    border: 1px solid rgb(var(--c-cream-muted-rgb) / 0.6);
     border-radius: 0;
     background: transparent;
     color: var(--c-cream);
@@ -291,7 +291,7 @@ const year = new Date().getFullYear();
     justify-content: center;
     width: 44px;
     height: 44px;
-    border: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+    border: 1px solid rgb(var(--c-cream-muted-rgb) / 0.3);
     color: var(--c-cream);
     transition:
       border-color 0.3s var(--ease),
@@ -325,6 +325,7 @@ const year = new Date().getFullYear();
   .site-footer__list span {
     display: inline-flex;
     align-items: flex-start;
+    min-width: 44px; /* tap-mål – også for korte links som "Cases" */
     gap: 0.65rem;
     color: var(--c-cream);
     text-decoration: none;
@@ -371,7 +372,7 @@ const year = new Date().getFullYear();
     justify-content: space-between;
     gap: 1rem 2rem;
     padding-block: 1.75rem;
-    border-top: 1px solid color-mix(in srgb, var(--c-cream-muted) 18%, transparent);
+    border-top: 1px solid rgb(var(--c-cream-muted-rgb) / 0.18);
     color: var(--c-cream-muted);
     font-size: 0.8125rem;
   }

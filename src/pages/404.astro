@@ -59,8 +59,8 @@ const contactLink = mainNav.find((item) => item.href.startsWith('/kontakt'))?.hr
   .nf__marble {
     --marble-wash: radial-gradient(
       ellipse at center,
-      color-mix(in srgb, var(--c-paper) 90%, transparent) 0%,
-      color-mix(in srgb, var(--c-paper) 55%, transparent) 70%
+      rgb(var(--c-paper-rgb) / 0.9) 0%,
+      rgb(var(--c-paper-rgb) / 0.55) 70%
     );
   }
 

@@ -192,7 +192,6 @@ function mailSubject(form: HTMLFormElement, data: FormData): string {
 // ---------- Opsætning ----------
 
 document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => {
-  form.noValidate = true; // JS står for valideringen; uden JS bruges browserens egen
   const status = form.querySelector<HTMLElement>('[data-form-status]');
   const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
   const type = form.dataset.form ?? 'kontakt';
@@ -255,4 +254,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
       submit?.removeAttribute('disabled');
     }
   });
+
+  // Først når submit-handleren er på plads, overtager JS valideringen (ellers bruges browserens egen)
+  form.noValidate = true;
 });

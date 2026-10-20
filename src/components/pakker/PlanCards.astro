@@ -142,7 +142,7 @@ import { packages, pricingNote, formatPrice } from '../../data/packages';
   }
 
   .plan--featured {
-    --plan-line: color-mix(in srgb, var(--c-cream) 16%, transparent);
+    --plan-line: rgb(var(--c-cream-rgb) / 0.16);
     --plan-muted: var(--c-cream-muted);
 
     background: var(--c-brown);
@@ -343,7 +343,7 @@ import { packages, pricingNote, formatPrice } from '../../data/packages';
 
   .plan--featured .plan__more {
     color: var(--c-cream-muted);
-    text-decoration-color: color-mix(in srgb, var(--c-cream) 35%, transparent);
+    text-decoration-color: rgb(var(--c-cream-rgb) / 0.35);
   }
 
   .plan--featured .plan__more:hover {

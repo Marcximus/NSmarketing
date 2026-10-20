@@ -125,8 +125,8 @@ const sameDayNote = site.callbackCutoff
   /* ---------- Formular på mørk baggrund ---------- */
   .cb__form {
     padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-    border: 1px solid color-mix(in srgb, var(--c-gold-light) 40%, transparent);
-    background: color-mix(in srgb, var(--c-brown) 55%, transparent);
+    border: 1px solid rgb(var(--c-gold-light-rgb) / 0.4);
+    background: rgb(var(--c-brown-rgb) / 0.55);
   }
 
   .cb__fields {
@@ -206,8 +206,8 @@ const sameDayNote = site.callbackCutoff
   .cb__status:not(:empty) {
     margin-top: var(--space-4);
     padding: 0.85rem 1rem;
-    border: 1px solid color-mix(in srgb, var(--c-gold-light) 55%, transparent);
-    background: color-mix(in srgb, var(--c-cream) 6%, transparent);
+    border: 1px solid rgb(var(--c-gold-light-rgb) / 0.55);
+    background: rgb(var(--c-cream-rgb) / 0.06);
     color: var(--c-cream);
   }
 

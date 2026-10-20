@@ -37,7 +37,7 @@ const colClass = (id: string, extra?: string | false) => [
       align="split"
     />
 
-    <div class="cmp" data-cmp data-active={defaultPlan}>
+    <div class="cmp" data-cmp data-active={defaultPlan} data-needs-js>
       <div class="cmp__picker" role="group" aria-label="Vælg hvilken pakke tabellen viser">
         {
           packages.map((p) => (
@@ -161,6 +161,9 @@ const colClass = (id: string, extra?: string | false) => [
 </section>
 
 <script>
+  // Safari < 14 kender kun MediaQueryList.addListener (forældet, men nødvendig som fallback)
+  type LegacyMediaQueryList = { addListener(listener: (event: MediaQueryListEvent) => void): void };
+
   const root = document.querySelector<HTMLElement>('[data-cmp]');
 
   if (root) {
@@ -172,6 +175,8 @@ const colClass = (id: string, extra?: string | false) => [
     const mobile = window.matchMedia('(max-width: 719px), (orientation: landscape) and (max-height: 500px)');
 
     const show = (id: string | undefined) => {
+      // En død tabel (BaseLayout satte .is-dead) vises i sin helhed og må ikke omskrives bagefter
+      if (root.classList.contains('is-dead')) return;
       const button = buttons.find((b) => b.dataset.pick === id);
       if (!id || !button) return;
       root.dataset.active = id;
@@ -182,8 +187,13 @@ const colClass = (id: string, extra?: string | false) => [
       footCells.forEach((td) => (td.colSpan = mobile.matches && td.dataset.col === id ? 2 : 1));
     };
 
-    show(root.dataset.active ?? buttons.find((b) => b.getAttribute('aria-pressed') === 'true')?.dataset.pick);
-    mobile.addEventListener('change', () => show(root.dataset.active));
+    // Først alle listeners, så is-ready, og til sidst første show(). Kaster noget før is-ready, er DOM'en
+    // urørt; kaster første show(), rulles is-ready og colSpan tilbage. I begge tilfælde giver BaseLayout
+    // .is-dead (hele tabellen) i stedet for en halvt omskrevet tabel.
+    const onMobileChange = () => show(root.dataset.active);
+    // Safari < 14 har kun den ældre addListener
+    if (mobile.addEventListener) mobile.addEventListener('change', onMobileChange);
+    else (mobile as unknown as LegacyMediaQueryList).addListener(onMobileChange);
 
     buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.pick)));
 
@@ -191,12 +201,23 @@ const colClass = (id: string, extra?: string | false) => [
     document.querySelectorAll<HTMLAnchorElement>('[data-show-plan]').forEach((link) => {
       link.addEventListener('click', () => show(link.dataset.showPlan));
     });
+
+    if (!root.classList.contains('is-dead')) {
+      root.classList.add('is-ready');
+      try {
+        show(root.dataset.active ?? buttons.find((b) => b.getAttribute('aria-pressed') === 'true')?.dataset.pick);
+      } catch (error) {
+        root.classList.remove('is-ready');
+        footCells.forEach((td) => (td.colSpan = 1));
+        throw error;
+      }
+    }
   }
 </script>
 
 <style>
   .cmp {
-    --cmp-feat: color-mix(in srgb, var(--c-beige) 42%, var(--c-white));
+    --cmp-feat: #f8f5f0; /* = beige 42 % på hvid (color-mix er ikke brugt af hensyn til Safari < 16.2) */
     --cmp-pad-x: clamp(0.6rem, 1.2vw, 1.25rem);
 
     position: relative;
@@ -451,13 +472,14 @@ const colClass = (id: string, extra?: string | false) => [
       z-index: 3;
     }
 
-    /* Med JS: én pakke ad gangen */
+    /* Med JS: én pakke ad gangen. Uden JS – eller hvis vælger-scriptet ikke kørte (.is-dead, se
+       BaseLayout) – hele tabellen med vandret scroll. is-off på de ikke-valgte kolonner er server-renderet. */
     /* Under den klæbende pakkevælger i stedet for under kolonneoverskrifterne */
-    :global(.js) .cmp__table a {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table a {
       scroll-margin-top: calc(var(--header-h) + 7rem);
     }
 
-    :global(.js) .cmp__picker {
+    :global(html.js) .cmp:not(.is-dead) .cmp__picker {
       position: sticky;
       top: var(--header-h);
       z-index: 3;
@@ -469,48 +491,48 @@ const colClass = (id: string, extra?: string | false) => [
       border-bottom: 1px solid var(--c-line);
     }
 
-    :global(.js) .cmp__scroll {
+    :global(html.js) .cmp:not(.is-dead) .cmp__scroll {
       overflow: visible;
       margin-inline: 0;
       padding-inline: 0;
     }
 
-    :global(.js) .cmp__table {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table {
       min-width: 0;
       table-layout: auto;
     }
 
-    :global(.js) .cmp__table thead,
-    :global(.js) .cmp__table .is-off {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table thead,
+    :global(html.js) .cmp:not(.is-dead) .cmp__table .is-off {
       display: none;
     }
 
-    :global(.js) .cmp__table tbody th,
-    :global(.js) .cmp__table tfoot th {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tbody th,
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tfoot th {
       position: static;
       width: 58%;
     }
 
-    :global(.js) .cmp__table td {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table td {
       text-align: right;
       padding-right: 0;
     }
 
-    :global(.js) .cmp__table .is-featured {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table .is-featured {
       background: transparent;
     }
 
-    :global(.js) .cmp__table tfoot th {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tfoot th {
       display: none;
     }
 
-    :global(.js) .cmp__table tfoot td {
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tfoot td {
       padding-inline: 0;
       text-align: left;
     }
 
     /* Gruppetitlen står alene i rækken (de øvrige celler er skjult) – lad den ombryde */
-    :global(.js) .cmp__group th span {
+    :global(html.js) .cmp:not(.is-dead) .cmp__group th span {
       white-space: normal;
       contain: none;
     }
@@ -549,7 +571,7 @@ const colClass = (id: string, extra?: string | false) => [
   /* Telefon på tværs: header + klæbende vælger må højst dække ca. 30 % af højden –
      navn og pris står på én linje i en lavere knap */
   @media (orientation: landscape) and (max-height: 500px) {
-    :global(.js) .cmp__picker {
+    :global(html.js) .cmp:not(.is-dead) .cmp__picker {
       padding-block: 0.1875rem;
     }
 
@@ -583,9 +605,14 @@ const colClass = (id: string, extra?: string | false) => [
   }
 
   /* Billedtekstens "viser …" giver kun mening, når der vises én pakke */
-  @media (min-width: 720px) {
+  @media (min-width: 720px) and (orientation: portrait), (min-width: 720px) and (min-height: 501px) {
     .cmp__caption-active {
       display: none;
     }
+  }
+
+  :global(html:not(.js)) .cmp__caption-active,
+  .cmp.is-dead .cmp__caption-active {
+    display: none;
   }
 </style>

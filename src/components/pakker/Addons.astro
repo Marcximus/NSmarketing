@@ -223,7 +223,7 @@ import { site } from '../../data/site';
   @media (max-width: 1023px) {
     .addons__nav {
       margin-inline: calc(-1 * var(--gutter));
-      background: color-mix(in srgb, var(--c-paper) 97%, transparent);
+      background: rgb(var(--c-paper-rgb) / 0.97);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border-block: 1px solid var(--c-line);
@@ -429,7 +429,7 @@ import { site } from '../../data/site';
   /* Rækken, et link har ført til (fx "Statister & modeller" fra forsiden) – en svag beige tone,
      der fylder lidt ud over kanten uden at flytte layoutet */
   .menu__row:target {
-    --row-tint: color-mix(in srgb, var(--c-beige) 70%, transparent);
+    --row-tint: rgb(var(--c-beige-rgb) / 0.7);
 
     background: var(--row-tint);
     box-shadow:

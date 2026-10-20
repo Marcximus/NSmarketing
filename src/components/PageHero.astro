@@ -38,8 +38,8 @@ const { title, lead, align = 'center', compact = false } = Astro.props;
   .page-hero__marble {
     --marble-wash: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--c-paper) 62%, transparent) 0%,
-      color-mix(in srgb, var(--c-paper) 86%, transparent) 100%
+      rgb(var(--c-paper-rgb) / 0.62) 0%,
+      rgb(var(--c-paper-rgb) / 0.86) 100%
     );
     --marble-pos: center 30%;
   }

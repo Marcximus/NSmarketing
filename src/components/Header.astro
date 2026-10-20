@@ -41,7 +41,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
   </div>
 </aside>
 
-<header class="site-header" data-variant={variant} data-header>
+<header class="site-header" data-variant={variant} data-header data-needs-js>
   <div class="container site-header__inner">
     <a href="/" class="site-header__logo" aria-label={`${site.name} – til forsiden`}>
       {/* Inline SVG i currentColor: ink på lys header, creme over forsidens hero, synligt i høj kontrast */}
@@ -162,7 +162,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     display: flex;
     gap: 0.9rem;
     padding-left: 1.75rem;
-    border-left: 1px solid color-mix(in srgb, var(--c-cream-muted) 25%, transparent);
+    border-left: 1px solid rgb(var(--c-cream-muted-rgb) / 0.25);
   }
 
   /* Touch på iPad på tværs (topbaren vises fra 1024px): trykflader på mindst 44 px */
@@ -194,9 +194,12 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
   .site-header::before {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: -1;
-    background: color-mix(in srgb, var(--c-paper) 96%, transparent);
+    background: rgb(var(--c-paper-rgb) / 0.96);
     backdrop-filter: saturate(140%) blur(10px);
     -webkit-backdrop-filter: saturate(140%) blur(10px);
     transition: opacity 0.4s var(--ease);
@@ -302,16 +305,17 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     }
   }
 
-  /* Overlay-variant (over mørkt hero-billede) */
-  .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open) {
+  /* Overlay-variant (over mørkt hero-billede). Kun når scroll-scriptet kører – uden JS eller ved
+     .is-dead bliver headeren aldrig solid ved scroll, så den holdes solid fra start. */
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open) {
     color: var(--c-cream);
   }
 
-  .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open)::before {
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open)::before {
     opacity: 0;
   }
 
-  .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open) .site-header__cta {
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open) .site-header__cta {
     --btn-bg: var(--c-cream);
     --btn-fg: var(--c-brown-deep);
     --btn-border: var(--c-cream);
@@ -320,7 +324,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     --btn-border-hover: var(--c-gold-light);
   }
 
-  .site-header[data-variant='overlay']:not(.is-scrolled):not(.menu-open) :focus-visible {
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open) :focus-visible {
     outline-color: var(--c-gold-light);
   }
 
@@ -363,17 +367,20 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
     }
   }
 
-  /* Uden JS: skjul burgeren og vis et almindeligt link til footerens genveje */
+  /* Uden JS – eller hvis menu-scriptet ikke kørte (.is-dead, se BaseLayout): skjul burgeren og
+     vis et almindeligt link til footerens genveje. */
   .menu-fallback {
     display: none;
   }
 
-  :global(html:not(.js)) .menu-toggle {
+  :global(html:not(.js)) .menu-toggle,
+  .site-header.is-dead .menu-toggle {
     display: none;
   }
 
   @media (max-width: 1023px) {
-    :global(html:not(.js)) .menu-fallback {
+    :global(html:not(.js)) .menu-fallback,
+    .site-header.is-dead .menu-fallback {
       display: inline-flex;
       align-items: center;
       min-height: 44px;
@@ -489,6 +496,9 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
 </style>
 
 <script>
+  // Safari < 14 kender kun MediaQueryList.addListener (forældet, men nødvendig som fallback)
+  type LegacyMediaQueryList = { addListener(listener: (event: MediaQueryListEvent) => void): void };
+
   const header = document.querySelector<HTMLElement>('[data-header]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
@@ -524,8 +534,15 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && sectio
         toggle.focus({ preventScroll: true });
       }
     });
-    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onDesktop = (e: MediaQueryListEvent) => {
       if (e.matches) setOpen(false);
-    });
+    };
+    // Safari < 14 har kun den ældre addListener
+    if (desktop.addEventListener) desktop.addEventListener('change', onDesktop);
+    else (desktop as unknown as LegacyMediaQueryList).addListener(onDesktop);
+
+    // Meld klar til BaseLayouts DOMContentLoaded-kontrol (ellers falder headeren tilbage til no-JS-visningen)
+    if (!header.classList.contains('is-dead')) header.classList.add('is-ready');
   }
 </script>

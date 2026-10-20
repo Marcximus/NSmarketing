@@ -74,7 +74,7 @@ const channels = (comparison.find((g) => g.title === 'Kanaler')?.rows ?? []).map
 
 <style>
   .hero {
-    --hero-line: color-mix(in srgb, var(--c-cream) 22%, transparent);
+    --hero-line: rgb(var(--c-cream-rgb) / 0.22);
 
     position: relative;
     isolation: isolate;
@@ -120,20 +120,20 @@ const channels = (comparison.find((g) => g.title === 'Kanaler')?.rows ?? []).map
     background:
       linear-gradient(
         180deg,
-        color-mix(in srgb, var(--c-brown-deep) 72%, transparent) 0%,
+        rgb(var(--c-brown-deep-rgb) / 0.72) 0%,
         transparent 28%
       ),
       linear-gradient(
         0deg,
-        color-mix(in srgb, var(--c-brown-deep) 92%, transparent) 0%,
-        color-mix(in srgb, var(--c-brown-deep) 40%, transparent) 42%,
+        rgb(var(--c-brown-deep-rgb) / 0.92) 0%,
+        rgb(var(--c-brown-deep-rgb) / 0.4) 42%,
         transparent 70%
       ),
       linear-gradient(
         90deg,
-        color-mix(in srgb, var(--c-brown-deep) 88%, transparent) 0%,
-        color-mix(in srgb, var(--c-brown-deep) 72%, transparent) 45%,
-        color-mix(in srgb, var(--c-brown) 38%, transparent) 100%
+        rgb(var(--c-brown-deep-rgb) / 0.88) 0%,
+        rgb(var(--c-brown-deep-rgb) / 0.72) 45%,
+        rgb(var(--c-brown-rgb) / 0.38) 100%
       );
   }
 
@@ -295,9 +295,9 @@ const channels = (comparison.find((g) => g.title === 'Kanaler')?.rows ?? []).map
       background:
         linear-gradient(
           180deg,
-          color-mix(in srgb, var(--c-brown-deep) 70%, transparent) 0%,
-          color-mix(in srgb, var(--c-brown-deep) 62%, transparent) 40%,
-          color-mix(in srgb, var(--c-brown-deep) 94%, transparent) 100%
+          rgb(var(--c-brown-deep-rgb) / 0.7) 0%,
+          rgb(var(--c-brown-deep-rgb) / 0.62) 40%,
+          rgb(var(--c-brown-deep-rgb) / 0.94) 100%
         );
     }
 

@@ -58,7 +58,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 };
 ---
 
-<section class="section section--white cases" id="cases" aria-labelledby="cases-title" data-cases>
+<section class="section section--white cases" id="cases" aria-labelledby="cases-title" data-cases data-needs-js>
   <div class="container">
     <h2 id="cases-title" class="visually-hidden">{examplesOnly ? 'Eksempler på forløb' : 'Udvalgte cases'}</h2>
 
@@ -157,7 +157,9 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
 <style>
   /* ---------- Filter ---------- */
-  :global(html:not(.js)) .case-filter {
+  /* Uden JS – eller hvis filter-scriptet ikke kørte (.is-dead, se BaseLayout) – skjules filteret */
+  :global(html:not(.js)) .case-filter,
+  .cases.is-dead .case-filter {
     display: none;
   }
 
@@ -484,7 +486,8 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
       const [layout, offset]: [string, boolean] =
         k === 0 ? ['lead', false] : j % 2 === 0 && k === n - 1 ? ['closing', false] : pattern[j % 4];
       card.dataset.layout = layout;
-      card.toggleAttribute('data-offset', offset);
+      if (offset) card.setAttribute('data-offset', '');
+      else card.removeAttribute('data-offset');
     };
 
     const apply = (key: string, updateUrl = true) => {
@@ -523,10 +526,30 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
     buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter ?? 'alle')));
 
-    // Forudvalgt filter fra URL'en – men ikke hvis der linkes direkte til en bestemt case (#id)
-    const initial = new URLSearchParams(window.location.search).get('ydelse');
-    if (initial && !window.location.hash && buttons.some((b) => b.dataset.filter === initial)) {
-      apply(initial, false);
+    // Meld klar før første mutation (samme rækkefølge som sammenligningstabellen). Er sektionen
+    // allerede død (BaseLayout), filtreres der ikke – ellers kunne kort blive skjult uden et filter.
+    if (!root.classList.contains('is-dead')) {
+      root.classList.add('is-ready');
+      // Server-renderet layout, så en fejlet forudvalgt filtrering kan rulles helt tilbage
+      const original = cards.map((card) => ({ layout: card.dataset.layout, offset: card.hasAttribute('data-offset') }));
+
+      // Forudvalgt filter fra URL'en – men ikke hvis der linkes direkte til en bestemt case (#id)
+      const initial = new URLSearchParams(window.location.search).get('ydelse');
+      if (initial && !window.location.hash && buttons.some((b) => b.dataset.filter === initial)) {
+        try {
+          apply(initial, false);
+        } catch (error) {
+          // Fejler filtreringen, vises alle cases, og BaseLayout gør sektionen død (filteret skjules)
+          cards.forEach((card, k) => {
+            card.hidden = false;
+            card.dataset.layout = original[k].layout;
+            if (original[k].offset) card.setAttribute('data-offset', '');
+            else card.removeAttribute('data-offset');
+          });
+          root.classList.remove('is-ready');
+          throw error;
+        }
+      }
     }
   }
 </script>
