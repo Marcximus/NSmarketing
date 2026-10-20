@@ -70,7 +70,7 @@ Logoet i `public/brand/` er vektoriseret ud fra den JPG, vi fik. Har I den origi
 
 ## Udvikling
 
-Kræver Node.js 20 eller nyere.
+Kræver Node.js 20.19+ eller 22.12+ (Node 21 understøttes ikke af Astro).
 
 ```bash
 npm install

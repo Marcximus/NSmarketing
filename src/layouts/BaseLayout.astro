@@ -84,7 +84,16 @@ const websiteLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      // .js skjuler [data-reveal] til reveal.ts viser dem. Indlæses reveal.ts ikke (fx manglende _astro-fil),
+      // vises alt indhold alligevel efter 2,5 sek.
+      (function (d) {
+        d.classList.add('js');
+        setTimeout(function () {
+          if (!d.classList.contains('reveal-ready')) d.classList.add('no-reveal');
+        }, 2500);
+      })(document.documentElement);
+    </script>
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />

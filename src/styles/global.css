@@ -918,6 +918,12 @@ a {
   transform: none;
 }
 
+/* Fallback: reveal.ts blev ikke indlæst (se BaseLayout) – vis alt */
+.no-reveal [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
 /* Tastaturfokus må aldrig lande på usynligt indhold */
 .js [data-reveal]:focus-within {
   opacity: 1;

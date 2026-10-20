@@ -1,6 +1,8 @@
 // Diskret fade-in af elementer med data-reveal, når de scrolles ind i billedet.
 // Brug style="--reveal-delay: .1s" for forskudt animation.
 
+document.documentElement.classList.add('reveal-ready');
+
 const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
 
 if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

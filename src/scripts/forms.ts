@@ -17,14 +17,14 @@ const success: Record<string, string> = {
 function successText(form: HTMLFormElement, type: string): string {
   if (type !== 'opkald') return success[type] ?? success.kontakt;
   const tid = form.elements.namedItem('tidspunkt');
-  const when =
-    tid instanceof HTMLSelectElement && tid.value && tid.value !== 'Hurtigst muligt'
-      ? 'i det valgte tidsrum'
-      : 'hurtigst muligt';
+  // Et valgt tidsrum kan allerede være passeret i dag – så lover vi ikke samme dag
+  if (tid instanceof HTMLSelectElement && tid.value && tid.value !== 'Hurtigst muligt') {
+    return 'Tak! Vi ringer jer op i det valgte tidsrum. Er det allerede passeret i dag, ringer vi næste hverdag.';
+  }
   const sameDay = site.callbackCutoff
     ? ` – samme dag, hvis I skriver på en hverdag inden kl. ${site.callbackCutoff}`
     : '';
-  return `Tak! Vi ringer jer op ${when}${sameDay}.`;
+  return `Tak! Vi ringer jer op hurtigst muligt${sameDay}.`;
 }
 
 const messages = {
