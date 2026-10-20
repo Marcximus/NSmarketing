@@ -1,0 +1,78 @@
+---
+// Gitter af små kort med ikon, titel og tekst. Teksten må indeholde simpel HTML.
+import Icon from '../Icon.astro';
+import type { IconName } from '../../data/icons';
+
+interface Props {
+  items: { icon: IconName; title: string; text: string }[];
+  headingLevel?: 'h3' | 'h4';
+}
+
+const { items, headingLevel: H = 'h3' } = Astro.props;
+---
+
+<ul class="legal-block lcards" role="list">
+  {
+    items.map((item) => (
+      <li class="lcard">
+        <span class="lcard__icon" aria-hidden="true">
+          <Icon name={item.icon} size={22} />
+        </span>
+        <H class="lcard__title">{item.title}</H>
+        <p class="lcard__text" set:html={item.text} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .lcards {
+    list-style: none;
+    display: grid;
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+
+  .lcard {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding: clamp(1.4rem, 1rem + 1vw, 1.9rem);
+    background: var(--c-white);
+  }
+
+  .lcard__icon {
+    display: inline-flex;
+    color: var(--c-gold);
+    margin-bottom: var(--space-1);
+  }
+
+  .lcard .lcard__title {
+    margin: 0;
+    font-family: var(--f-sans);
+    font-size: var(--fs-base);
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0;
+    color: var(--c-ink);
+  }
+
+  .lcard .lcard__text {
+    margin: 0;
+    font-size: var(--fs-sm);
+    line-height: 1.65;
+    color: var(--c-ink-2);
+  }
+
+  @media (min-width: 640px) {
+    .lcards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Ulige antal: sidste kort fylder hele bredden */
+    .lcard:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

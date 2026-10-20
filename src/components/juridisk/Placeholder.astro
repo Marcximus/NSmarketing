@@ -1,0 +1,23 @@
+---
+// Tydelig markering af oplysninger, der mangler at blive udfyldt (fx "[CVR-nummer]").
+// Forsvinder automatisk, når værdien er sat i src/data/site.ts.
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<span class="placeholder" title="Mangler – udfyldes før lancering">[{label}]</span>
+
+<style>
+  .placeholder {
+    display: inline-block;
+    padding: 0 0.4em;
+    border: 1px dashed var(--c-gold);
+    background: var(--c-beige);
+    color: var(--c-gold-ink);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+</style>

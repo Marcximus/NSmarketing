@@ -1,0 +1,229 @@
+---
+// Ledige stillinger (pt. ingen opslåede) + "Bliv en del af vores netværk" med roller.
+// Opfind ikke stillingsopslag her – tilføj først, når der er en rigtig stilling.
+import Icon from '../Icon.astro';
+import { careerRoles } from './careerRoles';
+
+const applyHref = (value: string) => `/karriere/?rolle=${encodeURIComponent(value)}#ansoeg`;
+---
+
+<section class="section openings" id="stillinger" aria-labelledby="openings-title">
+  <div class="container openings__grid">
+    <div class="openings__head" data-reveal>
+      <p class="eyebrow">Ledige stillinger</p>
+      <h2 id="openings-title">Åbne <em>stillinger</em></h2>
+      <p class="openings__lead">
+        Når vi søger nye kolleger, slår vi stillingerne op her. Følg med – eller send os en uopfordret
+        ansøgning allerede nu.
+      </p>
+    </div>
+
+    <div class="board" data-reveal style="--reveal-delay: .08s">
+      <div class="board__head" aria-hidden="true">
+        <span>Stilling</span>
+        <span>Type</span>
+        <span>Sted</span>
+      </div>
+      <div class="board__empty">
+        <span class="board__icon" aria-hidden="true"><Icon name="briefcase" size={24} /></span>
+        <h3 class="board__title">Ingen opslåede stillinger lige nu</h3>
+        <p class="board__text">
+          – men vi hører altid gerne fra talenter. Send en uopfordret ansøgning, så har vi dig i tankerne,
+          når vi får brug for nye kræfter.
+        </p>
+        <a href={applyHref('Uopfordret ansøgning')} class="btn btn--outline">
+          Send en uopfordret ansøgning <Icon name="arrow" size={16} />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--white kroles" id="netvaerk" aria-labelledby="kroles-title">
+  <div class="container">
+    <div class="section-head section-head--split" data-reveal>
+      <div>
+        <p class="eyebrow">Freelance & samarbejde</p>
+        <h2 id="kroles-title">Bliv en del af vores <em>netværk</em></h2>
+      </div>
+      <p class="lead">
+        Vi samarbejder løbende med freelancere og kreative talenter, når vores kunder har brug for ekstra
+        kompetencer. Find din rolle, og send os en ansøgning.
+      </p>
+    </div>
+
+    <ul class="kroles__grid" role="list">
+      {
+        careerRoles.map((role, i) => (
+          <li class="krole" data-reveal style={`--reveal-delay: ${(i % 3) * 0.08}s`}>
+            <span class="krole__icon" aria-hidden="true">
+              <Icon name={role.icon} size={22} />
+            </span>
+            <h3 class="krole__title">{role.title}</h3>
+            <p class="krole__text">{role.text}</p>
+            <a href={applyHref(role.value)} class="text-link krole__link">
+              Ansøg<span class="visually-hidden"> som {role.title.toLowerCase()}</span>
+              <Icon name="arrow" size={16} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* ---------- Ledige stillinger ---------- */
+  .openings__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 1024px) {
+    .openings__grid {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(4rem, 8vw, 7rem);
+      align-items: start;
+    }
+  }
+
+  .openings__grid > * {
+    min-width: 0;
+  }
+
+  .openings__lead {
+    margin-top: var(--space-5);
+    max-width: 26rem;
+    color: var(--c-ink-2);
+  }
+
+  .board {
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .board__head {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-4);
+    padding: 1rem clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+    border-bottom: 1px solid var(--c-line);
+    background: var(--c-paper);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .board__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(2rem, 1.4rem + 2.4vw, 3.5rem) clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+  }
+
+  .board__icon {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: var(--space-5);
+    border: 1px solid var(--c-gold);
+    background: var(--c-white);
+    color: var(--c-gold-ink);
+  }
+
+  .board__title {
+    font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);
+  }
+
+  .board__text {
+    max-width: 34rem;
+    margin-block: var(--space-3) var(--space-6);
+    color: var(--c-ink-2);
+  }
+
+  .board__empty .btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  @media (max-width: 479px) {
+    .board__empty .btn {
+      width: 100%;
+    }
+  }
+
+  /* ---------- Roller ---------- */
+  .kroles__grid {
+    display: grid;
+    gap: 1px;
+    list-style: none;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+
+  @media (min-width: 640px) {
+    .kroles__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .kroles__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .krole {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+    background: var(--c-white);
+    transition: background-color var(--dur) var(--ease);
+  }
+
+  .krole:hover {
+    background: var(--c-paper);
+  }
+
+  .krole__icon {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
+    border: 1px solid var(--c-gold);
+    background: var(--c-paper);
+    color: var(--c-gold-ink);
+    transition:
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .krole:hover .krole__icon {
+    background: var(--c-brown-deep);
+    color: var(--c-gold-light);
+  }
+
+  .krole__title {
+    font-size: clamp(1.35rem, 1.2rem + 0.4vw, 1.6rem);
+  }
+
+  .krole__text {
+    margin-top: var(--space-3);
+    max-width: 26rem;
+    font-size: 0.975rem;
+    color: var(--c-ink-2);
+  }
+
+  .krole__text {
+    margin-bottom: var(--space-5);
+  }
+
+  .krole__link {
+    margin-top: auto;
+  }
+</style>

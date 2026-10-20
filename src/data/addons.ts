@@ -10,6 +10,8 @@ export type Addon = {
   price: string | null; // fx 'Fra 1.500 kr.' – null = 'Pris efter aftale'
   unit?: string; // fx 'pr. md.' eller 'pr. person'
   icon: IconName;
+  /** Vises som genvej ("Gå direkte til") på pakkesiden og under "Og når I vil mere" på forsiden */
+  popular?: boolean;
 };
 
 export type AddonCategory = {
@@ -33,6 +35,7 @@ export const addonCategories: AddonCategory[] = [
         price: 'Fra 1.500 kr.',
         unit: 'pr. person',
         icon: 'users',
+        popular: true,
       },
       {
         id: 'content-dag',
@@ -42,6 +45,7 @@ export const addonCategories: AddonCategory[] = [
         price: 'Fra 4.500 kr.',
         unit: 'pr. dag',
         icon: 'camera',
+        popular: true,
       },
       {
         id: 'video',
@@ -89,6 +93,7 @@ export const addonCategories: AddonCategory[] = [
         price: 'Fra 2.500 kr.',
         unit: 'pr. md.',
         icon: 'target',
+        popular: true,
       },
       {
         id: 'tiktok-ads',
@@ -129,6 +134,7 @@ export const addonCategories: AddonCategory[] = [
         price: 'Fra 3.500 kr.',
         unit: 'pr. md.',
         icon: 'search',
+        popular: true,
       },
       {
         id: 'email',
@@ -138,6 +144,7 @@ export const addonCategories: AddonCategory[] = [
         price: 'Fra 2.000 kr.',
         unit: 'pr. md.',
         icon: 'mail',
+        popular: true,
       },
       {
         id: 'web',

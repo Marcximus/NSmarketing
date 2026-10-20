@@ -53,10 +53,12 @@ export const process: { number: string; title: string; text: string }[] = [
 ];
 
 // TODO: Bekræft at I kan stå inde for disse løfter
+// Svartiden her gælder nye henvendelser ("Vi svarer inden for én hverdag"). Svartid for kunder
+// afhænger af pakken og står i sammenligningstabellen i packages.ts – hold de to i overensstemmelse.
 export const promises: { value: string; label: string }[] = [
   { value: '4', label: 'platforme vi mestrer' },
   { value: '1', label: 'fast kontaktperson til jer' },
-  { value: '24 t', label: 'maks. svartid på hverdage' },
+  { value: '24 t', label: 'maks. svartid på nye henvendelser' },
   { value: '100 %', label: 'skræddersyet indhold' },
 ];
 

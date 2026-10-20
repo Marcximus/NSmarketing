@@ -1,0 +1,322 @@
+---
+// Kompakt pakketeaser: tre kort med navn, tagline, pris og de vigtigste mængder.
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { packages, formatPrice } from '../../data/packages';
+---
+
+<section class="section section--beige pkgs">
+  <div class="container">
+    <SectionHead
+      eyebrow="Pakkeløsninger"
+      title="Tre pakker. Ét klart <em>overblik</em>."
+      lead="Faste månedlige priser og ingen skjulte gebyrer. Vælg det niveau, der matcher jeres ambitioner – og byg på med tillægsydelser, når behovet opstår."
+      align="center"
+    />
+
+    <div class="pkgs__grid">
+      {
+        packages.map((p, i) => (
+          <article
+            class:list={['pkg', `pkg--${p.id}`, p.featured && 'pkg--featured', p.featured && 'on-dark']}
+            aria-labelledby={`pkg-${p.id}`}
+            data-reveal
+            style={`--reveal-delay: ${i * 0.1}s`}
+          >
+            {p.badge && <p class="pkg__badge">{p.badge}</p>}
+
+            <header class="pkg__head">
+              <h3 class="pkg__name" id={`pkg-${p.id}`}>
+                {p.name}
+              </h3>
+              <p class="pkg__tagline">{p.tagline}</p>
+            </header>
+
+            <div class="pkg__pricing">
+              <p class="pkg__price">
+                <span class="pkg__from">Fra</span>
+                <span class="pkg__amount">{formatPrice(p.price)}</span>
+                <span class="pkg__unit">kr./md.</span>
+              </p>
+              <p class="pkg__vat">ekskl. moms</p>
+            </div>
+
+            <dl class="pkg__summary">
+              {p.summary.map((s) => (
+                <div>
+                  <dt>{s.label}</dt>
+                  <dd>{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <a
+              href={`/kontakt/?pakke=${p.id}`}
+              class:list={['btn', 'btn--block', p.featured ? 'btn--gold' : 'btn--outline']}
+            >
+              Vælg {p.name} <Icon name="arrow" size={16} />
+            </a>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="pkgs__foot" data-reveal>
+      <a href="/pakkeloesninger/" class="btn">Sammenlign pakkerne <Icon name="arrow" size={16} /></a>
+      <p class="pkgs__note">
+        Alle priser er ekskl. moms. Statister, e-mail marketing, SEO og meget mere kan lægges oven i enhver
+        pakke – <a href="/pakkeloesninger/#tillaeg">se tillægsydelserne</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pkgs__grid {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 960px) {
+    .pkgs__grid {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      gap: 0;
+      max-width: none;
+    }
+  }
+
+  /* Kort */
+  .pkg {
+    --pkg-tier: var(--c-sand);
+    --pkg-line: var(--c-line);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
+    background: var(--c-white);
+    border: 1px solid var(--c-sand);
+    border-top: 2px solid var(--pkg-tier);
+  }
+
+  .pkg--gold {
+    --pkg-tier: var(--c-gold);
+  }
+
+  .pkg--black {
+    --pkg-tier: var(--c-ink);
+  }
+
+  @media (min-width: 960px) {
+    .pkg:not(.pkg--featured):first-child {
+      border-right: 0;
+    }
+
+    .pkg:not(.pkg--featured):last-child {
+      border-left: 0;
+    }
+  }
+
+  .pkg--featured {
+    --pkg-line: color-mix(in srgb, var(--c-cream) 18%, transparent);
+
+    z-index: 1;
+    background: var(--c-brown);
+    border-color: var(--c-brown);
+    border-top-color: var(--c-gold);
+    color: var(--c-cream);
+  }
+
+  @media (min-width: 960px) {
+    .pkg--featured {
+      padding-block: calc(clamp(2rem, 1.5rem + 1.5vw, 2.75rem) + 1.5rem);
+    }
+  }
+
+  .pkg__badge {
+    position: absolute;
+    top: 0;
+    right: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
+    padding: 0.45rem 0.8rem;
+    background: var(--c-gold-light);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-brown-deep);
+  }
+
+  .pkg__name {
+    font-size: clamp(2.1rem, 1.7rem + 1vw, 2.6rem);
+    line-height: 1;
+  }
+
+  .pkg__tagline {
+    margin-top: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .pkg--featured .pkg__tagline {
+    color: var(--c-gold-light);
+  }
+
+  .pkg__pricing {
+    margin-top: 2.25rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--pkg-line);
+  }
+
+  .pkg__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pkg__from,
+  .pkg__unit {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+
+  .pkg--featured .pkg__from,
+  .pkg--featured .pkg__unit,
+  .pkg--featured .pkg__vat {
+    color: var(--c-cream-muted);
+  }
+
+  .pkg__amount {
+    font-family: var(--f-serif);
+    font-variant-numeric: lining-nums;
+    font-size: clamp(2.4rem, 2rem + 1vw, 2.9rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .pkg__vat {
+    margin-top: 0.35rem;
+    font-size: 0.8125rem;
+    color: var(--c-muted);
+  }
+
+  /* Tre nøgletal */
+  .pkg__summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 2rem 0 2.25rem;
+    border-block: 1px solid var(--pkg-line);
+  }
+
+  .pkg__summary > div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    padding: 1.1rem 0.35rem;
+    text-align: center;
+  }
+
+  .pkg__summary > div + div {
+    border-left: 1px solid var(--pkg-line);
+  }
+
+  .pkg__summary dd {
+    margin: 0;
+    font-family: var(--f-serif);
+    font-variant-numeric: lining-nums;
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+
+  .pkg__summary dt {
+    font-size: 0.6875rem;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .pkg--featured .pkg__summary dt {
+    color: var(--c-cream-muted);
+  }
+
+  .pkg .btn {
+    margin-top: auto;
+  }
+
+  /* Tablet: kortene ligger som brede rækker med to kolonner */
+  @media (min-width: 640px) and (max-width: 959px) {
+    .pkgs__grid {
+      max-width: none;
+    }
+
+    .pkg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'head summary'
+        'pricing btn';
+      column-gap: clamp(2rem, 5vw, 3rem);
+    }
+
+    .pkg__head {
+      grid-area: head;
+    }
+
+    .pkg__pricing {
+      grid-area: pricing;
+    }
+
+    .pkg__summary {
+      grid-area: summary;
+      align-self: end;
+      margin: 0;
+    }
+
+    .pkg .btn {
+      grid-area: btn;
+      align-self: end;
+    }
+
+    .pkg__badge {
+      right: auto;
+      left: calc(50% + clamp(1rem, 2.5vw, 1.5rem));
+    }
+
+    .pkg--featured .pkg__summary {
+      margin-top: 1.5rem;
+    }
+  }
+
+  /* Bund */
+  .pkgs__foot {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    margin-top: clamp(3rem, 5vw, 4.5rem);
+    text-align: center;
+  }
+
+  .pkgs__note {
+    max-width: 38rem;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+
+  .pkgs__note a {
+    color: var(--c-gold-ink);
+    font-weight: 500;
+  }
+
+  .pkgs__note a:hover {
+    color: var(--c-ink);
+  }
+</style>

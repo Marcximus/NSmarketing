@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import CaseGrid from '../components/cases/CaseGrid.astro';
+import CaseTestimonials from '../components/cases/CaseTestimonials.astro';
+import CaseIndustries from '../components/cases/CaseIndustries.astro';
+import { site } from '../data/site';
+
+const description = `Se udvalgte cases fra ${site.name}: content, video, foto og annoncering på sociale medier – på tværs af brancher, platforme og formater.`;
+---
+
+<BaseLayout title="Cases & kunder" description={description}>
+  <PageHero
+    eyebrow="Cases"
+    title="Udvalgt arbejde – skabt til at blive <em>set</em>"
+    lead="Et udpluk af de profiler, vi skaber indhold til – på tværs af brancher, platforme og formater. Fælles for dem alle: en klar strategi, en gennemført æstetik og indhold, der passer til netop deres kunder."
+  >
+    <a href="#cases" class="btn">Se cases <Icon name="arrow" size={16} /></a>
+    <a href="/kontakt/" class="btn btn--outline">Book et uforpligtende møde</a>
+  </PageHero>
+
+  <CaseGrid />
+  <CaseTestimonials />
+  <CaseIndustries />
+
+  <CtaBand
+    eyebrow="Jeres tur"
+    title="Skal jeres virksomhed være den <em>næste</em> case?"
+    text="Book et uforpligtende møde. Vi kigger på jeres profiler, mål og kunder – og fortæller ærligt, hvad vi ville gøre, og hvilken pakke der giver mening for jer."
+  />
+</BaseLayout>

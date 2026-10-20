@@ -18,6 +18,9 @@ export const site = {
   address: null as { street: string; zip: string; city: string } | null,
   serviceArea: 'Vi arbejder med virksomheder i hele Danmark',
 
+  // TODO: Bekræft tidsfristen for "Bliv ringet op samme dag" på kontaktsiden. null = linjen vises ikke.
+  callbackCutoff: '15.00' as string | null,
+
   // TODO: Bekræft åbningstider
   hours: [
     { days: 'Mandag – torsdag', time: '09.00 – 17.00' },

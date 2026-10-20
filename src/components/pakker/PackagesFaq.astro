@@ -1,0 +1,123 @@
+---
+// Ofte stillede spørgsmål om pakkerne (src/data/content.ts → faq). JSON-LD ligger i sidens <head>.
+import Icon from '../Icon.astro';
+import { faq } from '../../data/content';
+import { site } from '../../data/site';
+---
+
+<section class="section section--beige faq" id="faq" aria-labelledby="faq-titel">
+  <div class="container faq__grid">
+    <div class="faq__intro" data-reveal>
+      <p class="eyebrow">Spørgsmål & svar</p>
+      <h2 id="faq-titel">Godt at vide, <em>før</em> I vælger</h2>
+      <p class="lead">
+        Her er svarene på det, vi oftest bliver spurgt om. Finder I ikke svaret, så ræk ud – vi svarer gerne.
+      </p>
+      <ul class="faq__contact" role="list">
+        <li>
+          <a href={site.phoneHref}>
+            <span class="faq__contact-icon" aria-hidden="true"><Icon name="phone" size={16} /></span>
+            <span><span class="faq__contact-label">Ring til os</span>{site.phone}</span>
+          </a>
+        </li>
+        <li>
+          <a href={site.emailHref}>
+            <span class="faq__contact-icon" aria-hidden="true"><Icon name="mail" size={16} /></span>
+            <span><span class="faq__contact-label">Skriv til os</span>{site.email}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="accordion faq__list" data-reveal style="--reveal-delay: .1s">
+      {
+        faq.map((item, i) => (
+          <details open={i === 0}>
+            <summary>{item.q}</summary>
+            <div class="accordion-body">
+              <p>{item.a}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grid {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  @media (min-width: 960px) {
+    .faq__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: start;
+    }
+
+    .faq__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 2.5rem);
+    }
+  }
+
+  .faq__intro .lead {
+    max-width: 28rem;
+    margin-top: var(--space-5);
+  }
+
+  .faq__contact {
+    list-style: none;
+    display: grid;
+    margin-top: var(--space-6);
+    border-top: 1px solid var(--c-sand);
+  }
+
+  .faq__contact a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--c-sand);
+    text-decoration: none;
+    color: var(--c-ink);
+    overflow-wrap: anywhere;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .faq__contact a:hover {
+    color: var(--c-gold-ink);
+  }
+
+  .faq__contact-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--c-gold);
+    color: var(--c-gold-ink);
+  }
+
+  .faq__contact-label {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  /* Hårstreger, der kan ses på beige */
+  .faq__list.accordion,
+  .faq__list.accordion details {
+    border-color: var(--c-sand);
+  }
+
+  .faq__list .accordion-body p {
+    max-width: 40rem;
+  }
+</style>

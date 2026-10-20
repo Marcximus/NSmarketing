@@ -255,6 +255,7 @@ a {
 }
 
 .text-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
@@ -267,6 +268,13 @@ a {
   padding-block: 0.35em;
   background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
   transition: background-size var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+/* Klikflade på min. 44px uden at flytte understregningen */
+.text-link::after {
+  content: '';
+  position: absolute;
+  inset: -0.5rem -0.25rem;
 }
 
 .text-link:hover {
@@ -585,6 +593,14 @@ a {
   width: 100%;
 }
 
+/* Smalle skærme: lange knaptekster må bryde i stedet for at give vandret scroll */
+@media (max-width: 479px) {
+  .btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
+
 .btn--sm {
   min-height: 2.75rem;
   padding: 0.6rem 1.3rem;
@@ -694,7 +710,7 @@ a {
 
 .input::placeholder,
 .textarea::placeholder {
-  color: #8b8077;
+  color: var(--c-muted);
 }
 
 .input:hover,
@@ -735,6 +751,15 @@ a {
   height: 1.15rem;
   margin-top: 0.15rem;
   accent-color: var(--c-brown);
+}
+
+/* Honeypot mod spam: skjult for mennesker, udfyldes kun af bots */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 /* ---------- Accordion (details/summary) ---------- */

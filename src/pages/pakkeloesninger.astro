@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import PlanCards from '../components/pakker/PlanCards.astro';
+import IncludedInAll from '../components/pakker/IncludedInAll.astro';
+import ComparisonTable from '../components/pakker/ComparisonTable.astro';
+import Addons from '../components/pakker/Addons.astro';
+import PackagesFaq from '../components/pakker/PackagesFaq.astro';
+import { packages, formatPrice } from '../data/packages';
+import { faq } from '../data/content';
+
+const fromPrice = formatPrice(Math.min(...packages.map((p) => p.price)));
+const names = packages.map((p) => p.name);
+const nameList = `${names.slice(0, -1).join(', ')} og ${names.at(-1)}`;
+
+const description = `Sammenlign ${nameList} – tre faste SoMe-pakker fra ${fromPrice} kr./md. ekskl. moms. Se også tillæg som statister, e-mail marketing, SEO og annoncering.`;
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+const jumpLinks = [
+  { href: '#pakker', label: 'Pakker' },
+  { href: '#sammenlign', label: 'Sammenlign' },
+  { href: '#tillaeg', label: 'Tillægsydelser' },
+  { href: '#faq', label: 'Spørgsmål' },
+];
+---
+
+<BaseLayout title="Pakkeløsninger & priser" description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <PageHero
+    eyebrow="Pakkeløsninger"
+    title="Tre pakker. Ét fast team. <em>Alt</em> klaret for jer."
+    lead="Faste månedlige priser, ingen skjulte gebyrer og ét team af strateger, fotografer og content creators, der klarer det hele. Vælg jeres niveau – og byg på med tillæg, når behovet vokser."
+  >
+    <nav class="jump" aria-label="På denne side">
+      <ol role="list">
+        {
+          jumpLinks.map((link, i) => (
+            <li>
+              <a href={link.href}>
+                <span class="jump__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+  </PageHero>
+
+  <PlanCards />
+  <IncludedInAll />
+  <ComparisonTable />
+  <Addons />
+  <PackagesFaq />
+
+  <CtaBand
+    eyebrow="Find den rette pakke"
+    title="I vælger niveauet&nbsp;– vi <em>klarer</em> resten"
+    text="Book et uforpligtende møde. Vi kigger på jeres profiler og mål og anbefaler den pakke – og de tillæg – der giver mest værdi for jer."
+  />
+</BaseLayout>
+
+<style>
+  .jump {
+    width: 100%;
+    margin-top: var(--space-2);
+  }
+
+  .jump ol {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 46rem;
+    margin-inline: auto;
+    border-top: 1px solid var(--c-sand);
+    border-left: 1px solid var(--c-sand);
+  }
+
+  @media (min-width: 640px) {
+    .jump ol {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .jump li {
+    border-right: 1px solid var(--c-sand);
+    border-bottom: 1px solid var(--c-sand);
+  }
+
+  .jump a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.5rem 0.75rem;
+    background: color-mix(in srgb, var(--c-white) 55%, transparent);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--c-ink);
+    transition:
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .jump a:hover {
+    background: var(--c-white);
+    color: var(--c-gold-ink);
+  }
+
+  .jump__num {
+    font-family: var(--f-serif);
+    font-size: 0.875rem;
+    font-style: italic;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--c-gold-ink);
+  }
+</style>

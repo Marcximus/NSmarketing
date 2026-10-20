@@ -23,8 +23,16 @@ const year = new Date().getFullYear();
           autocomplete="email"
           required
         />
+        <div class="hp-field" aria-hidden="true">
+          <label for="newsletter-gotcha">Lad dette felt være tomt</label>
+          <input id="newsletter-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+        </div>
         <input type="hidden" name="_subject" value="Ny tilmelding til nyhedsbrev" />
         <button type="submit" class="btn btn--gold">Tilmeld <Icon name="arrow" size={16} /></button>
+        <p class="newsletter__consent small">
+          Du kan altid afmelde dig igen. Læs, hvordan vi behandler din e-mail, i vores
+          <a href="/privatlivspolitik/">privatlivspolitik</a>.
+        </p>
         <p class="newsletter__status small" role="status" aria-live="polite" data-form-status></p>
       </form>
     </div>
@@ -190,11 +198,27 @@ const year = new Date().getFullYear();
     border-color: var(--c-gold-light);
   }
 
+  .newsletter__consent {
+    grid-column: 1 / -1;
+    margin-top: 0.75rem;
+    color: var(--c-cream-muted);
+  }
+
+  .newsletter__consent a {
+    color: var(--c-cream);
+  }
+
+  .newsletter__consent a:hover {
+    color: var(--c-gold-light);
+  }
+
   .newsletter__status {
     grid-column: 1 / -1;
-    min-height: 1.5em;
-    margin-top: 0.5rem;
     color: var(--c-gold-light);
+  }
+
+  .newsletter__status:not(:empty) {
+    margin-top: 0.5rem;
   }
 
   .site-footer__grid {

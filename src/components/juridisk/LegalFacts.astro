@@ -1,0 +1,140 @@
+---
+// Faktaboks (fx dataansvarlig eller Datatilsynet): titel + rækker med label og værdi.
+// Værdien kan være tekst, et link, simpel HTML (`html`) eller en tydelig pladsholder (`placeholder`).
+import Placeholder from './Placeholder.astro';
+
+interface Row {
+  label: string;
+  value?: string;
+  href?: string;
+  external?: boolean;
+  html?: string;
+  /** Vises som "[tekst]" med stiplet ramme, fx når CVR-nummeret mangler */
+  placeholder?: string;
+}
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  rows: Row[];
+}
+
+const { title, eyebrow, rows } = Astro.props;
+---
+
+<div class="legal-block lfacts">
+  <div class="lfacts__head">
+    {eyebrow && <p class="lfacts__eyebrow">{eyebrow}</p>}
+    <p class="lfacts__title">{title}</p>
+  </div>
+  <dl class="lfacts__list">
+    {
+      rows.map((row) => (
+        <div class="lfacts__row">
+          <dt>{row.label}</dt>
+          <dd>
+            {row.placeholder ? (
+              <Placeholder label={row.placeholder} />
+            ) : row.html ? (
+              <Fragment set:html={row.html} />
+            ) : row.href ? (
+              <a
+                href={row.href}
+                {...(row.external ? { target: '_blank', rel: 'noopener' } : {})}
+              >
+                {row.value}
+                {row.external && <span class="visually-hidden"> (åbner i et nyt vindue)</span>}
+              </a>
+            ) : (
+              row.value
+            )}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style>
+  .lfacts {
+    display: grid;
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .lfacts__head {
+    padding: clamp(1.4rem, 1rem + 1vw, 2rem);
+    border-bottom: 1px solid var(--c-line);
+    background:
+      linear-gradient(90deg, rgba(250, 247, 242, 0.88), rgba(250, 247, 242, 0.7)),
+      url('../../assets/images/marble.jpg') center / cover;
+  }
+
+  .lfacts__eyebrow {
+    margin-bottom: var(--space-2);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .lfacts__title {
+    font-family: var(--f-serif);
+    font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.75rem);
+    line-height: 1.2;
+    color: var(--c-ink);
+  }
+
+  .lfacts__list {
+    margin: 0;
+    padding: var(--space-2) clamp(1.4rem, 1rem + 1vw, 2rem);
+  }
+
+  .lfacts__row {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .lfacts__row:last-child {
+    border-bottom: 0;
+  }
+
+  dt {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--c-ink);
+    overflow-wrap: anywhere;
+  }
+
+  dd :global(a) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--c-ink);
+    text-decoration-color: var(--c-gold);
+    text-underline-offset: 0.22em;
+  }
+
+  dd :global(a:hover) {
+    color: var(--c-gold-ink);
+  }
+
+  @media (min-width: 640px) {
+    .lfacts__row {
+      grid-template-columns: 9rem minmax(0, 1fr);
+      align-items: center;
+      gap: var(--space-5);
+      min-height: 3.5rem;
+    }
+  }
+</style>

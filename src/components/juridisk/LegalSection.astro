@@ -1,0 +1,62 @@
+---
+// Nummereret afsnit i en juridisk tekst. Bruges inde i LegalLayout.
+interface Props {
+  id: string;
+  number: number;
+  title: string;
+}
+
+const { id, number, title } = Astro.props;
+const num = String(number).padStart(2, '0');
+---
+
+<section class="legal-section" id={id} aria-labelledby={`${id}-titel`} data-legal-section>
+  <header class="legal-section__head">
+    <span class="legal-section__num" aria-hidden="true">{num}</span>
+    <h2 id={`${id}-titel`} class="legal-section__title">{title}</h2>
+  </header>
+  <div class="legal-section__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .legal-section {
+    padding-block: clamp(2.5rem, 2rem + 2vw, 3.75rem);
+    border-top: 1px solid var(--c-line);
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+
+  .legal-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .legal-section__head {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .legal-section__num {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    color: var(--c-gold-ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .legal-section__num::after {
+    content: '';
+    width: 2.25rem;
+    height: 1px;
+    background: var(--c-gold);
+  }
+
+  .legal-section__title {
+    font-size: clamp(1.6rem, 1.25rem + 1.2vw, 2.25rem);
+    line-height: 1.18;
+  }
+</style>

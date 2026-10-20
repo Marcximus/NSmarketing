@@ -54,8 +54,8 @@ Logoet i `public/brand/` er vektoriseret ud fra den JPG, vi fik. Har I den origi
 
 - [ ] Priser på pakker og tillægsydelser (`packages.ts`, `addons.ts`)
 - [ ] Pakkenavne (Silver / Gold / Black) godkendt
-- [ ] CVR-nummer og evt. adresse (`site.ts`)
-- [ ] Åbningstider (`site.ts`)
+- [ ] CVR-nummer og adresse (`site.ts`). E-handelsloven § 7 kræver normalt, at hjemmesiden oplyser en geografisk adresse. Adressen vises automatisk i footer, på kontaktsiden og i privatlivspolitikken, når den er sat.
+- [ ] Åbningstider og tidsfristen for "Bliv ringet op samme dag" (`site.ts` → `hours`, `callbackCutoff`)
 - [ ] Links til egne profiler på Instagram, Facebook, LinkedIn og TikTok (`site.ts`)
 - [ ] Formular-endpoint oprettet, fx gratis hos [Formspree](https://formspree.io) eller [Web3Forms](https://web3forms.com), og URL'en indsat i `site.ts` → `formEndpoint`. Indtil da åbner formularerne brugerens mailprogram.
 - [ ] Svar i FAQ bekræftet (binding, opstart, rettigheder) (`content.ts`)
@@ -63,6 +63,8 @@ Logoet i `public/brand/` er vektoriseret ud fra den JPG, vi fik. Har I den origi
 - [ ] Rigtige cases, kundeudtalelser og team indsat. **Eksempelindholdet (markeret `placeholder: true` / "[Kundenavn]") må ikke gå live**, da det ville være vildledende markedsføring.
 - [ ] Egne fotos i stedet for Unsplash-placeholders
 - [ ] Privatlivspolitik gennemlæst og CVR indsat
+- [ ] Opbevaringsfristerne i privatlivspolitikken bekræftet (afsnit 06)
+- [ ] Tilføjes Google Analytics, Meta Pixel, YouTube, kort eller lignende: indfør samtykkebanner og opdater både cookiepolitik og privatlivspolitik (se kommentaren øverst i `src/pages/cookiepolitik.astro`)
 - [ ] Domæne peger på hostingen, og `site` i `astro.config.mjs` / `url` i `site.ts` passer
 
 ## Udvikling

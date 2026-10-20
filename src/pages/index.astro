@@ -1,20 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
-import SectionHead from '../components/SectionHead.astro';
 import CtaBand from '../components/CtaBand.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import IndustryMarquee from '../components/home/IndustryMarquee.astro';
+import HomeIntro from '../components/home/HomeIntro.astro';
+import HomeServices from '../components/home/HomeServices.astro';
+import HomePromises from '../components/home/HomePromises.astro';
+import HomePackages from '../components/home/HomePackages.astro';
+import HomeProcess from '../components/home/HomeProcess.astro';
+import HomeCases from '../components/home/HomeCases.astro';
+import HomeTestimonials from '../components/home/HomeTestimonials.astro';
+import { packages, formatPrice } from '../data/packages';
+
+const fromPrice = formatPrice(Math.min(...packages.map((p) => p.price)));
+const description = `SoMe-bureau med strategi, content, reels og annoncering på Instagram, Facebook, TikTok og LinkedIn. Få jeres egen Social Media Manager fra ${fromPrice} kr./md.`;
 ---
 
-<BaseLayout title="Silberg Creative – SoMe-bureau">
-  <PageHero eyebrow="Fundament" title="Sociale medier med <em>kant</em>" lead="Midlertidig testside for design-systemet.">
-    <a href="/pakkeloesninger/" class="btn">Se pakkerne</a>
-    <a href="/kontakt/" class="btn btn--outline">Book et møde</a>
-  </PageHero>
-  <section class="section">
-    <div class="container">
-      <SectionHead eyebrow="Ydelser" title="Alt, hvad jeres sociale medier <em>kræver</em>" lead="Strategi, content, annoncering og rapportering samlet ét sted." align="split" />
-      <div class="accordion"><details><summary>Hvor hurtigt kan vi komme i gang?</summary><div class="accordion-body">Typisk inden for 1–2 uger.</div></details></div>
-    </div>
-  </section>
+<BaseLayout
+  title="Silberg Creative – SoMe-bureau og social media management"
+  description={description}
+  headerVariant="overlay"
+>
+  <HomeHero />
+  <IndustryMarquee />
+  <HomeIntro />
+  <HomeServices />
+  <HomePromises />
+  <HomePackages />
+  <HomeProcess />
+  <HomeCases />
+  <HomeTestimonials />
   <CtaBand />
 </BaseLayout>

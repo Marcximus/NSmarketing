@@ -1,0 +1,221 @@
+---
+// "Bliv ringet op samme dag" – kort, separat formular (data-form="opkald"), håndteres af src/scripts/forms.ts.
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+
+// Tidsfristen styres fra site.ts (callbackCutoff). null = linjen skjules.
+const sameDayNote = site.callbackCutoff
+  ? `Gælder henvendelser på hverdage inden kl. ${site.callbackCutoff}.`
+  : null;
+---
+
+<section class="section section--deep cb" id="ring-op" aria-labelledby="cb-titel">
+  <div class="cb__marble" aria-hidden="true"></div>
+  <div class="container cb__grid">
+    <div class="cb__intro" data-reveal>
+      <p class="eyebrow">Hellere en snak i telefonen?</p>
+      <h2 id="cb-titel">Bliv ringet op <em>samme dag</em></h2>
+      <p class="lead">
+        Efterlad navn og nummer, og vælg hvornår det passer jer. Så ringer vi – og I slipper for at skrive en
+        lang besked.
+      </p>
+      {
+        sameDayNote && (
+          <p class="cb__note small">
+            <Icon name="clock" size={16} />
+            <span>{sameDayNote}</span>
+          </p>
+        )
+      }
+    </div>
+
+    <form
+      class="cb__form"
+      data-form="opkald"
+      method="post"
+      action={site.formEndpoint || undefined}
+      aria-labelledby="cb-titel"
+      novalidate
+      data-reveal
+      style="--reveal-delay: .1s"
+    >
+      <div class="cb__fields">
+        <div class="field">
+          <label for="ro-navn">Navn <span aria-hidden="true">*</span></label>
+          <input id="ro-navn" class="input" type="text" name="navn" autocomplete="name" required />
+        </div>
+
+        <div class="field">
+          <label for="ro-telefon">Telefon <span aria-hidden="true">*</span></label>
+          <input
+            id="ro-telefon"
+            class="input"
+            type="tel"
+            name="telefon"
+            autocomplete="tel"
+            inputmode="tel"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="ro-tidspunkt">Foretrukket tidspunkt</label>
+          <select id="ro-tidspunkt" class="select" name="tidspunkt">
+            <option value="Formiddag">Formiddag</option>
+            <option value="Eftermiddag">Eftermiddag</option>
+          </select>
+        </div>
+
+        <div class="cb__submit">
+          <button type="submit" class="btn btn--gold btn--block">
+            <Icon name="phone" size={16} /> Ring mig op
+          </button>
+        </div>
+      </div>
+
+      <div class="hp-field" aria-hidden="true">
+        <label for="ro-gotcha">Lad dette felt være tomt</label>
+        <input id="ro-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="_subject" value="Ring mig op" />
+
+      <p class="cb__privacy small">
+        <span aria-hidden="true">*</span> Skal udfyldes. Vi bruger kun jeres oplysninger til at ringe jer op –
+        læs mere i vores <a href="/privatlivspolitik/">privatlivspolitik</a>.
+      </p>
+      <p class="cb__status small" role="status" aria-live="polite" data-form-status></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .cb {
+    overflow: hidden;
+    isolation: isolate;
+    padding-block: clamp(4rem, 2.5rem + 5vw, 7rem);
+  }
+
+  /* Meget diskret marmortekstur i den mørke flade */
+  .cb__marble {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(
+        100deg,
+        var(--c-brown-deep) 0%,
+        color-mix(in srgb, var(--c-brown-deep) 94%, transparent) 55%,
+        color-mix(in srgb, var(--c-brown-deep) 88%, transparent) 100%
+      ),
+      url('../../assets/images/marble.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .cb__grid {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .cb__grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: center;
+    }
+  }
+
+  .cb__intro .lead {
+    max-width: 30rem;
+    margin-top: var(--space-5);
+  }
+
+  .cb__note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: var(--space-5);
+    color: var(--c-cream-muted);
+  }
+
+  .cb__note :global(svg) {
+    flex-shrink: 0;
+    color: var(--c-gold-light);
+  }
+
+  /* ---------- Formular på mørk baggrund ---------- */
+  .cb__form {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid color-mix(in srgb, var(--c-gold-light) 40%, transparent);
+    background: color-mix(in srgb, var(--c-brown) 55%, transparent);
+  }
+
+  .cb__fields {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 640px) {
+    .cb__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: end;
+    }
+  }
+
+  .cb .field label {
+    color: var(--c-cream-muted);
+  }
+
+  .cb .input,
+  .cb .select {
+    border-color: var(--c-cream-muted);
+    background-color: transparent;
+    color: var(--c-cream);
+  }
+
+  .cb .select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4b98a' stroke-width='1.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+
+  .cb .select option {
+    background: var(--c-brown-deep);
+    color: var(--c-cream);
+  }
+
+  .cb .input:hover,
+  .cb .select:hover {
+    border-color: var(--c-cream);
+  }
+
+  .cb .input:focus,
+  .cb .select:focus {
+    border-color: var(--c-gold-light);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-gold-light) 30%, transparent);
+  }
+
+  .cb__submit .btn {
+    min-height: 3.25rem;
+  }
+
+  .cb__privacy {
+    margin-top: var(--space-5);
+    color: var(--c-cream-muted);
+  }
+
+  .cb__privacy a {
+    color: var(--c-cream);
+  }
+
+  .cb__privacy a:hover {
+    color: var(--c-gold-light);
+  }
+
+  .cb__status:not(:empty) {
+    margin-top: var(--space-4);
+    padding: 0.85rem 1rem;
+    border-left: 2px solid var(--c-gold-light);
+    background: color-mix(in srgb, var(--c-cream) 6%, transparent);
+    color: var(--c-cream);
+  }
+
+</style>

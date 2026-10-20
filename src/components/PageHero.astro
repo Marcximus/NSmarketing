@@ -67,4 +67,12 @@ const { eyebrow, title, lead, align = 'center' } = Astro.props;
   .page-hero--center .page-hero__actions {
     justify-content: center;
   }
+
+  /* Mobil: knapperne i fuld bredde under hinanden */
+  @media (max-width: 479px) {
+    .page-hero__actions:not(:empty) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
 </style>

@@ -1,0 +1,238 @@
+---
+// "Få jeres egen Social Media Manager – og et helt team bag": billede, team-roller og nøglepunkter.
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import shootImage from '../../assets/images/content-shoot.jpg';
+import { team } from '../../data/team';
+import { includedInAll } from '../../data/packages';
+
+const keyPoints = includedInAll.slice(0, 4);
+---
+
+<section class="section intro" id="intro" aria-labelledby="intro-title">
+  <div class="container intro__grid">
+    <div class="intro__content" data-reveal style="--reveal-delay: .08s">
+      <p class="eyebrow">Jeres eget SoMe-team</p>
+      <h2 id="intro-title">Få jeres egen Social Media Manager – og et helt <em>team</em> bag</h2>
+      <p class="lead">
+        I får én fast kontaktperson, der kender jeres forretning indefra. Bag jeres Social Media Manager
+        står strateger, fotografer, content creators, grafikere og performance-specialister – klar, når
+        jeres brand har brug for dem.
+      </p>
+      <p class="intro__text">
+        Vi planlægger, producerer, udgiver og følger op. I godkender alt, før det går live – og bruger
+        tiden på det, I er bedst til.
+      </p>
+      <ul class="check-list intro__points">
+        {keyPoints.map((point) => <li>{point}</li>)}
+      </ul>
+      <a href="/om-os/" class="text-link">Mød teamet bag <Icon name="arrow" size={16} /></a>
+    </div>
+    <div class="intro__media" data-reveal>
+      <div class="frame-gold">
+        <div class="media intro__image">
+          <Image
+            src={shootImage}
+            alt="Fotograf og content creator optager indhold til sociale medier på en content-dag"
+            widths={[480, 720, 960, 1280]}
+            sizes="(min-width: 1024px) 44vw, 92vw"
+          />
+        </div>
+      </div>
+
+      <div class="intro__team" data-reveal style="--reveal-delay: .15s">
+        <p class="intro__team-label">Jeres team</p>
+        <ul>
+          {
+            team.map((member) => (
+              <li>
+                <Icon name={member.icon} size={18} />
+                <span>{member.role}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .intro__grid {
+    display: grid;
+    gap: clamp(3.5rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .intro__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(4rem, 8vw, 8rem);
+    }
+
+    /* Billedet til venstre på desktop – teksten står først i DOM'en */
+    .intro__media {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .intro__content {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  /* Billede + team-kort */
+  .intro__media {
+    position: relative;
+    padding-right: 1.25rem;
+  }
+
+  .intro__image {
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (max-width: 639px) {
+    .intro__image {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* Tablet: billede og team-kort side om side */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .intro__media {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      align-items: end;
+    }
+
+    .intro__image {
+      aspect-ratio: 1 / 1;
+    }
+
+    .intro__media .intro__team {
+      z-index: 1;
+      max-width: none;
+      margin: 0 0 -2.5rem -3rem;
+    }
+  }
+
+  .intro__team {
+    position: relative;
+    margin: -2.5rem 0 0 1.25rem;
+    padding: 1.5rem 1.25rem 1.25rem;
+    background: var(--c-white);
+    border: 1px solid var(--c-line);
+    box-shadow: var(--shadow-soft);
+  }
+
+  @media (min-width: 1024px) {
+    .intro__team {
+      position: absolute;
+      left: -2.5rem;
+      bottom: 2.5rem;
+      margin: 0;
+      width: 19.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) and (max-width: 1180px) {
+    .intro__team {
+      left: -1rem;
+    }
+  }
+
+  .intro__team-label {
+    padding-bottom: 0.9rem;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid var(--c-line);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .intro__team ul {
+    list-style: none;
+  }
+
+  .intro__team li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-block: 0.55rem;
+    font-size: var(--fs-sm);
+    color: var(--c-ink);
+  }
+
+  .intro__team li + li {
+    border-top: 1px solid color-mix(in srgb, var(--c-line) 70%, transparent);
+  }
+
+  /* Mobil: roller i to kolonner, så kortet ikke bliver for langt */
+  @media (max-width: 639px) {
+    .intro__team ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem 1rem;
+      padding-top: 0.5rem;
+    }
+
+    .intro__team li {
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding-block: 0.35rem;
+      font-size: 0.8125rem;
+      line-height: 1.35;
+    }
+
+    .intro__team li + li {
+      border-top: 0;
+    }
+
+    .intro__team li :global(svg) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .intro__team {
+      padding: 1.75rem 1.75rem 1.5rem;
+    }
+  }
+
+  .intro__team li :global(svg) {
+    flex-shrink: 0;
+    color: var(--c-gold);
+  }
+
+  /* Tekst */
+  .intro__content h2 {
+    max-width: 15ch;
+  }
+
+  .intro__content .lead {
+    margin-top: var(--space-6);
+  }
+
+  .intro__text {
+    margin-top: var(--space-5);
+    color: var(--c-ink-2);
+  }
+
+  .intro__points {
+    margin-block: var(--space-6) var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--c-line);
+  }
+
+  @media (min-width: 640px) {
+    .intro__points {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem 2rem;
+    }
+  }
+</style>

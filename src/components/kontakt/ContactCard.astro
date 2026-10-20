@@ -1,0 +1,422 @@
+---
+// Højre kolonne på /kontakt/: direkte kontakt, åbningstider, område, sociale medier og "Hvad sker der nu?".
+// Alle virksomhedsdata kommer fra src/data/site.ts.
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+
+const nextSteps = [
+  {
+    title: 'Vi ringer jer op',
+    text: 'Inden for én hverdag tager vi kontakt og hører kort om jeres virksomhed og ønsker.',
+  },
+  {
+    title: 'Uforpligtende møde',
+    text: 'Vi mødes fysisk eller online og kigger sammen på jeres profiler, mål og målgruppe.',
+  },
+  {
+    title: 'Forslag til pakke og plan',
+    text: 'I får et konkret forslag til pakke, eventuelle tillæg og de første måneders indhold.',
+  },
+];
+---
+
+<div class="cc">
+  <div class="cc__direct on-dark">
+    <p class="eyebrow">Direkte kontakt</p>
+    <h2 id="cc-titel" class="cc__title">Vi er kun et opkald <em>væk</em></h2>
+
+    <ul class="cc__lines" role="list">
+      <li>
+        <a class="cc__line" href={site.phoneHref}>
+          <span class="cc__icon" aria-hidden="true"><Icon name="phone" size={18} /></span>
+          <span class="cc__line-body">
+            <span class="cc__label">Ring til os</span>
+            <span class="cc__value cc__value--phone">{site.phone}</span>
+          </span>
+          <span class="cc__go" aria-hidden="true"><Icon name="arrow-up-right" size={18} /></span>
+        </a>
+      </li>
+      <li>
+        <a class="cc__line" href={site.emailHref}>
+          <span class="cc__icon" aria-hidden="true"><Icon name="mail" size={18} /></span>
+          <span class="cc__line-body">
+            <span class="cc__label">Skriv til os</span>
+            <span class="cc__value cc__value--mail">{site.email}</span>
+          </span>
+          <span class="cc__go" aria-hidden="true"><Icon name="arrow-up-right" size={18} /></span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="cc__block">
+      <h3 class="cc__subtitle">
+        <Icon name="clock" size={16} />
+        Åbningstider
+      </h3>
+      <dl class="cc__hours">
+        {
+          site.hours.map((h) => (
+            <div>
+              <dt>{h.days}</dt>
+              <dd>{h.time}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="cc__block cc__meta">
+      <p class="cc__area">
+        <Icon name="pin" size={16} />
+        <span>
+          {
+            site.address ? (
+              <>
+                {site.address.street}, {site.address.zip} {site.address.city}
+                <br />
+              </>
+            ) : null
+          }
+          {site.serviceArea}
+        </span>
+      </p>
+
+      <ul class="cc__social" role="list" aria-label="Følg os">
+        {
+          site.social.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
+                <Icon name={s.icon} size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="cc__next">
+    <h3 class="cc__next-title">Hvad sker der nu?</h3>
+    <ol class="cc__steps" role="list">
+      {
+        nextSteps.map((step, i) => (
+          <li>
+            <span class="cc__num" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h4 class="cc__step-title">{step.title}</h4>
+              <p class="cc__step-text">{step.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</div>
+
+<style>
+  .cc {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  /* Tablet: kort og forløb side om side, så den fulde bredde udnyttes */
+  @media (min-width: 720px) and (max-width: 1023px) {
+    .cc {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      grid-template-rows: auto;
+    }
+
+    .cc .cc__next {
+      border-top: 1px solid var(--c-line);
+      border-left: 0;
+    }
+  }
+
+  /* ---------- Mørkebrunt kort ---------- */
+  .cc__direct {
+    position: relative;
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+    background: var(--c-brown);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  /* Diskret marmor i hjørnet */
+  .cc__direct::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(160deg, color-mix(in srgb, var(--c-brown) 82%, transparent) 0%, var(--c-brown) 55%),
+      url('../../assets/images/marble.jpg');
+    background-size: cover;
+    background-position: center top;
+    opacity: 1;
+    mix-blend-mode: normal;
+  }
+
+  .cc__direct .eyebrow {
+    margin-bottom: var(--space-4);
+  }
+
+  .cc__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-snug);
+    color: var(--c-cream);
+  }
+
+  .cc__title em {
+    font-style: italic;
+    color: var(--c-gold-light);
+  }
+
+  /* Telefon og mail */
+  .cc__lines {
+    list-style: none;
+    margin-top: var(--space-6);
+    border-top: 1px solid color-mix(in srgb, var(--c-cream) 18%, transparent);
+  }
+
+  .cc__line {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding-block: 1.15rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-cream) 18%, transparent);
+    color: var(--c-cream);
+    text-decoration: none;
+  }
+
+  .cc__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid color-mix(in srgb, var(--c-gold-light) 55%, transparent);
+    color: var(--c-gold-light);
+    transition:
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .cc__line-body {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .cc__label {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-cream-muted);
+  }
+
+  .cc__value {
+    font-family: var(--f-serif);
+    line-height: 1.2;
+    color: var(--c-cream);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .cc__value--phone {
+    font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.1rem);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .cc__value--mail {
+    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+    overflow-wrap: anywhere;
+  }
+
+  .cc__go {
+    color: var(--c-cream-muted);
+    transition:
+      transform var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .cc__line:hover .cc__icon {
+    background: var(--c-gold-light);
+    color: var(--c-brown-deep);
+  }
+
+  .cc__line:hover .cc__value,
+  .cc__line:hover .cc__go {
+    color: var(--c-gold-light);
+  }
+
+  .cc__line:hover .cc__go {
+    transform: translate(3px, -3px);
+  }
+
+  /* Åbningstider */
+  .cc__block {
+    margin-top: var(--space-6);
+  }
+
+  .cc__subtitle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: var(--space-3);
+    font-family: var(--f-sans);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--c-gold-light);
+  }
+
+  .cc__hours {
+    display: grid;
+    margin: 0;
+  }
+
+  .cc__hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.55rem;
+    border-bottom: 1px dashed color-mix(in srgb, var(--c-cream) 16%, transparent);
+    font-size: 0.95rem;
+  }
+
+  .cc__hours div:last-child {
+    border-bottom: 0;
+  }
+
+  .cc__hours dt {
+    color: var(--c-cream-muted);
+  }
+
+  .cc__hours dd {
+    margin: 0;
+    color: var(--c-cream);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  /* Område og sociale medier */
+  .cc__meta {
+    display: grid;
+    gap: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid color-mix(in srgb, var(--c-cream) 18%, transparent);
+  }
+
+  .cc__area {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--c-cream-muted);
+  }
+
+  .cc__area :global(svg),
+  .cc__subtitle :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.1em;
+    color: var(--c-gold-light);
+  }
+
+  .cc__social {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .cc__social a {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid color-mix(in srgb, var(--c-cream) 30%, transparent);
+    color: var(--c-cream);
+    transition:
+      background-color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .cc__social a:hover {
+    background: var(--c-cream);
+    border-color: var(--c-cream);
+    color: var(--c-brown-deep);
+  }
+
+  /* ---------- Hvad sker der nu? ---------- */
+  .cc__next {
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+    border: 1px solid var(--c-line);
+    border-top: 0;
+    background: var(--c-white);
+  }
+
+  .cc__next-title {
+    font-size: var(--fs-h4);
+    font-family: var(--f-serif);
+    line-height: var(--lh-snug);
+  }
+
+  .cc__steps {
+    list-style: none;
+    display: grid;
+    margin-top: var(--space-5);
+    counter-reset: step;
+  }
+
+  .cc__steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: var(--space-3);
+    padding-bottom: var(--space-5);
+  }
+
+  .cc__steps li:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Lodret guldlinje mellem trinene */
+  .cc__steps li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 2.1rem;
+    bottom: 0.4rem;
+    left: 0.85rem;
+    width: 1px;
+    background: var(--c-gold);
+    opacity: 0.55;
+  }
+
+  .cc__num {
+    font-family: var(--f-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--c-gold-ink);
+  }
+
+  .cc__step-title {
+    font-size: var(--fs-base);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .cc__step-text {
+    margin-top: 0.2rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--c-ink-2);
+  }
+</style>

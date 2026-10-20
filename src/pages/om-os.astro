@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import OmStory from '../components/om-os/OmStory.astro';
+import OmPrinciples from '../components/om-os/OmPrinciples.astro';
+import OmTeam from '../components/om-os/OmTeam.astro';
+import OmChecklist from '../components/om-os/OmChecklist.astro';
+import OmProcess from '../components/om-os/OmProcess.astro';
+import OmCareerTeaser from '../components/om-os/OmCareerTeaser.astro';
+import { site } from '../data/site';
+
+const description = `Mød ${site.name}: strateger, fotografer, content creators og performance-specialister, der klarer jeres sociale medier fra strategi til rapport.`;
+---
+
+<BaseLayout title="Om os" description={description}>
+  <PageHero
+    eyebrow="Om Silberg Creative"
+    title="Et bureau bygget på <em>æstetik</em> og resultater"
+    lead="Vi hjælper virksomheder med at få mere ud af deres sociale medier – uden at det koster dem tid. Med et fast team af specialister bag hver eneste profil."
+  >
+    <a href="#team" class="btn">Mød teamet <Icon name="arrow" size={16} /></a>
+    <a href="/kontakt/" class="btn btn--outline">Book et uforpligtende møde</a>
+  </PageHero>
+
+  <OmStory />
+  <OmPrinciples />
+  <OmTeam />
+  <OmChecklist />
+  <OmProcess />
+  <OmCareerTeaser />
+
+  <CtaBand
+    eyebrow="Lad os lære hinanden at kende"
+    title="Skal vi tage <em>ansvaret</em> for jeres sociale medier?"
+    text="Book et uforpligtende møde. Vi kigger på jeres nuværende profiler, fortæller, hvad vi ville gøre – og hvilken pakke der giver mening for jer."
+  />
+</BaseLayout>

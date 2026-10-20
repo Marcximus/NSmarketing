@@ -1,0 +1,215 @@
+---
+// Karriere: hvad det vil sige at arbejde med os + hvad vi værdsætter.
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import handsImage from '../../assets/images/creator-hands.jpg';
+import type { IconName } from '../../data/icons';
+
+const expectations = [
+  'Varierede opgaver for virksomheder i mange forskellige brancher',
+  'Klare briefs, så du ved præcis, hvad opgaven går ud på',
+  'Et kreativt miljø med høje standarder og plads til idéer',
+  'Indhold i høj kvalitet, du kan være stolt af at vise frem',
+];
+
+const values: { title: string; text: string; icon: IconName }[] = [
+  {
+    title: 'Sans for æstetik',
+    text: 'Du har et skarpt øje for detaljer, lys og komposition – og ved, at kvaliteten ligger i det, de fleste overser.',
+    icon: 'sparkle',
+  },
+  {
+    title: 'Ansvar og ordentlighed',
+    text: 'Du holder, hvad du lover. Vores kunder skal kunne regne med os, og det starter hos hver enkelt af os.',
+    icon: 'shield',
+  },
+  {
+    title: 'Nysgerrighed',
+    text: 'Platforme, formater og trends ændrer sig hele tiden. Du er på forkant – og deler gerne det, du lærer.',
+    icon: 'compass',
+  },
+  {
+    title: 'Holdånd',
+    text: 'Vi lykkes sammen. Du giver og modtager gerne sparring og glæder dig over andres gode idéer.',
+    icon: 'users',
+  },
+];
+---
+
+<section class="section kintro" aria-labelledby="kintro-title">
+  <div class="container kintro__grid">
+    <div class="kintro__content" data-reveal style="--reveal-delay: .08s">
+      <p class="eyebrow">Hos Silberg Creative</p>
+      <h2 id="kintro-title">Kreativt håndværk med <em>høje</em> standarder</h2>
+      <p class="lead">
+        Vi skaber indhold for virksomheder, der går op i, hvordan de fremstår – og vi går lige så meget op i
+        det selv. Strateger, fotografer, content creators og grafikere arbejder tæt sammen om hver eneste
+        kunde.
+      </p>
+      <h3 class="kintro__subhead">Det kan du forvente</h3>
+      <ul class="check-list kintro__list">
+        {expectations.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <div class="kintro__media" data-reveal>
+      <div class="frame-gold">
+        <div class="media kintro__image">
+          <Image
+            src={handsImage}
+            alt="Hænder holder et analogt kamera klar til at tage et billede"
+            widths={[400, 600, 800, 1000]}
+            sizes="(min-width: 1024px) 38vw, 92vw"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--beige kvalues" aria-labelledby="kvalues-title">
+  <div class="container">
+    <div class="section-head section-head--split" data-reveal>
+      <div>
+        <p class="eyebrow">Hvem vi leder efter</p>
+        <h2 id="kvalues-title">Det <em>værdsætter</em> vi</h2>
+      </div>
+      <p class="lead">
+        Erfaring og et stærkt portfolio betyder meget. Men det er måden, du arbejder på, der gør forskellen –
+        for os og for vores kunder.
+      </p>
+    </div>
+
+    <ul class="kvalues__list" role="list">
+      {
+        values.map((value, i) => (
+          <li class="kvalue" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+            <span class="kvalue__icon" aria-hidden="true">
+              <Icon name={value.icon} size={22} />
+            </span>
+            <div>
+              <h3 class="kvalue__title">{value.title}</h3>
+              <p class="kvalue__text">{value.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* ---------- Intro ---------- */
+  .kintro__grid {
+    display: grid;
+    gap: clamp(3.5rem, 7vw, 5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .kintro__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(4rem, 8vw, 8rem);
+    }
+  }
+
+  .kintro__content h2 {
+    max-width: 14ch;
+  }
+
+  .kintro__content .lead {
+    max-width: 38rem;
+    margin-top: var(--space-5);
+  }
+
+  .kintro__subhead {
+    margin-top: var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--c-line);
+    font-family: var(--f-sans);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .kintro__list {
+    margin-top: var(--space-5);
+    color: var(--c-ink-2);
+  }
+
+  @media (min-width: 640px) {
+    .kintro__list {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 2.25rem;
+    }
+  }
+
+  .kintro__media {
+    padding: 0 1.25rem 1.25rem 0;
+  }
+
+  .kintro__image {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 1024px) {
+    .kintro__image {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  /* ---------- Værdier ---------- */
+  .kvalues__list {
+    display: grid;
+    list-style: none;
+    border-top: 1px solid var(--c-sand);
+  }
+
+  @media (min-width: 820px) {
+    .kvalues__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .kvalue {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-5);
+    padding-block: var(--space-6);
+    border-bottom: 1px solid var(--c-sand);
+  }
+
+  @media (min-width: 820px) {
+    .kvalue {
+      padding: var(--space-7) var(--space-6) var(--space-7) 0;
+    }
+
+    .kvalue:nth-child(even) {
+      padding-left: var(--space-6);
+      border-left: 1px solid var(--c-sand);
+    }
+  }
+
+  .kvalue__icon {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border: 1px solid var(--c-gold);
+    color: var(--c-gold-ink);
+  }
+
+  .kvalue__title {
+    font-size: clamp(1.3rem, 1.15rem + 0.4vw, 1.5rem);
+  }
+
+  .kvalue__text {
+    margin-top: var(--space-2);
+    max-width: 30rem;
+    font-size: 0.975rem;
+    color: var(--c-ink-2);
+  }
+</style>

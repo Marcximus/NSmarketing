@@ -1,0 +1,243 @@
+---
+// Kontaktformular til /kontakt/. Håndteres af src/scripts/forms.ts (data-form="kontakt").
+// Kan forudfyldes via URL'en, fx /kontakt/?pakke=gold&emne=statister
+//  - pakke: id fra src/data/packages.ts (silver/gold/black)
+//  - emne:  'pakkeloesning', 'tillaeg', 'andet' eller et tillægs-id fra src/data/addons.ts
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { packages, formatPrice } from '../../data/packages';
+import { addonCategories } from '../../data/addons';
+---
+
+<div class="cf">
+  <div class="cf__head">
+    <p class="eyebrow">Skriv til os</p>
+    <h2 id="kontakt-formular-titel" class="cf__title">Fortæl os lidt om <em>jer</em></h2>
+    <p class="cf__intro">
+      Jo mere vi ved på forhånd, jo bedre kan vi forberede det første møde. Et par linjer er rigeligt.
+    </p>
+  </div>
+
+  <form
+    class="cf__form"
+    data-form="kontakt"
+    method="post"
+    action={site.formEndpoint || undefined}
+    aria-labelledby="kontakt-formular-titel"
+    novalidate
+  >
+    <p class="cf__required small">Felter markeret med <span aria-hidden="true">*</span><span class="visually-hidden">stjerne</span> skal udfyldes.</p>
+
+    <div class="cf__grid">
+      <div class="field">
+        <label for="kf-navn">Navn <span class="req" aria-hidden="true">*</span></label>
+        <input id="kf-navn" class="input" type="text" name="navn" autocomplete="name" required />
+      </div>
+
+      <div class="field">
+        <label for="kf-virksomhed">Virksomhed</label>
+        <input id="kf-virksomhed" class="input" type="text" name="virksomhed" autocomplete="organization" />
+      </div>
+
+      <div class="field">
+        <label for="kf-email">E-mail <span class="req" aria-hidden="true">*</span></label>
+        <input
+          id="kf-email"
+          class="input"
+          type="email"
+          name="email"
+          autocomplete="email"
+          inputmode="email"
+          spellcheck="false"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="kf-telefon">Telefon</label>
+        <input id="kf-telefon" class="input" type="tel" name="telefon" autocomplete="tel" inputmode="tel" />
+      </div>
+
+      <div class="field">
+        <label for="kf-pakke">Interesseret i</label>
+        <select id="kf-pakke" class="select" name="pakke">
+          <option value="">Ved ikke endnu</option>
+          {
+            packages.map((p) => (
+              <option value={p.id}>
+                {p.name} – {formatPrice(p.price)} kr./md.
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="kf-emne">Hvad drejer det sig om?</label>
+        <select id="kf-emne" class="select" name="emne">
+          <option value="">Vælg emne</option>
+          <option value="pakkeloesning">Pakkeløsning</option>
+          <option value="tillaeg">Tillægsydelse</option>
+          {
+            addonCategories.map((cat) => (
+              <optgroup label={cat.title}>
+                {cat.items.map((item) => (
+                  <option value={item.id}>{item.name}</option>
+                ))}
+              </optgroup>
+            ))
+          }
+          <option value="andet">Andet</option>
+        </select>
+      </div>
+
+      <div class="field field--full">
+        <label for="kf-besked">Besked <span class="req" aria-hidden="true">*</span></label>
+        <textarea
+          id="kf-besked"
+          class="textarea"
+          name="besked"
+          rows="6"
+          required
+          placeholder="Fx hvad I laver, hvilke kanaler I er på i dag, og hvad I gerne vil opnå."></textarea>
+      </div>
+    </div>
+
+    <label class="checkbox cf__consent" for="kf-samtykke">
+      <input id="kf-samtykke" type="checkbox" name="samtykke" value="Ja" required />
+      <span>
+        Jeg giver samtykke til, at {site.name} behandler mine oplysninger for at kunne besvare min
+        henvendelse. Læs mere i vores <a href="/privatlivspolitik/">privatlivspolitik</a>.
+        <span class="req" aria-hidden="true">*</span>
+      </span>
+    </label>
+
+    <div class="hp-field" aria-hidden="true">
+      <label for="kf-gotcha">Lad dette felt være tomt</label>
+      <input id="kf-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+    </div>
+    <input type="hidden" name="_subject" value="Ny henvendelse fra hjemmesiden" />
+
+    <div class="cf__actions">
+      <button type="submit" class="btn">Send besked <Icon name="arrow" size={16} /></button>
+      <p class="cf__promise small">
+        <Icon name="clock" size={16} />
+        <span>Vi svarer inden for én hverdag.</span>
+      </p>
+    </div>
+    <p class="cf__status small" role="status" aria-live="polite" data-form-status></p>
+  </form>
+</div>
+
+<style>
+  .cf {
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .cf__head {
+    padding-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .cf__head .eyebrow {
+    margin-bottom: var(--space-4);
+  }
+
+  .cf__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-snug);
+  }
+
+  .cf__intro {
+    max-width: 34rem;
+    margin-top: var(--space-3);
+    color: var(--c-ink-2);
+  }
+
+  .cf__required {
+    margin-bottom: var(--space-5);
+    color: var(--c-muted);
+  }
+
+  .req {
+    color: var(--c-gold-ink);
+  }
+
+  .cf__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 640px) {
+    .cf__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Lange optioner må ikke skubbe layoutet ud */
+  .cf .select {
+    min-width: 0;
+    text-overflow: ellipsis;
+  }
+
+  .cf .textarea {
+    min-height: 10rem;
+  }
+
+  .cf__consent {
+    margin-top: var(--space-6);
+  }
+
+  .cf__consent a {
+    color: var(--c-ink);
+  }
+
+  .cf__consent a:hover {
+    color: var(--c-gold-ink);
+  }
+
+  /* Honeypot – skjult for mennesker og skærmlæsere, synlig for spam-robotter */
+
+  .cf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--c-line);
+  }
+
+  .cf__promise {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--c-ink-2);
+  }
+
+  .cf__promise :global(svg) {
+    flex-shrink: 0;
+    color: var(--c-gold);
+  }
+
+  .cf__status:not(:empty) {
+    margin-top: var(--space-4);
+    padding: 0.85rem 1rem;
+    border-left: 2px solid var(--c-gold);
+    background: var(--c-paper);
+    color: var(--c-ink);
+  }
+
+  @media (max-width: 479px) {
+    .cf__actions .btn {
+      width: 100%;
+    }
+  }
+</style>

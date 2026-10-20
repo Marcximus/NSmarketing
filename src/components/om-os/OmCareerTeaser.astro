@@ -1,0 +1,86 @@
+---
+// Karriere-teaser på Om os: "Vi vokser" → /karriere/.
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import shootImage from '../../assets/images/content-shoot.jpg';
+
+const roles = ['Fotografer', 'Videografer', 'Content creators', 'Statister & modeller', 'Praktikanter'];
+---
+
+<section class="section section--white career" aria-labelledby="career-title">
+  <div class="container">
+    <div class="career__card">
+      <div class="career__media" data-reveal>
+        <div class="media">
+          <Image
+            src={shootImage}
+            alt="Fotograf tager billeder på et shoot i et lyst køkken"
+            widths={[480, 720, 960, 1200]}
+            sizes="(min-width: 960px) 46vw, 92vw"
+          />
+        </div>
+      </div>
+      <div class="career__content" data-reveal style="--reveal-delay: .08s">
+        <p class="eyebrow">Karriere</p>
+        <h2 id="career-title">Vi <em>vokser</em></h2>
+        <p class="career__text">
+          Vi er altid på udkig efter dygtige og kreative talenter, der vil være med til at skabe indhold i
+          topklasse for danske virksomheder – som fast del af teamet eller i vores netværk.
+        </p>
+        <ul class="career__roles" role="list" aria-label="Vi hører gerne fra">
+          {roles.map((role) => <li class="tag">{role}</li>)}
+        </ul>
+        <a href="/karriere/" class="btn">Se karriere <Icon name="arrow" size={16} /></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .career__card {
+    display: grid;
+    border: 1px solid var(--c-line);
+    background: var(--c-paper);
+  }
+
+  @media (min-width: 960px) {
+    .career__card {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  .career__media .media {
+    height: 100%;
+    aspect-ratio: 3 / 2;
+  }
+
+  @media (min-width: 960px) {
+    .career__media .media {
+      aspect-ratio: auto;
+      min-height: 28rem;
+    }
+  }
+
+  .career__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(2rem, 1.2rem + 3.2vw, 4.5rem);
+  }
+
+  .career__text {
+    margin-top: var(--space-5);
+    max-width: 30rem;
+    color: var(--c-ink-2);
+  }
+
+  .career__roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: var(--space-5) var(--space-6);
+    list-style: none;
+  }
+</style>

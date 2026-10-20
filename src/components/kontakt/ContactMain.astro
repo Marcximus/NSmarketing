@@ -1,0 +1,41 @@
+---
+// Hovedsektion på /kontakt/: formular (venstre) + kontaktkort (højre). Stables på mobil.
+import ContactForm from './ContactForm.astro';
+import ContactCard from './ContactCard.astro';
+---
+
+<section class="section cm" id="skriv" aria-label="Kontaktformular og kontaktoplysninger">
+  <div class="container cm__grid">
+    <div class="cm__form" data-reveal>
+      <ContactForm />
+    </div>
+    <div class="cm__card" data-reveal style="--reveal-delay: .1s">
+      <ContactCard />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cm {
+    padding-top: clamp(2rem, 1rem + 3vw, 3.5rem);
+  }
+
+  .cm__grid {
+    display: grid;
+    gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .cm__grid {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: clamp(1.5rem, 3vw, 3rem);
+    }
+
+    /* Begge kolonner fylder hele rækkens højde, så kanterne flugter i bunden */
+    .cm__form,
+    .cm__card {
+      display: grid;
+    }
+  }
+</style>

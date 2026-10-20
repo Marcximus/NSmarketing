@@ -1,0 +1,190 @@
+---
+// Kundeudtalelser i redaktionelt layout på mørk marmor: fast (sticky) overskrift til venstre,
+// ét stort citat og resten i en række til højre.
+// OBS: Indholdet kommer fra content.ts og er pt. eksempler (placeholder: true), der skal udskiftes.
+import Icon from '../Icon.astro';
+import { testimonials } from '../../data/content';
+
+const [feature, ...rest] = testimonials;
+---
+
+{
+  feature && (
+    <section class="section section--deep case-quotes" aria-labelledby="case-quotes-title">
+      <div class="case-quotes__bg" aria-hidden="true" />
+      <div class="container case-quotes__layout">
+        <div class="case-quotes__head">
+          <div data-reveal>
+            <p class="eyebrow">Kundeudtalelser</p>
+            <h2 id="case-quotes-title">
+              Ord fra dem, vi <em>arbejder</em> for
+            </h2>
+          </div>
+        </div>
+
+        <div class="case-quotes__body">
+          <figure class="case-quotes__feature" data-reveal style="--reveal-delay: .1s">
+            <Icon name="quote" size={44} strokeWidth={0.9} class="case-quotes__mark" />
+            <blockquote>
+              <p>{feature.quote}</p>
+            </blockquote>
+            <figcaption>
+              <span class="case-quotes__name">{feature.name}</span>
+              <span class="case-quotes__company">{feature.company}</span>
+            </figcaption>
+          </figure>
+
+          {rest.length > 0 && (
+            <ul class="case-quotes__list" role="list">
+              {rest.map((t, i) => (
+                <li data-reveal style={`--reveal-delay: ${0.1 + i * 0.1}s`}>
+                  <figure class="case-quotes__item">
+                    <blockquote>
+                      <p>{t.quote}</p>
+                    </blockquote>
+                    <figcaption>
+                      <span class="case-quotes__name">{t.name}</span>
+                      <span class="case-quotes__company">{t.company}</span>
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .case-quotes {
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  /* Diskret mørk marmor: marmorteksturen under et næsten tæt lag mørkebrun */
+  .case-quotes__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--c-brown-deep) 93%, transparent) 0%,
+        color-mix(in srgb, var(--c-brown-deep) 88%, transparent) 100%
+      ),
+      url('../../assets/images/marble.jpg');
+    background-size: cover;
+    background-position: center 40%;
+  }
+
+  .case-quotes__layout {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  .case-quotes__head h2 {
+    max-width: 12ch;
+  }
+
+  .case-quotes__feature :global(.case-quotes__mark) {
+    color: var(--c-gold);
+    margin-bottom: 1.75rem;
+  }
+
+  .case-quotes blockquote {
+    margin: 0;
+  }
+
+  .case-quotes__feature blockquote p {
+    font-family: var(--f-serif);
+    font-size: clamp(1.45rem, 1rem + 1.7vw, 2.35rem);
+    font-style: italic;
+    line-height: 1.42;
+    letter-spacing: -0.01em;
+    color: var(--c-cream);
+  }
+
+  .case-quotes figcaption {
+    display: grid;
+    gap: 0.25rem;
+    width: fit-content;
+    min-width: 3rem;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--c-gold);
+  }
+
+  .case-quotes__name {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--c-cream);
+  }
+
+  .case-quotes__company {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-cream-muted);
+  }
+
+  .case-quotes__list {
+    display: grid;
+    margin-top: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    list-style: none;
+    border-top: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+  }
+
+  .case-quotes__item {
+    padding-block: 2rem;
+  }
+
+  .case-quotes__list > li + li .case-quotes__item {
+    border-top: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+  }
+
+  .case-quotes__item blockquote p {
+    font-family: var(--f-serif);
+    font-size: clamp(1.1rem, 1.02rem + 0.3vw, 1.25rem);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--c-cream);
+  }
+
+  .case-quotes__item figcaption {
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .case-quotes__layout {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: start;
+    }
+
+    /* Overskriften følger med, mens man læser citaterne */
+    .case-quotes__head {
+      position: sticky;
+      top: calc(var(--header-h) + 3rem);
+    }
+
+    .case-quotes__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-quotes__item {
+      padding: 2.5rem 2.5rem 0 0;
+    }
+
+    .case-quotes__list > li + li .case-quotes__item {
+      height: 100%;
+      border-top: 0;
+      padding-left: 2.5rem;
+      padding-right: 0;
+      border-left: 1px solid color-mix(in srgb, var(--c-cream-muted) 30%, transparent);
+    }
+  }
+</style>

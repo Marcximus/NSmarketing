@@ -1,0 +1,698 @@
+---
+// Tillægsydelser (src/data/addons.ts). Alle kategorier er synlige – også uden JS.
+// Desktop: sticky kategori-menu i venstre side. Mobil/tablet: sticky vandret menu under headeren.
+import Icon from '../Icon.astro';
+import { addonCategories, addonNote, type Addon } from '../../data/addons';
+import { site } from '../../data/site';
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+// "Spørg om statister & modeller", men "Spørg om SEO" og "Spørg om LinkedIn management"
+const properNouns = ['Meta', 'TikTok', 'LinkedIn', 'Pinterest', 'Google', 'Instagram', 'Facebook', 'YouTube'];
+const inSentence = (name: string) => {
+  const first = name.split(/[\s-]/)[0];
+  if (properNouns.includes(first) || /^[A-ZÆØÅ]{2,}$/.test(first)) return name;
+  return name.charAt(0).toLocaleLowerCase('da-DK') + name.slice(1);
+};
+
+// Genveje til de tillæg, der oftest bliver spurgt efter (styres med popular: true i addons.ts)
+const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.popular);
+---
+
+<section class="section addons" id="tillaeg" aria-labelledby="tillaeg-titel">
+  <div class="container">
+    <div class="addons__head" data-reveal>
+      <div>
+        <p class="eyebrow">Tillægsydelser</p>
+        <h2 id="tillaeg-titel">Byg jeres pakke <em>større</em></h2>
+      </div>
+      <p class="lead">
+        Alle tillæg kan lægges oven i enhver pakke – fast hver måned eller kun i de perioder, hvor I har brug for
+        ekstra kræfter. Fra statister og ekstra content-dage til SEO og e-mail marketing.
+      </p>
+    </div>
+
+    {
+      quick.length > 0 && (
+        <div class="addons__quick" data-reveal>
+          <p class="addons__quick-label" id="tillaeg-genveje">Gå direkte til</p>
+          <ul role="list" aria-labelledby="tillaeg-genveje">
+            {quick.map((a) => (
+              <li>
+                <a href={`#tillaeg-${a.id}`}>
+                  {a.name}
+                  <Icon name="arrow" size={14} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <div class="addons__layout">
+      <nav class="addons__nav" aria-label="Kategorier af tillægsydelser" data-addon-nav>
+        <p class="addons__nav-title" aria-hidden="true">Kategorier</p>
+        <ol role="list">
+          {
+            addonCategories.map((c, i) => (
+              <li>
+                <a href={`#tillaeg-${c.id}`} data-addon-link={c.id}>
+                  <span class="addons__nav-num" aria-hidden="true">
+                    {pad(i + 1)}
+                  </span>
+                  <span class="addons__nav-text">{c.title}</span>
+                  <span class="addons__nav-count">
+                    {c.items.length}
+                    <span class="visually-hidden"> ydelser</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="addons__help">
+          <p class="addons__help-title">Usikre på, hvad I har brug for?</p>
+          <p class="addons__help-text">Vi sammensætter gerne en løsning, der passer til jeres mål og budget.</p>
+          <a href={site.phoneHref} class="addons__help-link">
+            <Icon name="phone" size={15} /> Ring {site.phone}
+          </a>
+          <a href={site.emailHref} class="addons__help-link">
+            <Icon name="mail" size={15} /> Skriv til os
+          </a>
+        </div>
+      </nav>
+
+      <div class="addons__cats">
+        {
+          addonCategories.map((c, i) => (
+            <section
+              class="addon-cat"
+              id={`tillaeg-${c.id}`}
+              aria-labelledby={`tillaeg-kat-${c.id}`}
+              data-addon-cat={c.id}
+            >
+              <header class="addon-cat__head" data-reveal>
+                <span class="addon-cat__num" aria-hidden="true">
+                  {pad(i + 1)}
+                </span>
+                <div>
+                  <h3 id={`tillaeg-kat-${c.id}`}>{c.title}</h3>
+                  <p>{c.intro}</p>
+                </div>
+              </header>
+
+              <ul class="addon-grid" role="list" data-reveal>
+                {c.items.map((a) => (
+                  <li class="addon" id={`tillaeg-${a.id}`}>
+                    <div class="addon__head">
+                      <span class="addon__icon" aria-hidden="true">
+                        <Icon name={a.icon} size={22} />
+                      </span>
+                      <h4 class="addon__name">{a.name}</h4>
+                    </div>
+                    <p class="addon__desc">{a.description}</p>
+                    <div class="addon__foot">
+                      <p class="addon__price">
+                        {a.price ? (
+                          <>
+                            <span class="addon__amount">{a.price}</span>
+                            {a.unit && <span class="addon__unit">{a.unit}</span>}
+                          </>
+                        ) : (
+                          <span class="addon__amount addon__amount--quote">Pris efter aftale</span>
+                        )}
+                      </p>
+                      <a href={`/kontakt/?emne=${a.id}`} class="addon__link">
+                        Spørg om {inSentence(a.name)}
+                        <Icon name="arrow" size={14} />
+                      </a>
+                    </div>
+                  </li>
+                ))}
+                {c.items.length % 2 === 1 && (
+                  <li class="addon addon--custom">
+                    <div class="addon__head">
+                      <span class="addon__icon" aria-hidden="true">
+                        <Icon name="sparkle" size={22} />
+                      </span>
+                      <h4 class="addon__name">Noget helt tredje?</h4>
+                    </div>
+                    <p class="addon__desc">
+                      Står det, I har brug for, ikke på listen? Fortæl os om opgaven, så sammensætter vi en løsning.
+                    </p>
+                    <div class="addon__foot">
+                      <a href="/kontakt/" class="addon__link">
+                        Fortæl os om opgaven
+                        <Icon name="arrow" size={14} />
+                      </a>
+                    </div>
+                  </li>
+                )}
+              </ul>
+            </section>
+          ))
+        }
+
+        <p class="addons__note">{addonNote}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Markerer den kategori, man er ved at læse, i kategori-menuen
+  const nav = document.querySelector<HTMLElement>('[data-addon-nav]');
+  const list = nav?.querySelector<HTMLElement>('ol');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-addon-link]')];
+  const cats = [...document.querySelectorAll<HTMLElement>('[data-addon-cat]')];
+
+  if (nav && list && links.length && cats.length && 'IntersectionObserver' in window) {
+    const setActive = (id: string) => {
+      links.forEach((link) => {
+        const active = link.dataset.addonLink === id;
+        if (active) {
+          link.setAttribute('aria-current', 'true');
+          // Hold det aktive punkt synligt i den vandrette mobilmenu
+          if (list.scrollWidth > list.clientWidth) {
+            const left = link.offsetLeft - list.offsetLeft;
+            const outside = left < list.scrollLeft || left + link.offsetWidth > list.scrollLeft + list.clientWidth;
+            if (outside) list.scrollTo({ left: Math.max(0, left - 16), behavior: 'smooth' });
+          }
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    const visible = new Map<string, boolean>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => visible.set((e.target as HTMLElement).dataset.addonCat ?? '', e.isIntersecting));
+        const current = cats.find((c) => visible.get(c.dataset.addonCat ?? ''));
+        if (current?.dataset.addonCat) setActive(current.dataset.addonCat);
+      },
+      { rootMargin: '-35% 0px -60% 0px' },
+    );
+    cats.forEach((c) => observer.observe(c));
+  }
+</script>
+
+<style>
+  /* ---------- Overskrift ---------- */
+  .addons__head {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 960px) {
+    .addons__head {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: end;
+    }
+  }
+
+  /* Genveje til de mest efterspurgte tillæg */
+  .addons__quick {
+    display: grid;
+    gap: 0.9rem;
+    margin-block: clamp(2rem, 1.5rem + 2vw, 3rem) clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+    padding-block: 1.25rem;
+    border-block: 1px solid var(--c-line);
+  }
+
+  @media (min-width: 900px) {
+    .addons__quick {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 2rem;
+    }
+  }
+
+  .addons__quick-label {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .addons__quick ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .addons__quick a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--c-sand);
+    background: var(--c-white);
+    font-size: var(--fs-sm);
+    text-decoration: none;
+    color: var(--c-ink);
+    transition:
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .addons__quick a :global(svg) {
+    color: var(--c-gold);
+    transform: rotate(90deg);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .addons__quick a:hover {
+    border-color: var(--c-gold);
+    color: var(--c-gold-ink);
+  }
+
+  .addons__quick a:hover :global(svg) {
+    transform: rotate(90deg) translateX(3px);
+  }
+
+  /* ---------- Layout ---------- */
+  .addons__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    .addons__layout {
+      grid-template-columns: 15.5rem minmax(0, 1fr);
+      gap: clamp(3rem, 5vw, 5.5rem);
+      align-items: start;
+    }
+  }
+
+  /* ---------- Kategori-menu ---------- */
+  .addons__nav {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 5;
+  }
+
+  .addons__nav ol {
+    list-style: none;
+  }
+
+  .addons__nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    text-decoration: none;
+    color: var(--c-ink-2);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .addons__nav a:hover,
+  .addons__nav a[aria-current='true'] {
+    color: var(--c-ink);
+  }
+
+  .addons__nav-num {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--c-gold-ink);
+  }
+
+  .addons__nav-count {
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--c-muted);
+  }
+
+  /* Mobil/tablet: vandret menu, der klæber under headeren */
+  @media (max-width: 1023px) {
+    .addons__nav {
+      margin-inline: calc(-1 * var(--gutter));
+      background: color-mix(in srgb, var(--c-paper) 97%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-block: 1px solid var(--c-line);
+    }
+
+    .addons__nav-title,
+    .addons__help,
+    .addons__nav-count {
+      display: none;
+    }
+
+    .addons__nav ol {
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-inline: calc(var(--gutter) - 0.9rem);
+      scroll-padding-inline: var(--gutter);
+    }
+
+    .addons__nav ol::-webkit-scrollbar {
+      display: none;
+    }
+
+    .addons__nav li {
+      flex-shrink: 0;
+    }
+
+    .addons__nav a {
+      position: relative;
+      gap: 0.5rem;
+      min-height: 3.25rem;
+      padding-inline: 0.9rem;
+      font-size: var(--fs-sm);
+      white-space: nowrap;
+      color: var(--c-muted);
+    }
+
+    .addons__nav a::after {
+      content: '';
+      position: absolute;
+      left: 0.9rem;
+      right: 0.9rem;
+      bottom: -1px;
+      height: 2px;
+      background: var(--c-gold);
+      transform: scaleX(0);
+      transition: transform var(--dur) var(--ease);
+    }
+
+    .addons__nav a[aria-current='true']::after {
+      transform: scaleX(1);
+    }
+  }
+
+  /* Desktop: lodret menu i venstre side */
+  @media (min-width: 1024px) {
+    .addons__nav {
+      top: calc(var(--header-h) + 2rem);
+    }
+
+    .addons__nav-title {
+      padding-bottom: 0.9rem;
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--c-muted);
+      border-bottom: 1px solid var(--c-line);
+    }
+
+    .addons__nav li {
+      border-bottom: 1px solid var(--c-line);
+    }
+
+    .addons__nav a {
+      position: relative;
+      padding: 0.9rem 0 0.9rem 0;
+      font-size: 0.9375rem;
+      line-height: 1.35;
+      transition:
+        color var(--dur) var(--ease),
+        padding var(--dur) var(--ease);
+    }
+
+    .addons__nav a::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 1px;
+      background: var(--c-gold);
+      transition: width var(--dur) var(--ease);
+    }
+
+    .addons__nav a[aria-current='true'] {
+      padding-left: 1.75rem;
+    }
+
+    .addons__nav a[aria-current='true']::before {
+      width: 1.1rem;
+    }
+
+    .addons__nav-text {
+      flex: 1;
+    }
+
+    .addons__help {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--c-line);
+      background: var(--c-white);
+    }
+
+    .addons__help-title {
+      font-family: var(--f-serif);
+      font-size: 1.2rem;
+      line-height: 1.3;
+    }
+
+    .addons__help-text {
+      margin: 0.6rem 0 0.9rem;
+      font-size: var(--fs-sm);
+      line-height: 1.55;
+      color: var(--c-ink-2);
+    }
+
+    .addons__help-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 2.75rem;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--c-ink);
+      border-top: 1px solid var(--c-line);
+    }
+
+    .addons__help-link :global(svg) {
+      color: var(--c-gold);
+    }
+
+    .addons__help-link:hover {
+      color: var(--c-gold-ink);
+    }
+  }
+
+  /* ---------- Kategorier ---------- */
+  .addon-cat {
+    scroll-margin-top: calc(var(--header-h) + 4.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .addon-cat {
+      scroll-margin-top: calc(var(--header-h) + 2rem);
+    }
+  }
+
+  .addon-cat + .addon-cat {
+    margin-top: clamp(3.5rem, 2.5rem + 3vw, 5.5rem);
+  }
+
+  .addon-cat__head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: baseline;
+    margin-bottom: 1.75rem;
+  }
+
+  .addon-cat__num {
+    font-family: var(--f-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--c-gold-ink);
+  }
+
+  .addon-cat__head h3 {
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+  }
+
+  .addon-cat__head p {
+    margin-top: 0.5rem;
+    color: var(--c-ink-2);
+  }
+
+  /* ---------- Kort ---------- */
+  .addon-grid {
+    list-style: none;
+    display: grid;
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+
+  @media (min-width: 640px) {
+    .addon-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .addon {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+    background: var(--c-white);
+    scroll-margin-top: calc(var(--header-h) + 5rem);
+    transition: box-shadow var(--dur) var(--ease);
+  }
+
+  @media (min-width: 1024px) {
+    .addon {
+      scroll-margin-top: calc(var(--header-h) + 2rem);
+    }
+  }
+
+  .addon:hover,
+  .addon:target {
+    box-shadow: inset 0 0 0 1px var(--c-gold);
+  }
+
+  .addon:target {
+    background: color-mix(in srgb, var(--c-beige) 35%, var(--c-white));
+  }
+
+  .addon__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .addon__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--c-sand);
+    color: var(--c-gold);
+  }
+
+  /* Fra tablet: ikonet står over navnet */
+  @media (min-width: 640px) {
+    .addon__head {
+      display: block;
+    }
+
+    .addon__icon {
+      width: 3rem;
+      height: 3rem;
+      margin-bottom: 1.4rem;
+    }
+  }
+
+  .addon__name {
+    font-family: var(--f-serif);
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  .addon__desc {
+    margin: 0.85rem 0 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--c-ink-2);
+  }
+
+  .addon__foot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .addon__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.45rem;
+  }
+
+  .addon__amount {
+    font-family: var(--f-serif);
+    font-size: 1.15rem;
+    font-variant-numeric: lining-nums;
+    color: var(--c-ink);
+  }
+
+  .addon__amount--quote {
+    font-family: var(--f-sans);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--c-ink-2);
+  }
+
+  .addon__unit {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+
+  .addon__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    margin-bottom: -0.6rem;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--c-sand);
+    text-underline-offset: 0.35em;
+    transition:
+      color var(--dur) var(--ease),
+      text-decoration-color var(--dur) var(--ease);
+  }
+
+  .addon__link :global(svg) {
+    flex-shrink: 0;
+    color: var(--c-gold);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .addon__link:hover {
+    color: var(--c-gold-ink);
+    text-decoration-color: currentColor;
+  }
+
+  .addon__link:hover :global(svg) {
+    transform: translateX(3px);
+  }
+
+  /* Det udvidede link gør hele kortet klikbart uden at pakke alt ind i et link */
+  .addon__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .addon--custom {
+    background: var(--c-paper);
+  }
+
+  .addon--custom .addon__icon {
+    border-style: dashed;
+  }
+
+  .addons__note {
+    margin-top: 2rem;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+</style>
