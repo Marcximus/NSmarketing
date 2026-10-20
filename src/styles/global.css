@@ -22,6 +22,7 @@
   --c-gold-light: #d4b98a; /* guld som tekst på mørke flader (AA) */
   --c-cream: #f3eee7; /* tekst på mørke flader */
   --c-cream-muted: #cdbfae; /* dæmpet tekst på mørke flader (AA) */
+  --c-field: #8a7d70; /* kant på formularfelter – 4,0:1 på hvid, 3,7:1 på paper (WCAG 1.4.11) */
 
   /* Typografi */
   --f-serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
@@ -695,12 +696,12 @@ a {
   width: 100%;
   min-height: 3.25rem;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--c-sand);
+  border: 1px solid var(--c-field);
   border-radius: var(--radius);
   background: var(--c-white);
   color: var(--c-ink);
   font-size: var(--fs-base);
-  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease);
 }
 
 .textarea {
@@ -716,15 +717,14 @@ a {
 .input:hover,
 .select:hover,
 .textarea:hover {
-  border-color: var(--c-muted);
+  border-color: var(--c-ink-2);
 }
 
+/* Fokusring kommer fra den globale :focus-visible (guld, 2px) */
 .input:focus,
 .select:focus,
 .textarea:focus {
-  outline: none;
   border-color: var(--c-ink);
-  box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.25);
 }
 
 .select {
@@ -751,6 +751,26 @@ a {
   height: 1.15rem;
   margin-top: 0.15rem;
   accent-color: var(--c-brown);
+}
+
+/* Fejltekst ved et felt (indsættes af src/scripts/forms.ts) */
+.field-error {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: #9b2c2c; /* 7,5:1 på hvid, 7,0:1 på paper */
+}
+
+.input[aria-invalid='true'],
+.select[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-color: #9b2c2c;
+}
+
+.on-dark .field-error,
+.section--deep .field-error,
+.section--brown .field-error {
+  color: #f2b8a8; /* 10,0:1 på brown-deep, 8,0:1 på brown */
 }
 
 /* Honeypot mod spam: skjult for mennesker, udfyldes kun af bots */
@@ -882,6 +902,13 @@ a {
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Tastaturfokus må aldrig lande på usynligt indhold */
+.js [data-reveal]:focus-within {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

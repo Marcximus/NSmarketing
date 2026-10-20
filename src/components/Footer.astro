@@ -204,6 +204,23 @@ const year = new Date().getFullYear();
     border-color: var(--c-gold-light);
   }
 
+  /* Fejltekst fra forms.ts: under feltet på mobil, under felt + knap på bredere skærme */
+  .newsletter :global(.field-error) {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 560px) {
+    .newsletter :global(.field-error) {
+      order: 1;
+      margin-top: 0.5rem;
+    }
+
+    .newsletter__consent,
+    .newsletter__status {
+      order: 2;
+    }
+  }
+
   .newsletter__consent {
     grid-column: 1 / -1;
     margin-top: 0.75rem;

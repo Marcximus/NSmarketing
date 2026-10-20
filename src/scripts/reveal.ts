@@ -19,3 +19,9 @@ if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-m
   );
   items.forEach((el) => observer.observe(el));
 }
+
+// Fokus via tastatur viser elementet med det samme (ingen usynlig fokusring under fade-in)
+document.addEventListener('focusin', (e) => {
+  const el = (e.target as Element | null)?.closest?.('[data-reveal]');
+  if (el) el.classList.add('is-visible');
+});
