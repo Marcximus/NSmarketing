@@ -9,7 +9,9 @@ interface Props {
 
 const { variant = 'solid' } = Astro.props;
 const path = Astro.url.pathname;
-const isActive = (href: string) => !href.includes('#') && href !== '/' && path.startsWith(href);
+// Karriere hører under Om os i menuen
+const section = path.startsWith('/karriere/') ? '/om-os/' : path;
+const isActive = (href: string) => !href.includes('#') && href !== '/' && section.startsWith(href);
 ---
 
 <aside class="topbar on-dark" aria-label="Kontaktoplysninger">
@@ -25,7 +27,7 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
       <li class="topbar__social">
         {
           site.social.map((s) => (
-            <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label}`}>
+            <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
               <Icon name={s.icon} size={15} />
             </a>
           ))
@@ -70,6 +72,10 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
 
     <a href="/kontakt/" class="btn btn--sm site-header__cta">Book et møde</a>
 
+    <a href={site.phoneHref} class="header-call" aria-label={`Ring til ${site.name} på ${site.phone}`}>
+      <Icon name="phone" size={18} />
+    </a>
+
     <button
       class="menu-toggle"
       type="button"
@@ -77,16 +83,18 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
       aria-controls="mobile-menu"
       data-menu-toggle
     >
-      <span class="visually-hidden" data-menu-label>Åbn menu</span>
+      <span class="visually-hidden">Menu</span>
       <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span></span>
     </button>
+    <!-- Uden JS virker burgeren ikke – i stedet hopper "Menu" til genvejene i footeren -->
+    <a href="#genveje" class="menu-fallback">Menu</a>
   </div>
 
   <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
     <div class="container mobile-menu__inner">
       <nav aria-label="Mobilmenu">
         <ul class="mobile-menu__list">
-          <li><a href="/">Forside</a></li>
+          <li><a href="/" aria-current={path === '/' ? 'page' : undefined}>Forside</a></li>
           {
             mainNav.map((item) => (
               <li>
@@ -315,6 +323,28 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
     outline-color: var(--c-gold-light);
   }
 
+  /* Ring op-ikon: på mobil/tablet, hvor topbaren og "Book et møde" er skjult */
+  .header-call {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: inherit;
+  }
+
+  @media (min-width: 1024px) {
+    .header-call {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .site-header__inner {
+      gap: 0.25rem;
+    }
+  }
+
   /* Mobilmenu-knap */
   .menu-toggle {
     display: inline-flex;
@@ -329,6 +359,29 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
   @media (min-width: 1024px) {
     .menu-toggle {
       display: none;
+    }
+  }
+
+  /* Uden JS: skjul burgeren og vis et almindeligt link til footerens genveje */
+  .menu-fallback {
+    display: none;
+  }
+
+  :global(html:not(.js)) .menu-toggle {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
+    :global(html:not(.js)) .menu-fallback {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: inherit;
     }
   }
 
@@ -432,7 +485,6 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
   const header = document.querySelector<HTMLElement>('[data-header]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
-  const label = document.querySelector<HTMLElement>('[data-menu-label]');
 
   if (header) {
     const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
@@ -445,8 +497,13 @@ const isActive = (href: string) => !href.includes('#') && href !== '/' && path.s
       toggle.setAttribute('aria-expanded', String(open));
       header.classList.toggle('menu-open', open);
       menu.hidden = !open;
-      document.documentElement.style.overflow = open ? 'hidden' : '';
-      if (label) label.textContent = open ? 'Luk menu' : 'Åbn menu';
+      // Lås body (ikke html): låses html, bliver body en scroll-container pga. overflow-x: hidden,
+      // og så forsvinder den sticky header op ad skærmen, når menuen åbnes efter scroll.
+      document.body.style.overflow = open ? 'hidden' : '';
+      // Alt uden for headeren er utilgængeligt, mens menuen er åben (fokus og skærmlæsere)
+      for (const el of Array.from(document.body.children)) {
+        if (el !== header && el instanceof HTMLElement) el.inert = open;
+      }
     };
 
     toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));

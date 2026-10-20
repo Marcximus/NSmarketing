@@ -10,9 +10,16 @@ const year = new Date().getFullYear();
     <div class="site-footer__newsletter">
       <div>
         <p class="eyebrow">Nyhedsbrev</p>
-        <h2 class="h3">Inspiration til jeres sociale medier – én gang om måneden.</h2>
+        <h2 class="h3">Inspiration til sociale medier – én gang om måneden.</h2>
       </div>
-      <form class="newsletter" data-form="newsletter" novalidate>
+      <!-- Uden JS sendes formularen til formEndpoint eller som mail (aldrig som GET med e-mail i URL'en) -->
+      <form
+        class="newsletter"
+        data-form="newsletter"
+        method="post"
+        action={site.formEndpoint || `mailto:${site.email}`}
+        enctype={site.formEndpoint ? undefined : 'text/plain'}
+      >
         <label for="newsletter-email" class="visually-hidden">Din e-mail</label>
         <input
           id="newsletter-email"
@@ -50,13 +57,13 @@ const year = new Date().getFullYear();
           />
         </a>
         <p class="muted small">
-          Fuldt SoMe-bureau med strategi, content, annoncering og rapportering samlet ét sted.
+          SoMe-bureau med strategi, content, annoncering og rapportering – samlet ét sted.
         </p>
         <ul class="site-footer__social">
           {
             site.social.map((s) => (
               <li>
-                <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label}`}>
+                <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
                   <Icon name={s.icon} size={18} />
                 </a>
               </li>
@@ -106,7 +113,7 @@ const year = new Date().getFullYear();
         </dl>
       </div>
 
-      <nav aria-label="Genveje">
+      <nav aria-label="Genveje" id="genveje">
         <h2 class="site-footer__title">Genveje</h2>
         <ul class="site-footer__list">
           {
@@ -182,7 +189,7 @@ const year = new Date().getFullYear();
   .newsletter__input {
     min-height: 3.25rem;
     padding: 0.85rem 1rem;
-    border: 1px solid rgba(205, 191, 174, 0.4);
+    border: 1px solid rgba(205, 191, 174, 0.6);
     border-radius: 0;
     background: transparent;
     color: var(--c-cream);
@@ -194,7 +201,6 @@ const year = new Date().getFullYear();
   }
 
   .newsletter__input:focus {
-    outline: none;
     border-color: var(--c-gold-light);
   }
 
