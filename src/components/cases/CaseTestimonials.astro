@@ -2,6 +2,8 @@
 // Kundeudtalelser i redaktionelt layout på mørk marmor: fast (sticky) overskrift til venstre,
 // ét stort citat og resten i en række til højre.
 // OBS: Indholdet kommer fra content.ts og er pt. eksempler (placeholder: true), der skal udskiftes.
+// Så længe en udtalelse er markeret placeholder, vises den som "Eksempel på udtalelse" i stedet for
+// navn og virksomhed – fiktive citater må ikke fremstå som rigtige kunders ord (markedsføringsloven).
 import Icon from '../Icon.astro';
 import { testimonials } from '../../data/content';
 
@@ -29,8 +31,14 @@ const [feature, ...rest] = testimonials;
               <p>{feature.quote}</p>
             </blockquote>
             <figcaption>
-              <span class="case-quotes__name">{feature.name}</span>
-              <span class="case-quotes__company">{feature.company}</span>
+              {feature.placeholder ? (
+                <span class="case-quotes__example">Eksempel på udtalelse</span>
+              ) : (
+                <>
+                  <span class="case-quotes__name">{feature.name}</span>
+                  <span class="case-quotes__company">{feature.company}</span>
+                </>
+              )}
             </figcaption>
           </figure>
 
@@ -43,8 +51,14 @@ const [feature, ...rest] = testimonials;
                       <p>{t.quote}</p>
                     </blockquote>
                     <figcaption>
-                      <span class="case-quotes__name">{t.name}</span>
-                      <span class="case-quotes__company">{t.company}</span>
+                      {t.placeholder ? (
+                        <span class="case-quotes__example">Eksempel på udtalelse</span>
+                      ) : (
+                        <>
+                          <span class="case-quotes__name">{t.name}</span>
+                          <span class="case-quotes__company">{t.company}</span>
+                        </>
+                      )}
                     </figcaption>
                   </figure>
                 </li>
@@ -127,6 +141,14 @@ const [feature, ...rest] = testimonials;
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-cream-muted);
+  }
+
+  .case-quotes__example {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--c-cream-muted);
   }

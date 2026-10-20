@@ -79,14 +79,15 @@ import { promises } from '../../data/content';
 
   .promises__list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin: 0;
     border-top: 1px solid var(--promise-line);
   }
 
-  @media (min-width: 720px) {
+  /* Fire kolonner først fra 1024 px, så de spærrede labels ikke brækker over tre linjer */
+  @media (min-width: 1024px) {
     .promises__list {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       border-top: 0;
     }
   }
@@ -106,7 +107,7 @@ import { promises } from '../../data/content';
     border-left: 1px solid var(--promise-line);
   }
 
-  @media (min-width: 720px) {
+  @media (min-width: 1024px) {
     .promise,
     .promise:nth-child(even) {
       padding: 0.5rem 1.5rem 0.25rem;
@@ -133,6 +134,7 @@ import { promises } from '../../data/content';
     line-height: 1.5;
     letter-spacing: 0.16em;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
     color: var(--c-cream-muted);
   }
 </style>

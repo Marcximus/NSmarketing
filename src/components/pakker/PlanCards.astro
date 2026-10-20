@@ -53,11 +53,15 @@ const pad = (n: number) => String(n).padStart(2, '0');
               ))}
             </dl>
 
-            <ul class="check-list plan__list">
-              {p.highlights.map((h) => (
-                <li>{h}</li>
-              ))}
-            </ul>
+            {/* Ét direkte barn, så kortet stadig har præcis 7 rækker i subgrid'et */}
+            <div class="plan__list">
+              {p.plusLabel && <p class="plan__plus">{p.plusLabel}</p>}
+              <ul class="check-list">
+                {p.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            </div>
 
             <div class="plan__actions">
               <a
@@ -84,12 +88,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
     padding-top: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
   }
 
-  /* Desktop: kortene rejser sig op over herosektionens marmor, så pakkerne ses i første skærmbillede */
+  /* Desktop: kortene rejser sig op over herosektionens marmor, så priserne ses i første skærmbillede.
+     Overlappet er PageHero's bundpadding minus 2rem, så der altid er 2rem luft mellem lead og kort. */
   @media (min-width: 1000px) {
     .plans-section {
       position: relative;
       z-index: 1;
-      margin-top: -3.5rem;
+      margin-top: calc(2rem - clamp(3.5rem, 2.5rem + 4vw, 6rem));
       padding-top: 0;
     }
   }
@@ -111,7 +116,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
       row-gap: 0;
     }
 
-    .plan {
+    /* .plans > .plan: skal vinde over grundreglen .plan { display: flex } længere nede */
+    .plans > .plan {
       grid-row: span 7;
       display: grid;
       grid-template-rows: subgrid;
@@ -159,7 +165,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     justify-content: space-between;
     gap: 1rem;
     min-height: 1.9rem;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem; /* holder første pris inden for første skærmbillede ved 1440×900 */
   }
 
   .plan__index {
@@ -292,10 +298,23 @@ const pad = (n: number) => String(n).padStart(2, '0');
   }
 
   /* Highlights */
-  .plan .plan__list {
+  .plan__list {
     margin-top: 1.75rem;
+  }
+
+  .plan .plan__list ul {
     gap: 0.8rem;
     font-size: 0.9375rem;
+  }
+
+  /* "Alt i Silver, plus:" – gør forskellen mellem pakkerne let at skimme */
+  .plan__plus {
+    margin-bottom: 0.9rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--plan-muted);
   }
 
   .plan--featured .plan__list li::before {
@@ -353,6 +372,30 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   .plan--featured .plan__more:hover {
     color: var(--c-gold-light);
+  }
+
+  /* Mobil: lidt strammere lodret rytme i de stablede kort, så første pris ses uden at scrolle */
+  @media (max-width: 699px) {
+    .plan__top {
+      margin-bottom: 1.25rem;
+    }
+
+    .plan__price {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+    }
+
+    .plan__summary {
+      margin-top: 1.5rem;
+    }
+
+    .plan__list {
+      margin-top: 1.5rem;
+    }
+
+    .plan__actions {
+      margin-top: 1.75rem;
+    }
   }
 
   /* Tablet: kortet deles i to kolonner, så siden ikke bliver uendeligt lang */

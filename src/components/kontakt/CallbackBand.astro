@@ -16,7 +16,7 @@ const sameDayNote = site.callbackCutoff
       <p class="eyebrow">Hellere en snak i telefonen?</p>
       <h2 id="cb-titel">Bliv ringet op <em>samme dag</em></h2>
       <p class="lead">
-        Efterlad navn og nummer, og vælg hvornår det passer jer. Så ringer vi – og I slipper for at skrive en
+        Efterlad navn og nummer, og vælg, hvornår det passer jer. Så ringer vi – og I slipper for at skrive en
         lang besked.
       </p>
       {
@@ -33,9 +33,9 @@ const sameDayNote = site.callbackCutoff
       class="cb__form"
       data-form="opkald"
       method="post"
-      action={site.formEndpoint || undefined}
+      action={site.formEndpoint || `mailto:${site.email}`}
+      enctype={site.formEndpoint ? undefined : 'text/plain'}
       aria-labelledby="cb-titel"
-      novalidate
       data-reveal
       style="--reveal-delay: .1s"
     >
@@ -61,8 +61,9 @@ const sameDayNote = site.callbackCutoff
         <div class="field">
           <label for="ro-tidspunkt">Foretrukket tidspunkt</label>
           <select id="ro-tidspunkt" class="select" name="tidspunkt">
-            <option value="Formiddag">Formiddag</option>
-            <option value="Eftermiddag">Eftermiddag</option>
+            <option value="Hurtigst muligt" selected>Hurtigst muligt</option>
+            <option value="Formiddag (kl. 9–12)">Formiddag (kl. 9–12)</option>
+            <option value="Eftermiddag (kl. 12–16)">Eftermiddag (kl. 12–16)</option>
           </select>
         </div>
 
@@ -158,7 +159,11 @@ const sameDayNote = site.callbackCutoff
   @media (min-width: 640px) {
     .cb__fields {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: end;
+      align-items: start; /* felterne flugter, også når kun det ene har en fejltekst */
+    }
+
+    .cb__submit {
+      align-self: end;
     }
   }
 
@@ -187,10 +192,15 @@ const sameDayNote = site.callbackCutoff
     border-color: var(--c-cream);
   }
 
+  /* Fokus: kantskift + den globale fokusring i guld (se global.css) */
   .cb .input:focus,
   .cb .select:focus {
     border-color: var(--c-gold-light);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-gold-light) 30%, transparent);
+  }
+
+  .cb .input[aria-invalid='true'],
+  .cb .select[aria-invalid='true'] {
+    border-color: #f2b8a8; /* samme fejltone som .field-error på mørk flade */
   }
 
   .cb__submit .btn {

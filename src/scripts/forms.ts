@@ -9,12 +9,23 @@ type Field = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 const success: Record<string, string> = {
   kontakt: 'Tak for jeres besked! Vi svarer inden for én hverdag.',
-  opkald: site.callbackCutoff
-    ? `Tak! Vi ringer jer op i det valgte tidsrum – samme dag, hvis I skriver på en hverdag inden kl. ${site.callbackCutoff}.`
-    : 'Tak! Vi ringer jer op i det valgte tidsrum.',
   karriere: 'Tak for din ansøgning! Vi læser den grundigt og vender tilbage.',
   newsletter: 'Tak for din tilmelding!',
 };
+
+/** Successtekst pr. formulartype. Opkald følger det valgte tidspunkt ("Hurtigst muligt" er standard). */
+function successText(form: HTMLFormElement, type: string): string {
+  if (type !== 'opkald') return success[type] ?? success.kontakt;
+  const tid = form.elements.namedItem('tidspunkt');
+  const when =
+    tid instanceof HTMLSelectElement && tid.value && tid.value !== 'Hurtigst muligt'
+      ? 'i det valgte tidsrum'
+      : 'hurtigst muligt';
+  const sameDay = site.callbackCutoff
+    ? ` – samme dag, hvis I skriver på en hverdag inden kl. ${site.callbackCutoff}`
+    : '';
+  return `Tak! Vi ringer jer op ${when}${sameDay}.`;
+}
 
 const messages = {
   sending: 'Sender …',
@@ -205,7 +216,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
 
     const data = new FormData(form);
     if (data.get('_gotcha')) return; // spam-felt
-    const done = success[type] ?? success.kontakt;
+    const done = successText(form, type);
 
     if (!site.formEndpoint) {
       const body = [...data.entries()]

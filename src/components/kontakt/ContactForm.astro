@@ -22,9 +22,9 @@ import { addonCategories } from '../../data/addons';
     class="cf__form"
     data-form="kontakt"
     method="post"
-    action={site.formEndpoint || undefined}
+    action={site.formEndpoint || `mailto:${site.email}`}
+    enctype={site.formEndpoint ? undefined : 'text/plain'}
     aria-labelledby="kontakt-formular-titel"
-    novalidate
   >
     <p class="cf__required small">Felter markeret med <span aria-hidden="true">*</span><span class="visually-hidden">stjerne</span> skal udfyldes.</p>
 

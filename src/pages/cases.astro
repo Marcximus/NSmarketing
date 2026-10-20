@@ -6,17 +6,25 @@ import Icon from '../components/Icon.astro';
 import CaseGrid from '../components/cases/CaseGrid.astro';
 import CaseTestimonials from '../components/cases/CaseTestimonials.astro';
 import CaseIndustries from '../components/cases/CaseIndustries.astro';
+import { cases } from '../data/cases';
 import { site } from '../data/site';
 
-const description = `Se udvalgte cases fra ${site.name}: content, video, foto og annoncering på sociale medier – på tværs af brancher, platforme og formater.`;
+// Så længe alle cases er eksempler (placeholder: true), må teksten ikke påstå, at det er rigtige kunder.
+const examplesOnly = cases.every((c) => c.placeholder);
+
+const lead = examplesOnly
+  ? 'Sådan kan et forløb hos os se ud – på tværs af brancher, platforme og formater. Fælles for dem alle: en klar strategi, en gennemført æstetik og indhold, der passer til netop deres kunder.'
+  : 'Et udpluk af de profiler, vi skaber indhold til – på tværs af brancher, platforme og formater. Fælles for dem alle: en klar strategi, en gennemført æstetik og indhold, der passer til netop deres kunder.';
+
+const heroTitle = examplesOnly
+  ? 'Indhold skabt til at blive <em>set</em>'
+  : 'Udvalgt arbejde – skabt til at blive <em>set</em>';
+
+const description = `Se, hvordan ${site.name} arbejder med content, video, foto og annoncering på sociale medier – på tværs af brancher, platforme og formater.`;
 ---
 
-<BaseLayout title="Cases & kunder" description={description}>
-  <PageHero
-    eyebrow="Cases"
-    title="Udvalgt arbejde – skabt til at blive <em>set</em>"
-    lead="Et udpluk af de profiler, vi skaber indhold til – på tværs af brancher, platforme og formater. Fælles for dem alle: en klar strategi, en gennemført æstetik og indhold, der passer til netop deres kunder."
-  >
+<BaseLayout title="Cases – content til sociale medier" description={description}>
+  <PageHero eyebrow="Cases" title={heroTitle} lead={lead}>
     <a href="#cases" class="btn">Se cases <Icon name="arrow" size={16} /></a>
     <a href="/kontakt/" class="btn btn--outline">Book et uforpligtende møde</a>
   </PageHero>
@@ -28,6 +36,6 @@ const description = `Se udvalgte cases fra ${site.name}: content, video, foto og
   <CtaBand
     eyebrow="Jeres tur"
     title="Skal jeres virksomhed være den <em>næste</em> case?"
-    text="Book et uforpligtende møde. Vi kigger på jeres profiler, mål og kunder – og fortæller ærligt, hvad vi ville gøre, og hvilken pakke der giver mening for jer."
+    text="Vi kigger på jeres profiler, mål og kunder – og fortæller ærligt, hvad vi ville gøre, og hvilken pakke der giver mening for jer."
   />
 </BaseLayout>

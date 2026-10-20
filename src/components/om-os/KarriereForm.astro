@@ -3,7 +3,7 @@
 // Rolle-feltet kan forudfyldes via URL'en, fx /karriere/?rolle=Praktikant#ansoeg
 import Icon from '../Icon.astro';
 import { site } from '../../data/site';
-import { careerRoles } from './careerRoles';
+import { careerRoles, openings } from './careerRoles';
 
 const steps = [
   { title: 'Du sender din ansøgning', text: 'Fortæl kort om dig selv, og send gerne et link til dit portfolio eller din Instagram.' },
@@ -49,8 +49,8 @@ const steps = [
         class="apply-form"
         data-form="karriere"
         method="post"
-        action={site.formEndpoint || undefined}
-        novalidate
+        action={site.formEndpoint || `mailto:${site.email}`}
+        enctype={site.formEndpoint ? undefined : 'text/plain'}
       >
         <p class="apply-form__required small"><span aria-hidden="true">*</span> Skal udfyldes</p>
 
@@ -74,6 +74,7 @@ const steps = [
             <label for="k-rolle">Rolle <span aria-hidden="true">*</span></label>
             <select id="k-rolle" class="select" name="rolle" required>
               <option value="" disabled selected>Vælg en rolle</option>
+              {openings.map((o) => <option value={o.title}>{o.title}</option>)}
               {careerRoles.map((role) => <option value={role.value}>{role.value}</option>)}
             </select>
           </div>

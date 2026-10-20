@@ -1,7 +1,7 @@
 ---
 // Case-oversigt med filter (toggle-knapper) og redaktionelt grid.
 // Uden JS skjules filteret, og alle cases vises. Med JS filtreres kortene, og antallet
-// annonceres via role="status". Filteret kan deles som link: /cases/?ydelse=video
+// annonceres (kun for skærmlæsere) via role="status". Filteret kan deles som link: /cases/?ydelse=video
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 import { cases, type CaseService } from '../../data/cases';
@@ -21,20 +21,23 @@ const serviceOrder: { service: CaseService; phrase: string }[] = [
   { service: 'Video', phrase: 'video' },
   { service: 'Foto', phrase: 'foto' },
   { service: 'Annoncering', phrase: 'annoncering' },
-  { service: 'E-mail', phrase: 'e-mail marketing' },
+  { service: 'E-mail', phrase: 'e-mailmarketing' },
   { service: 'Statister', phrase: 'statister' },
 ];
 
+// Synlig betegnelse: "SoMe" står i versaler som "SOME", så den skrives ud.
+const serviceLabel = (s: CaseService) => (s === 'SoMe' ? 'Sociale medier' : s);
+
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9æøå]+/g, '-');
 const total = cases.length;
+// Så længe alle cases er eksempler, kaldes de ikke "udvalgte"
+const examplesOnly = cases.every((c) => c.placeholder);
 
 // Vis kun ydelser, der findes i data. En ydelse, som alle cases har (fx SoMe), giver samme
 // resultat som "Alle" og udelades derfor.
 const filters = serviceOrder
   .map((s) => ({ ...s, key: slug(s.service), count: cases.filter((c) => c.services.includes(s.service)).length }))
   .filter((s) => s.count > 0 && s.count < total);
-
-const pad = (n: number) => String(n).padStart(2, '0');
 
 // Redaktionelt layout ud fra kortets plads blandt de synlige cases (samme logik i klientscriptet nedenfor):
 // første = stort hovedkort; derefter rækker af to: bredt/smalt → smalt/bredt. Står det sidste kort
@@ -57,7 +60,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
 <section class="section section--white cases" id="cases" aria-labelledby="cases-title" data-cases>
   <div class="container">
-    <h2 id="cases-title" class="visually-hidden">Udvalgte cases</h2>
+    <h2 id="cases-title" class="visually-hidden">{examplesOnly ? 'Eksempler på forløb' : 'Udvalgte cases'}</h2>
 
     {
       filters.length > 0 && (
@@ -68,23 +71,13 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
           <div class="case-filter__buttons" role="group" aria-labelledby="case-filter-label">
             <button type="button" class="case-filter__btn" aria-pressed="true" data-filter="alle">
               Alle
-              <span class="case-filter__count" aria-hidden="true">
-                {pad(total)}
-              </span>
             </button>
             {filters.map((f) => (
               <button type="button" class="case-filter__btn" aria-pressed="false" data-filter={f.key} data-phrase={f.phrase}>
-                {f.service}
-                <span class="case-filter__count" aria-hidden="true">
-                  {pad(f.count)}
-                </span>
+                {serviceLabel(f.service)}
               </button>
             ))}
           </div>
-          {/* Kort, visuel tæller – den fulde sætning læses op via status-regionen nedenfor */}
-          <p class="case-filter__counter" aria-hidden="true">
-            <span data-case-shown>{pad(total)}</span> af {pad(total)} cases
-          </p>
           <p class="visually-hidden" role="status" data-case-status>
             Viser alle {total} cases
           </p>
@@ -96,10 +89,11 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
       {
         cases.map((c, i) => {
           // Kundenavnet (c.client) vises ikke, så længe navnene er placeholders ("[Kundenavn]").
+          // I stedet står branchen som titel, og meta-linjen markerer kortet som et eksempel.
           // Når rigtige navne er indsat og placeholder er sat til false, vises client som titel
           // og branchen flyttes op i meta-linjen – samme logik som på forsiden.
           const heading = c.placeholder ? c.industry : c.client;
-          const meta = c.placeholder ? c.location : `${c.industry} · ${c.location}`;
+          const meta = c.placeholder ? `Eksempel · ${c.location}` : `${c.industry} · ${c.location}`;
           const titleId = `case-${c.id}-title`;
           const { layout, offset } = layoutFor(i, total);
           return (
@@ -141,11 +135,11 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
                   <p class="case__excerpt">{c.excerpt}</p>
                   <ul class="case__tags" role="list" aria-label="Ydelser">
                     {c.services.map((s) => (
-                      <li class="tag">{s}</li>
+                      <li class="tag">{serviceLabel(s)}</li>
                     ))}
                   </ul>
                   <a href="/kontakt/" class="text-link case__cta">
-                    Få lignende resultater <Icon name="arrow" size={16} />
+                    Tal med os om et lignende forløb <Icon name="arrow" size={16} />
                   </a>
                 </div>
               </article>
@@ -171,13 +165,9 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     display: none;
   }
 
-  /* Mobil/tablet: label + tæller øverst, knapper under. Bred skærm: alt på én linje. */
+  /* Mobil/tablet: label øverst, knapper under. Bred skærm: alt på én linje. */
   .case-filter {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      'label counter'
-      'buttons buttons';
     align-items: center;
     gap: 1.25rem 1.5rem;
     margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
@@ -185,16 +175,11 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     border-bottom: 1px solid var(--c-line);
   }
 
-  .case-filter__label,
-  .case-filter__counter {
+  .case-filter__label {
     font-size: var(--fs-xs);
     font-weight: 500;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-  }
-
-  .case-filter__label {
-    grid-area: label;
     display: inline-flex;
     align-items: center;
     gap: 0.9rem;
@@ -208,22 +193,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     background: var(--c-gold);
   }
 
-  .case-filter__counter {
-    grid-area: counter;
-    white-space: nowrap;
-    color: var(--c-muted);
-  }
-
-  .case-filter__counter span {
-    font-family: var(--f-serif);
-    font-size: 1rem;
-    font-style: italic;
-    letter-spacing: 0;
-    color: var(--c-gold-ink);
-  }
-
   .case-filter__buttons {
-    grid-area: buttons;
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -232,7 +202,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
   .case-filter__btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
     min-height: 2.75rem;
     padding: 0.5rem 1rem;
     border: 1px solid var(--c-sand);
@@ -259,25 +228,8 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
     color: var(--c-paper);
   }
 
-  .case-filter__count {
-    font-family: var(--f-serif);
-    font-size: 0.8125rem;
-    font-style: italic;
-    letter-spacing: 0;
-    color: var(--c-gold-ink);
-  }
-
-  .case-filter__btn[aria-pressed='true'] .case-filter__count {
-    color: var(--c-gold-light);
-  }
-
   @media (max-width: 599px) {
-    .case-filter {
-      column-gap: 1rem;
-    }
-
-    .case-filter__label,
-    .case-filter__counter {
+    .case-filter__label {
       letter-spacing: 0.2em;
     }
 
@@ -293,8 +245,7 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
   @media (min-width: 1280px) {
     .case-filter {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      grid-template-areas: 'label buttons counter';
+      grid-template-columns: auto minmax(0, 1fr);
       gap: 2.5rem;
     }
   }
@@ -313,10 +264,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
   /* hidden-attributten skal vinde over display på kortet */
   .case[hidden] {
     display: none;
-  }
-
-  .case {
-    scroll-margin-top: calc(var(--header-h) + 1.5rem);
   }
 
   .case__inner {
@@ -394,6 +341,15 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
 
   .case[data-layout='lead'] .case__cta {
     display: inline-flex;
+  }
+
+  /* Mobil: lidt tættere spatiering, så CTA'en kan stå på én linje med pilen –
+     og på de smalleste skærme deles den i to lige lange linjer i stedet for et enkelt ord alene */
+  @media (max-width: 599px) {
+    .case__cta {
+      letter-spacing: 0.1em;
+      text-wrap: balance;
+    }
   }
 
   /* Kort, der linkes til fra forsiden (/cases/#id), markeres diskret */
@@ -551,7 +507,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
   const grid = root?.querySelector<HTMLElement>('[data-case-grid]');
   const buttons = Array.from(root?.querySelectorAll<HTMLButtonElement>('[data-filter]') ?? []);
   const status = root?.querySelector<HTMLElement>('[data-case-status]');
-  const counter = root?.querySelector<HTMLElement>('[data-case-shown]');
 
   if (root && grid && buttons.length && status) {
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-services]'));
@@ -587,8 +542,6 @@ const layoutFor = (k: number, n: number): { layout: Layout; offset: boolean } =>
       });
 
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === key)));
-
-      if (counter) counter.textContent = String(shown).padStart(2, '0');
 
       const phrase = buttons.find((b) => b.dataset.filter === key)?.dataset.phrase;
       status.textContent =

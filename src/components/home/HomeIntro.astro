@@ -1,5 +1,5 @@
 ---
-// "Få jeres egen Social Media Manager – og et helt team bag": billede, team-roller og nøglepunkter.
+// "Jeres egen Social Media Manager – og et helt team i ryggen": billede, team-roller og nøglepunkter.
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 import shootImage from '../../assets/images/content-shoot.jpg';
@@ -12,8 +12,8 @@ const keyPoints = includedInAll.slice(0, 4);
 <section class="section intro" id="intro" aria-labelledby="intro-title">
   <div class="container intro__grid">
     <div class="intro__content" data-reveal style="--reveal-delay: .08s">
-      <p class="eyebrow">Jeres eget SoMe-team</p>
-      <h2 id="intro-title">Få jeres egen Social Media Manager – og et helt <em>team</em> bag</h2>
+      <p class="eyebrow">Jeres eget team</p>
+      <h2 id="intro-title">Jeres egen Social Media Manager – og et helt <em>team</em> i ryggen</h2>
       <p class="lead">
         I får én fast kontaktperson, der kender jeres forretning indefra. Bag jeres Social Media Manager
         står strateger, fotografer, content creators, grafikere og performance-specialister – klar, når
@@ -26,7 +26,7 @@ const keyPoints = includedInAll.slice(0, 4);
       <ul class="check-list intro__points">
         {keyPoints.map((point) => <li>{point}</li>)}
       </ul>
-      <a href="/om-os/" class="text-link">Mød teamet bag <Icon name="arrow" size={16} /></a>
+      <a href="/om-os/#team" class="text-link">Mød teamet bag <Icon name="arrow" size={16} /></a>
     </div>
     <div class="intro__media" data-reveal>
       <div class="frame-gold">
@@ -61,6 +61,7 @@ const keyPoints = includedInAll.slice(0, 4);
 <style>
   .intro__grid {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: clamp(3.5rem, 6vw, 5rem);
     align-items: center;
   }

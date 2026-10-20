@@ -10,6 +10,16 @@ export type CareerRole = {
   icon: IconName;
 };
 
+export type Opening = {
+  title: string;
+  type: string;
+  location: string;
+};
+
+// Ledige stillinger på /karriere/. Tilføj kun rigtige stillinger her – opfind ikke opslag.
+// Er listen tom, vises sektionen "Åbne stillinger" slet ikke. Titlen bruges også som valgmulighed i rolle-feltet.
+export const openings: Opening[] = [];
+
 export const careerRoles: CareerRole[] = [
   {
     value: 'Fotograf/videograf',

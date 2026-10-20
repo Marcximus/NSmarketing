@@ -6,7 +6,7 @@ import { industries } from '../../data/content';
 
 <section class="marquee" aria-labelledby="marquee-label" data-marquee>
   <div class="marquee__inner">
-    <p class="marquee__label" id="marquee-label">Vi skaber indhold for</p>
+    <p class="marquee__label" id="marquee-label">Vi skaber indhold til</p>
     <div class="marquee__viewport">
       <div class="marquee__track">
         <ul class="marquee__list">
@@ -133,6 +133,11 @@ import { industries } from '../../data/content';
   .marquee__toggle:hover {
     border-color: var(--c-ink);
     color: var(--c-ink);
+  }
+
+  /* Uden JS virker knappen ikke – skjul den (hover-pausen virker stadig) */
+  :global(html:not(.js)) .marquee__toggle {
+    display: none;
   }
 
   /* Pause-ikon (to streger) → afspil-ikon (trekant) */

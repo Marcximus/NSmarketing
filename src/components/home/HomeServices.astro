@@ -1,5 +1,5 @@
 ---
-// De fire kerneydelser i et skarpt grid med hårstreger + udvalgte tillægsydelser.
+// De fire kerneydelser i et skarpt grid med hårstreger + udvalgte tillægsydelser (linker til kortene på pakkesiden).
 import Icon from '../Icon.astro';
 import SectionHead from '../SectionHead.astro';
 import { services } from '../../data/content';
@@ -11,6 +11,9 @@ const allAddons = addonCategories.flatMap((c) => c.items);
 const featuredAddons = featuredAddonIds
   .map((id) => allAddons.find((a) => a.id === id))
   .filter((a): a is NonNullable<typeof a> => Boolean(a));
+
+// Blød bindestreg i lange sammensatte ord ("Influencer-/marketing"), så de kan brydes i de smalle mobilkolonner
+const breakable = (name: string) => name.replace(/(\p{Ll})(marketing)/gu, '$1\u00AD$2');
 ---
 
 <section class="section section--white services">
@@ -43,7 +46,11 @@ const featuredAddons = featuredAddonIds
     <div class="services__addons" data-reveal>
       <p class="services__addons-label">Og når I vil mere</p>
       <ul>
-        {featuredAddons.map((a) => <li>{a.name}</li>)}
+        {featuredAddons.map((a) => (
+          <li>
+            <a href={`/pakkeloesninger/#tillaeg-${a.id}`}>{breakable(a.name)}</a>
+          </li>
+        ))}
       </ul>
       <a href="/pakkeloesninger/#tillaeg" class="text-link">Alle tillægsydelser <Icon name="arrow" size={16} /></a>
     </div>
@@ -166,7 +173,7 @@ const featuredAddons = featuredAddonIds
     .services__addons ul {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem 1.75rem;
+      gap: 0 1.75rem; /* linkene er selv 44 px høje */
     }
   }
 
@@ -178,6 +185,23 @@ const featuredAddons = featuredAddonIds
     font-size: 1.05rem;
     line-height: 1.35;
     color: var(--c-ink);
+  }
+
+  .services__addons li a {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 44px;
+    overflow-wrap: anywhere;
+    color: inherit;
+    text-decoration: none;
+    text-decoration-color: var(--c-gold);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+  }
+
+  .services__addons li a:hover {
+    text-decoration-line: underline;
   }
 
   .services__addons li::before {

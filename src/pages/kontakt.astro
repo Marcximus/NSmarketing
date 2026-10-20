@@ -7,7 +7,7 @@ import CallbackBand from '../components/kontakt/CallbackBand.astro';
 import ContactFaq from '../components/kontakt/ContactFaq.astro';
 import { site } from '../data/site';
 
-const description = `Book et uforpligtende møde om jeres sociale medier. Ring på ${site.phone}, skriv til ${site.email} eller udfyld formularen – vi svarer inden for én hverdag.`;
+const description = `Book et uforpligtende møde om jeres sociale medier. Ring ${site.phone} eller skriv til ${site.email} – vi svarer inden for én hverdag.`;
 
 const contactJsonLd = {
   '@context': 'https://schema.org',
@@ -15,25 +15,14 @@ const contactJsonLd = {
   name: `Kontakt ${site.name}`,
   url: new URL('/kontakt/', site.url).href,
   description,
-  mainEntity: {
-    '@type': 'ProfessionalService',
-    name: site.name,
-    url: site.url,
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'customer service',
-      telephone: '+45' + site.phone.replace(/\s/g, ''),
-      email: site.email,
-      areaServed: 'DK',
-      availableLanguage: ['Danish'],
-    },
-  },
+  // Refererer til organisationen, som er defineret i BaseLayout (inkl. contactPoint)
+  mainEntity: { '@id': `${site.url}/#organization` },
 };
 
 const reassurance = ['Uforpligtende første møde', 'Fast kontaktperson', 'Én fast pris om måneden'];
 ---
 
-<BaseLayout title="Kontakt" description={description}>
+<BaseLayout title="Kontakt SoMe-bureauet – book et møde" description={description}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(contactJsonLd)} />
 
   <PageHero

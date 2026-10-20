@@ -1,6 +1,13 @@
 """Genererer marmor-teksturen (src/assets/images/marble.jpg) proceduralt.
 
 Kør: python3 scripts/generate-marble.py
+
+Teksturen genereres i 2400 px og gemmes nedskaleret til 1600 px, kvalitet 62, progressiv (ca. 25 KB).
+Den ligger næsten altid under en creme-gradient, så højere opløsning/kvalitet koster kun LCP.
+Den nuværende fil er genkodet med sharp (mozjpeg):
+  node -e "require('sharp')('src/assets/images/marble.jpg').resize(1600)
+    .jpeg({ quality: 62, mozjpeg: true, progressive: true }).toBuffer()
+    .then((b) => require('fs').writeFileSync('src/assets/images/marble.jpg', b))"
 """
 import numpy as np
 from PIL import Image, ImageFilter
@@ -67,5 +74,6 @@ img = img * (1 - gold[..., None] * 0.7) + gold_c * gold[..., None] * 0.7
 img = np.clip(img, 0, 255).astype(np.uint8)
 
 im = Image.fromarray(img).filter(ImageFilter.GaussianBlur(1.4))
-im.save('src/assets/images/marble.jpg', quality=86, optimize=True, progressive=True)
+im = im.resize((1600, round(H * 1600 / W)), Image.LANCZOS)
+im.save('src/assets/images/marble.jpg', quality=62, optimize=True, progressive=True)
 print('saved', im.size)

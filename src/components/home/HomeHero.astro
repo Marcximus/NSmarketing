@@ -20,8 +20,9 @@ const channels = (comparison.find((g) => g.title === 'Kanaler')?.rows ?? []).map
     <Image
       src={heroImage}
       alt=""
-      widths={[640, 960, 1280, 1920, 2400]}
+      widths={[640, 960, 1280, 1600, 1920]}
       sizes="100vw"
+      quality={70}
       loading="eager"
       fetchpriority="high"
     />
@@ -35,8 +36,8 @@ const channels = (comparison.find((g) => g.title === 'Kanaler')?.rows ?? []).map
         Sociale medier, der sætter jeres brand i <em>scene</em>
       </h1>
       <p class="lead hero__lead hero__in" style="--in-delay: .35s">
-        Få jeres egen Social Media Manager – og et helt team bag. Strategi, content, annoncering og
-        rapportering samlet i én fast månedlig pakke.
+        Strategi, content, annoncering og rapportering – samlet i én fast månedlig pakke og håndteret af
+        ét&nbsp;team.
       </p>
       <div class="btn-row hero__actions hero__in" style="--in-delay: .5s">
         <a href="/pakkeloesninger/" class="btn btn--gold">Se pakkerne <Icon name="arrow" size={16} /></a>
@@ -278,7 +279,7 @@ const channels = (comparison.find((g) => g.title === 'Kanaler')?.rows ?? []).map
     inset: 0;
     background: var(--c-gold-light);
     transform: translateX(-100%);
-    animation: hero-line 2.4s var(--ease) 1.2s infinite;
+    animation: hero-line 2.4s var(--ease) 1.2s 2;
   }
 
   @keyframes hero-line {

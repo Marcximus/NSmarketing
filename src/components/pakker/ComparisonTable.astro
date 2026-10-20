@@ -5,6 +5,7 @@
 import Icon from '../Icon.astro';
 import SectionHead from '../SectionHead.astro';
 import { packages, comparison, formatPrice } from '../../data/packages';
+import { addonCategories } from '../../data/addons';
 
 const featured = packages.find((p) => p.featured) ?? packages[0];
 const defaultPlan = featured.id;
@@ -14,6 +15,12 @@ const nameList = `${packages
   .join(', ')} og ${packages.at(-1)?.name}`;
 
 const isAddonValue = (v: string) => v.trim().toLowerCase() === 'tillæg';
+// "Tillæg" linker direkte til det tillæg, rækken handler om (fx Meta-annoncering → #tillaeg-meta-ads)
+const addonFor = (label: string) => addonCategories.flatMap((c) => c.items).find((a) => label.startsWith(a.name));
+const addonHref = (label: string) => {
+  const addon = addonFor(label);
+  return addon ? `#tillaeg-${addon.id}` : '#tillaeg';
+};
 const colClass = (id: string, extra?: string | false) => [
   extra,
   id === featured.id && 'is-featured',
@@ -61,10 +68,10 @@ const colClass = (id: string, extra?: string | false) => [
 
           <thead>
             <tr>
-              <td class="cmp__corner">
+              <th scope="row" class="cmp__corner">
                 <span>Pris pr. måned</span>
                 <span>ekskl. moms</span>
-              </td>
+              </th>
               {
                 packages.map((p) => (
                   <th scope="col" class:list={colClass(p.id, 'cmp__head')} data-col={p.id}>
@@ -109,9 +116,11 @@ const colClass = (id: string, extra?: string | false) => [
                               <span class="visually-hidden">Ikke inkluderet</span>
                             </>
                           ) : isAddonValue(v) ? (
-                            <a href="#tillaeg" class="cmp__addon">
+                            <a href={addonHref(row.label)} class="cmp__addon">
                               {v}
-                              <span class="visually-hidden"> – se tillægsydelser</span>
+                              <span class="visually-hidden">
+                                {addonFor(row.label) ? ` – se tillægget ${addonFor(row.label)!.name}` : ' – se tillægsydelser'}
+                              </span>
                             </a>
                           ) : (
                             <span class="cmp__text">{v}</span>
@@ -127,9 +136,9 @@ const colClass = (id: string, extra?: string | false) => [
 
           <tfoot>
             <tr>
-              <td class="cmp__foot-label">
+              <th scope="row" class="cmp__foot-label">
                 <span class="visually-hidden">Vælg pakke</span>
-              </td>
+              </th>
               {
                 packages.map((p) => (
                   <td class:list={colClass(p.id)} data-col={p.id}>
@@ -227,9 +236,13 @@ const colClass = (id: string, extra?: string | false) => [
     background: var(--cmp-feat);
   }
 
+  /* Fokuserede links (Tab/Shift+Tab) må ikke ende skjult bag de klæbende kolonneoverskrifter */
+  .cmp__table a {
+    scroll-margin-top: calc(var(--header-h) + 9.5rem);
+  }
+
   /* Kolonneoverskrifter – klæber under den faste header */
-  .cmp__table thead th,
-  .cmp__table thead td {
+  .cmp__table thead th {
     position: sticky;
     top: var(--header-h);
     z-index: 2;
@@ -246,6 +259,7 @@ const colClass = (id: string, extra?: string | false) => [
 
   .cmp__table .cmp__corner {
     text-align: left;
+    font-weight: 400;
     padding-left: 0;
   }
 
@@ -349,7 +363,6 @@ const colClass = (id: string, extra?: string | false) => [
     height: 1px;
     vertical-align: middle;
     background: var(--c-muted);
-    opacity: 0.6;
   }
 
   .cmp__text {
@@ -370,6 +383,7 @@ const colClass = (id: string, extra?: string | false) => [
   }
 
   /* Bund med knapper */
+  .cmp__table tfoot th,
   .cmp__table tfoot td {
     padding-top: 1.75rem;
     padding-bottom: 1.75rem;
@@ -399,7 +413,7 @@ const colClass = (id: string, extra?: string | false) => [
     }
 
     .cmp__table tbody th,
-    .cmp__table tfoot td:first-child,
+    .cmp__table tfoot th,
     .cmp__corner {
       position: sticky;
       left: 0;
@@ -407,8 +421,7 @@ const colClass = (id: string, extra?: string | false) => [
       background: var(--c-white);
     }
 
-    .cmp__table thead th,
-    .cmp__table thead td {
+    .cmp__table thead th {
       position: static;
     }
 
@@ -420,6 +433,11 @@ const colClass = (id: string, extra?: string | false) => [
     }
 
     /* Med JS: én pakke ad gangen */
+    /* Under den klæbende pakkevælger i stedet for under kolonneoverskrifterne */
+    :global(.js) .cmp__table a {
+      scroll-margin-top: calc(var(--header-h) + 7rem);
+    }
+
     :global(.js) .cmp__picker {
       position: sticky;
       top: var(--header-h);
@@ -449,7 +467,7 @@ const colClass = (id: string, extra?: string | false) => [
     }
 
     :global(.js) .cmp__table tbody th,
-    :global(.js) .cmp__table tfoot td:first-child {
+    :global(.js) .cmp__table tfoot th {
       position: static;
       width: 58%;
     }
@@ -463,7 +481,7 @@ const colClass = (id: string, extra?: string | false) => [
       background: transparent;
     }
 
-    :global(.js) .cmp__table tfoot td:first-child {
+    :global(.js) .cmp__table tfoot th {
       display: none;
     }
 

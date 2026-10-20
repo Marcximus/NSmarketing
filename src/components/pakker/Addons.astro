@@ -7,14 +7,6 @@ import { site } from '../../data/site';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-// "Spørg om statister & modeller", men "Spørg om SEO" og "Spørg om LinkedIn management"
-const properNouns = ['Meta', 'TikTok', 'LinkedIn', 'Pinterest', 'Google', 'Instagram', 'Facebook', 'YouTube'];
-const inSentence = (name: string) => {
-  const first = name.split(/[\s-]/)[0];
-  if (properNouns.includes(first) || /^[A-ZÆØÅ]{2,}$/.test(first)) return name;
-  return name.charAt(0).toLocaleLowerCase('da-DK') + name.slice(1);
-};
-
 // Genveje til de tillæg, der oftest bliver spurgt efter (styres med popular: true i addons.ts)
 const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.popular);
 ---
@@ -28,7 +20,7 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
       </div>
       <p class="lead">
         Alle tillæg kan lægges oven i enhver pakke – fast hver måned eller kun i de perioder, hvor I har brug for
-        ekstra kræfter. Fra statister og ekstra content-dage til SEO og e-mail marketing.
+        ekstra kræfter. Fra statister og ekstra content-dage til SEO og e-mailmarketing.
       </p>
     </div>
 
@@ -125,36 +117,21 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
                         )}
                       </p>
                       <a href={`/kontakt/?emne=${a.id}`} class="addon__link">
-                        Spørg om {inSentence(a.name)}
+                        Spørg os<span class="visually-hidden"> om {a.name}</span>
                         <Icon name="arrow" size={14} />
                       </a>
                     </div>
                   </li>
                 ))}
-                {c.items.length % 2 === 1 && (
-                  <li class="addon addon--custom">
-                    <div class="addon__head">
-                      <span class="addon__icon" aria-hidden="true">
-                        <Icon name="sparkle" size={22} />
-                      </span>
-                      <h4 class="addon__name">Noget helt tredje?</h4>
-                    </div>
-                    <p class="addon__desc">
-                      Står det, I har brug for, ikke på listen? Fortæl os om opgaven, så sammensætter vi en løsning.
-                    </p>
-                    <div class="addon__foot">
-                      <a href="/kontakt/" class="addon__link">
-                        Fortæl os om opgaven
-                        <Icon name="arrow" size={14} />
-                      </a>
-                    </div>
-                  </li>
-                )}
               </ul>
             </section>
           ))
         }
 
+        <p class="addons__custom">
+          Står det, I har brug for, ikke på listen? <a href="/kontakt/?emne=tillaeg">Fortæl os om opgaven</a> – så
+          sammensætter vi en løsning.
+        </p>
         <p class="addons__note">{addonNote}</p>
       </div>
     </div>
@@ -169,22 +146,29 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
   const cats = [...document.querySelectorAll<HTMLElement>('[data-addon-cat]')];
 
   if (nav && list && links.length && cats.length && 'IntersectionObserver' in window) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Hold et punkt helt synligt i den vandrette mobilmenu
+    const reveal = (link: HTMLAnchorElement, behavior: ScrollBehavior) => {
+      if (list.scrollWidth <= list.clientWidth) return;
+      const left = link.offsetLeft - list.offsetLeft;
+      const outside = left < list.scrollLeft || left + link.offsetWidth > list.scrollLeft + list.clientWidth;
+      if (outside) list.scrollTo({ left: Math.max(0, left - 16), behavior });
+    };
+
     const setActive = (id: string) => {
       links.forEach((link) => {
-        const active = link.dataset.addonLink === id;
-        if (active) {
+        if (link.dataset.addonLink === id) {
           link.setAttribute('aria-current', 'true');
-          // Hold det aktive punkt synligt i den vandrette mobilmenu
-          if (list.scrollWidth > list.clientWidth) {
-            const left = link.offsetLeft - list.offsetLeft;
-            const outside = left < list.scrollLeft || left + link.offsetWidth > list.scrollLeft + list.clientWidth;
-            if (outside) list.scrollTo({ left: Math.max(0, left - 16), behavior: 'smooth' });
-          }
+          reveal(link, reduceMotion.matches ? 'auto' : 'smooth');
         } else {
           link.removeAttribute('aria-current');
         }
       });
     };
+
+    // Tastaturfokus: browseren scroller kun menuen, hvis punktet er helt skjult – vis hele punktet
+    links.forEach((link) => link.addEventListener('focus', () => reveal(link, 'auto')));
 
     const visible = new Map<string, boolean>();
     const observer = new IntersectionObserver(
@@ -388,6 +372,18 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
     .addons__nav a[aria-current='true']::after {
       transform: scaleX(1);
     }
+
+    /* Den vandrette menu klipper alt uden for <ol> (overflow-x) – fokusringen lægges indenfor */
+    .addons__nav a:focus-visible {
+      outline-offset: -4px;
+    }
+
+    /* Fokuserede links må ikke gemme sig bag den klæbende kategorimenu (ca. 3.4rem under headeren) */
+    .addon__link,
+    .addons__quick a,
+    .addons__custom a {
+      scroll-margin-top: calc(var(--header-h) + 4rem);
+    }
   }
 
   /* Desktop: lodret menu i venstre side */
@@ -527,6 +523,7 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
   .addon-grid {
     list-style: none;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1px;
     background: var(--c-line);
     border: 1px solid var(--c-line);
@@ -536,13 +533,18 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
     .addon-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    /* Et ulige sidste kort fylder hele rækken, så der ikke står et tomt felt */
+    .addon:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
   }
 
   .addon {
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+    padding: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
     background: var(--c-white);
     scroll-margin-top: calc(var(--header-h) + 5rem);
     transition: box-shadow var(--dur) var(--ease);
@@ -573,23 +575,10 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border: 1px solid var(--c-sand);
     color: var(--c-gold);
-  }
-
-  /* Fra tablet: ikonet står over navnet */
-  @media (min-width: 640px) {
-    .addon__head {
-      display: block;
-    }
-
-    .addon__icon {
-      width: 3rem;
-      height: 3rem;
-      margin-bottom: 1.4rem;
-    }
   }
 
   .addon__name {
@@ -597,10 +586,12 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
     font-size: 1.375rem;
     font-weight: 400;
     line-height: 1.25;
+    overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   .addon__desc {
-    margin: 0.85rem 0 1.5rem;
+    margin: 0.75rem 0 1.25rem;
     font-size: 0.9375rem;
     line-height: 1.6;
     color: var(--c-ink-2);
@@ -608,15 +599,19 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
 
   .addon__foot {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.35rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
     margin-top: auto;
     padding-top: 1rem;
     border-top: 1px solid var(--c-line);
   }
 
+  /* Prisen giver plads, så linket bliver på samme linje (enheden brydes i stedet under beløbet) */
   .addon__price {
+    flex: 1 1 0;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -624,6 +619,7 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
   }
 
   .addon__amount {
+    white-space: nowrap;
     font-family: var(--f-serif);
     font-size: 1.15rem;
     font-variant-numeric: lining-nums;
@@ -648,7 +644,8 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
     align-items: center;
     gap: 0.5rem;
     min-height: 2.75rem;
-    margin-bottom: -0.6rem;
+    /* Trykfladen beholder sin højde uden at gøre kortets bund højere (hele kortet er desuden klikbart) */
+    margin-block: -0.5rem;
     font-size: var(--fs-sm);
     font-weight: 500;
     color: var(--c-ink);
@@ -682,17 +679,29 @@ const quick: Addon[] = addonCategories.flatMap((c) => c.items).filter((a) => a.p
     inset: 0;
   }
 
-  .addon--custom {
-    background: var(--c-paper);
-  }
-
-  .addon--custom .addon__icon {
-    border-style: dashed;
-  }
-
+  .addons__custom,
   .addons__note {
     margin-top: 2rem;
     font-size: var(--fs-sm);
     color: var(--c-muted);
+  }
+
+  .addons__custom {
+    color: var(--c-ink-2);
+  }
+
+  .addons__custom + .addons__note {
+    margin-top: 0.5rem;
+  }
+
+  .addons__custom a {
+    font-weight: 500;
+    color: var(--c-ink);
+    text-decoration-color: var(--c-gold);
+    text-underline-offset: 0.3em;
+  }
+
+  .addons__custom a:hover {
+    color: var(--c-gold-ink);
   }
 </style>

@@ -65,7 +65,8 @@ Logoet i `public/brand/` er vektoriseret ud fra den JPG, vi fik. Har I den origi
 - [ ] Privatlivspolitik gennemlæst og CVR indsat
 - [ ] Opbevaringsfristerne i privatlivspolitikken bekræftet (afsnit 06)
 - [ ] Tilføjes Google Analytics, Meta Pixel, YouTube, kort eller lignende: indfør samtykkebanner og opdater både cookiepolitik og privatlivspolitik (se kommentaren øverst i `src/pages/cookiepolitik.astro`)
-- [ ] Domæne peger på hostingen, og `site` i `astro.config.mjs` / `url` i `site.ts` passer
+- [ ] Domæne peger på hostingen, og `site` i `astro.config.mjs` / `url` i `site.ts` passer (bruges også i `public/robots.txt`)
+- [ ] `sitemap.xml` indsendt i Google Search Console. Nye sider tilføjes i listen i `src/pages/sitemap.xml.ts`
 
 ## Udvikling
 
@@ -83,4 +84,4 @@ Marmorteksturen er genereret med `python3 scripts/generate-marble.py`.
 
 ## Hosting
 
-`npm run build` giver en mappe (`dist/`) med rene HTML-, CSS- og billedfiler, som kan lægges på alle webhoteller. Anbefalet: **Vercel** eller **Netlify** (gratis, automatisk deploy fra GitHub, HTTPS inkluderet). Klassiske danske webhoteller som Simply.com og one.com virker også: upload indholdet af `dist/` via FTP.
+`npm run build` giver en mappe (`dist/`) med rene HTML-, CSS- og billedfiler, som kan lægges på alle webhoteller. Anbefalet: **Vercel** eller **Netlify** (gratis, automatisk deploy fra GitHub, HTTPS inkluderet). Klassiske danske webhoteller som Simply.com og one.com virker også: upload indholdet af `dist/` via FTP. Husk den skjulte fil `.htaccess`, så Apache viser sitets egen 404-side.

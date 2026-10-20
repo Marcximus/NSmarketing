@@ -1,6 +1,8 @@
 ---
 // Kundeudtalelser i et roligt citat-layout.
 // OBS: Indholdet kommer fra content.ts og er pt. eksempler (placeholder: true), der skal udskiftes.
+// Så længe en udtalelse er placeholder, signeres den "Eksempel på udtalelse" i stedet for navn/virksomhed,
+// så den ikke kan forveksles med en rigtig anmeldelse.
 import Icon from '../Icon.astro';
 import SectionHead from '../SectionHead.astro';
 import { testimonials } from '../../data/content';
@@ -21,8 +23,14 @@ import { testimonials } from '../../data/content';
                 <p>{t.quote}</p>
               </blockquote>
               <figcaption>
-                <span class="quote__name">{t.name}</span>
-                <span class="quote__company">{t.company}</span>
+                {t.placeholder ? (
+                  <span class="quote__example">Eksempel på udtalelse</span>
+                ) : (
+                  <>
+                    <span class="quote__name">{t.name}</span>
+                    <span class="quote__company">{t.company}</span>
+                  </>
+                )}
               </figcaption>
             </figure>
           </li>
@@ -35,7 +43,8 @@ import { testimonials } from '../../data/content';
 </section>
 
 <style>
-  /* Mobil/tablet: vandret swipe-række med snap. Desktop: tre kolonner med hårstreger. */
+  /* Mobil/tablet: vandret swipe-række med snap og tynd guld-scrollbar (viser, at der er flere).
+     Desktop: tre kolonner med hårstreger. */
   .quotes__scroller {
     margin-inline: calc(-1 * var(--gutter));
     padding-inline: var(--gutter);
@@ -43,11 +52,13 @@ import { testimonials } from '../../data/content';
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-gold) transparent;
   }
 
-  .quotes__scroller::-webkit-scrollbar {
-    display: none;
+  /* Fokusringen tegnes indenfor, så den ikke klippes af sidens kanter */
+  .quotes__scroller:focus-visible {
+    outline-offset: -3px;
   }
 
   .quotes__grid {
@@ -163,6 +174,14 @@ import { testimonials } from '../../data/content';
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .quote__example {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--c-muted);
   }

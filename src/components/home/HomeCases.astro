@@ -1,10 +1,13 @@
 ---
 // Tre udvalgte cases (featured) med billede, branche, lokation, ydelser og kanaler.
+// Eksempel-cases (placeholder: true) mærkes "Eksempel" i meta-linjen, så de ikke ligner rigtige kunder.
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 import { cases } from '../../data/cases';
 
 const featured = cases.filter((c) => c.featured).slice(0, 3);
+// Så længe alle cases er eksempler, kaldes de ikke "udvalgte"
+const examplesOnly = cases.every((c) => c.placeholder);
 const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok', linkedin: 'LinkedIn' };
 ---
 
@@ -12,7 +15,7 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
   <div class="container">
     <div class="home-cases__head" data-reveal>
       <div>
-        <p class="eyebrow">Udvalgte cases</p>
+        <p class="eyebrow">{examplesOnly ? 'Eksempler på forløb' : 'Udvalgte cases'}</p>
         <h2>Indhold, der får folk til at <em>stoppe op</em></h2>
       </div>
       <div class="home-cases__intro">
@@ -27,7 +30,7 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
       {
         featured.map((c, i) => {
           const heading = c.placeholder ? c.industry : c.client;
-          const meta = c.placeholder ? c.location : `${c.industry} · ${c.location}`;
+          const meta = c.placeholder ? `Eksempel · ${c.location}` : `${c.industry} · ${c.location}`;
           return (
             <li class="case" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
               <div class="media media--zoom case__media">
@@ -55,7 +58,7 @@ const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'Ti
                 <p class="case__excerpt">{c.excerpt}</p>
                 <ul class="case__tags" aria-label="Ydelser">
                   {c.services.map((s) => (
-                    <li class="tag">{s}</li>
+                    <li class="tag">{s === 'SoMe' ? 'Sociale medier' : s}</li>
                   ))}
                 </ul>
               </div>

@@ -1,49 +1,63 @@
 ---
-// Ledige stillinger (pt. ingen opslåede) + "Bliv en del af vores netværk" med roller.
-// Opfind ikke stillingsopslag her – tilføj først, når der er en rigtig stilling.
+// Ledige stillinger (vises kun, når `openings` i ./careerRoles.ts har indhold) + "Bliv en del af vores netværk" med roller.
+// Tilføj kun rigtige stillinger – opfind ikke opslag.
 import Icon from '../Icon.astro';
-import { careerRoles } from './careerRoles';
+import { careerRoles, openings } from './careerRoles';
 
 const applyHref = (value: string) => `/karriere/?rolle=${encodeURIComponent(value)}#ansoeg`;
+const hasOpenings = openings.length > 0;
 ---
 
-<section class="section openings" id="stillinger" aria-labelledby="openings-title">
-  <div class="container openings__grid">
-    <div class="openings__head" data-reveal>
-      <p class="eyebrow">Ledige stillinger</p>
-      <h2 id="openings-title">Åbne <em>stillinger</em></h2>
-      <p class="openings__lead">
-        Når vi søger nye kolleger, slår vi stillingerne op her. Følg med – eller send os en uopfordret
-        ansøgning allerede nu.
-      </p>
-    </div>
+{
+  hasOpenings && (
+    <section class="section openings" id="stillinger" aria-labelledby="openings-title">
+      <div class="container openings__grid">
+        <div class="openings__head" data-reveal>
+          <p class="eyebrow">Ledige stillinger</p>
+          <h2 id="openings-title">Åbne <em>stillinger</em></h2>
+          <p class="openings__lead">
+            Se vores aktuelle opslag herunder – eller send os en uopfordret ansøgning, hvis du ikke finder den
+            rette rolle.
+          </p>
+        </div>
 
-    <div class="board" data-reveal style="--reveal-delay: .08s">
-      <div class="board__head" aria-hidden="true">
-        <span>Stilling</span>
-        <span>Type</span>
-        <span>Sted</span>
+        <div class="board" data-reveal style="--reveal-delay: .08s">
+          <div class="board__head" aria-hidden="true">
+            <span>Stilling</span>
+            <span>Type</span>
+            <span>Sted</span>
+            <span />
+          </div>
+          <ul class="board__list" role="list">
+            {openings.map((o) => (
+              <li class="board__row">
+                <h3 class="board__role">{o.title}</h3>
+                <p class="board__meta">
+                  <span class="visually-hidden">Type: </span>
+                  {o.type}
+                </p>
+                <p class="board__meta">
+                  <span class="visually-hidden">Sted: </span>
+                  {o.location}
+                </p>
+                <a href={applyHref(o.title)} class="text-link board__link">
+                  Ansøg<span class="visually-hidden">: {o.title}</span>
+                  <Icon name="arrow" size={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div class="board__empty">
-        <span class="board__icon" aria-hidden="true"><Icon name="briefcase" size={24} /></span>
-        <h3 class="board__title">Ingen opslåede stillinger lige nu</h3>
-        <p class="board__text">
-          – men vi hører altid gerne fra talenter. Send en uopfordret ansøgning, så har vi dig i tankerne,
-          når vi får brug for nye kræfter.
-        </p>
-        <a href={applyHref('Uopfordret ansøgning')} class="btn btn--outline">
-          Send en uopfordret ansøgning <Icon name="arrow" size={16} />
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
+  )
+}
 
 <section class="section section--white kroles" id="netvaerk" aria-labelledby="kroles-title">
   <div class="container">
     <div class="section-head section-head--split" data-reveal>
       <div>
-        <p class="eyebrow">Freelance & samarbejde</p>
+        <p class="eyebrow">{hasOpenings ? 'Freelance & samarbejde' : 'Vi rekrutterer løbende'}</p>
         <h2 id="kroles-title">Bliv en del af vores <em>netværk</em></h2>
       </div>
       <p class="lead">
@@ -62,7 +76,7 @@ const applyHref = (value: string) => `/karriere/?rolle=${encodeURIComponent(valu
             <h3 class="krole__title">{role.title}</h3>
             <p class="krole__text">{role.text}</p>
             <a href={applyHref(role.value)} class="text-link krole__link">
-              Ansøg<span class="visually-hidden"> som {role.title.toLowerCase()}</span>
+              Ansøg<span class="visually-hidden">: {role.title}</span>
               <Icon name="arrow" size={16} />
             </a>
           </li>
@@ -103,55 +117,55 @@ const applyHref = (value: string) => `/karriere/?rolle=${encodeURIComponent(valu
   }
 
   .board__head {
+    display: none;
+  }
+
+  .board__list {
+    list-style: none;
+  }
+
+  .board__row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: var(--space-4);
-    padding: 1rem clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+    gap: 0.35rem var(--space-4);
+    padding: var(--space-5) clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
     border-bottom: 1px solid var(--c-line);
-    background: var(--c-paper);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--c-muted);
   }
 
-  .board__empty {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: clamp(2rem, 1.4rem + 2.4vw, 3.5rem) clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+  .board__row:last-child {
+    border-bottom: 0;
   }
 
-  .board__icon {
-    display: grid;
-    place-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: var(--space-5);
-    border: 1px solid var(--c-gold);
-    background: var(--c-white);
-    color: var(--c-gold-ink);
+  .board__role {
+    font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
   }
 
-  .board__title {
-    font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);
-  }
-
-  .board__text {
-    max-width: 34rem;
-    margin-block: var(--space-3) var(--space-6);
+  .board__meta {
+    font-size: 0.95rem;
     color: var(--c-ink-2);
   }
 
-  .board__empty .btn {
-    max-width: 100%;
-    white-space: normal;
+  .board__link {
+    justify-self: start;
   }
 
-  @media (max-width: 479px) {
-    .board__empty .btn {
-      width: 100%;
+  @media (min-width: 640px) {
+    .board__head,
+    .board__row {
+      grid-template-columns: 2fr 1fr 1fr auto;
+      align-items: center;
+    }
+
+    .board__head {
+      display: grid;
+      gap: var(--space-4);
+      padding: 1rem clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+      border-bottom: 1px solid var(--c-line);
+      background: var(--c-paper);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--c-muted);
     }
   }
 

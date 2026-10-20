@@ -9,7 +9,7 @@ import { packages, formatPrice } from '../../data/packages';
   <div class="container">
     <SectionHead
       eyebrow="Pakkeløsninger"
-      title="Tre pakker. Ét klart <em>overblik</em>."
+      title="Tre pakker. Ét&nbsp;klart <em>overblik</em>."
       lead="Faste månedlige priser og ingen skjulte gebyrer. Vælg det niveau, der matcher jeres ambitioner – og byg på med tillægsydelser, når behovet opstår."
       align="center"
     />
@@ -34,7 +34,6 @@ import { packages, formatPrice } from '../../data/packages';
 
             <div class="pkg__pricing">
               <p class="pkg__price">
-                <span class="pkg__from">Fra</span>
                 <span class="pkg__amount">{formatPrice(p.price)}</span>
                 <span class="pkg__unit">kr./md.</span>
               </p>
@@ -64,7 +63,7 @@ import { packages, formatPrice } from '../../data/packages';
     <div class="pkgs__foot" data-reveal>
       <a href="/pakkeloesninger/" class="btn">Sammenlign pakkerne <Icon name="arrow" size={16} /></a>
       <p class="pkgs__note">
-        Alle priser er ekskl. moms. Statister, e-mail marketing, SEO og meget mere kan lægges oven i enhver
+        Alle priser er ekskl. moms. Statister, e-mailmarketing, SEO og meget mere kan lægges oven i enhver
         pakke – <a href="/pakkeloesninger/#tillaeg">se tillægsydelserne</a>.
       </p>
     </div>
@@ -74,6 +73,7 @@ import { packages, formatPrice } from '../../data/packages';
 <style>
   .pkgs__grid {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
     max-width: 30rem;
     margin-inline: auto;
@@ -81,7 +81,7 @@ import { packages, formatPrice } from '../../data/packages';
 
   @media (min-width: 960px) {
     .pkgs__grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       align-items: center;
       gap: 0;
       max-width: none;
@@ -180,13 +180,11 @@ import { packages, formatPrice } from '../../data/packages';
     gap: 0.5rem;
   }
 
-  .pkg__from,
   .pkg__unit {
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
   }
 
-  .pkg--featured .pkg__from,
   .pkg--featured .pkg__unit,
   .pkg--featured .pkg__vat {
     color: var(--c-cream-muted);
@@ -208,8 +206,9 @@ import { packages, formatPrice } from '../../data/packages';
 
   /* Tre nøgletal */
   .pkg__summary {
+    container-type: inline-size;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin: 2rem 0 2.25rem;
     border-block: 1px solid var(--pkg-line);
   }
@@ -239,13 +238,30 @@ import { packages, formatPrice } from '../../data/packages';
     font-size: 0.6875rem;
     line-height: 1.35;
     letter-spacing: 0.06em;
-    white-space: nowrap;
     text-transform: uppercase;
     color: var(--c-muted);
   }
 
   .pkg--featured .pkg__summary dt {
     color: var(--c-cream-muted);
+  }
+
+  /* Meget smal række (fx stor systemskrift på mobil): nøgletallene stables som "8 opslag / md." */
+  @container (max-width: 12.5rem) {
+    .pkg__summary > div {
+      grid-column: 1 / -1;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 0.8rem 0;
+      text-align: left;
+    }
+
+    .pkg__summary > div + div {
+      border-left: 0;
+      border-top: 1px solid var(--pkg-line);
+    }
   }
 
   .pkg .btn {

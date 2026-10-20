@@ -82,7 +82,16 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+
+/* Ankre og tastaturfokus må ikke lande under den sticky header. Det løses med scroll-margin på
+   indholdet i stedet for scroll-padding på html: med scroll-padding får fokus på headerens egne
+   links (logo, ring op, menu-knap) browseren til at scrolle siden et halvt skærmbillede op.
+   Browseren regner ikke scroll-margin med ved Tab/Shift+Tab – det klarer src/scripts/focus-clear.ts. */
+main,
+main *,
+footer * {
+  scroll-margin-top: calc(var(--header-h) + 1rem);
 }
 
 body {
@@ -678,6 +687,7 @@ a {
 /* ---------- Formularer ---------- */
 .field {
   display: grid;
+  align-content: start; /* feltet beholder sin højde, når nabofeltet får en fejltekst */
   gap: 0.5rem;
 }
 
@@ -771,6 +781,10 @@ a {
 .section--deep .field-error,
 .section--brown .field-error {
   color: #f2b8a8; /* 10,0:1 på brown-deep, 8,0:1 på brown */
+}
+
+:is(.on-dark, .section--deep, .section--brown) :is(.input, .select, .textarea)[aria-invalid='true'] {
+  border-color: #f2b8a8;
 }
 
 /* Honeypot mod spam: skjult for mennesker, udfyldes kun af bots */
