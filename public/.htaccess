@@ -1,0 +1,2 @@
+# Kun relevant på Apache-webhoteller (fx Simply.com/one.com)
+ErrorDocument 404 /404.html

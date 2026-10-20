@@ -25,7 +25,7 @@ export const addonCategories: AddonCategory[] = [
   {
     id: 'produktion',
     title: 'Produktion & content',
-    intro: 'Mere og større indhold – fra statister til ekstra optagedage.',
+    intro: 'Mere og større indhold – fra statister til ekstra content-dage.',
     items: [
       {
         id: 'statister',
@@ -33,7 +33,7 @@ export const addonCategories: AddonCategory[] = [
         description:
           'Vi caster og booker statister, modeller og håndmodeller til jeres optagelser, så indholdet får liv og ansigter.',
         price: 'Fra 1.500 kr.',
-        unit: 'pr. person',
+        unit: 'pr. person pr. optagedag',
         icon: 'users',
         popular: true,
       },
@@ -53,6 +53,7 @@ export const addonCategories: AddonCategory[] = [
         description:
           'Produktvideoer, kampagnefilm og reels – fra idé og manuskript til færdigklippet film.',
         price: 'Fra 3.900 kr.',
+        unit: 'pr. film',
         icon: 'video',
       },
       {
@@ -67,7 +68,7 @@ export const addonCategories: AddonCategory[] = [
         id: 'frikob',
         name: 'Frikøb af content',
         description:
-          'Fulde rettigheder til billeder og video, så I frit kan bruge dem i annoncer, print og på hjemmesiden.',
+          'Fulde rettigheder til billeder og video, så I frit kan bruge dem i print, på hjemmesiden og i egne kampagner.',
         price: null,
         icon: 'key',
       },
@@ -76,6 +77,7 @@ export const addonCategories: AddonCategory[] = [
         name: 'Grafisk design & print',
         description: 'Flyers, menukort, skilte, præsentationer og skabeloner i jeres visuelle identitet.',
         price: 'Fra 1.200 kr.',
+        unit: 'pr. opgave',
         icon: 'pen',
       },
     ],
@@ -89,7 +91,7 @@ export const addonCategories: AddonCategory[] = [
         id: 'meta-ads',
         name: 'Meta-annoncering',
         description:
-          'Målrettede kampagner på Facebook og Instagram. Opsætning, målgrupper, test og løbende optimering.',
+          'Målrettede kampagner på Facebook og Instagram. Opsætning, målgrupper, test og løbende optimering. Annoncebudget betales separat.',
         price: 'Fra 2.500 kr.',
         unit: 'pr. md.',
         icon: 'target',
@@ -98,7 +100,8 @@ export const addonCategories: AddonCategory[] = [
       {
         id: 'tiktok-ads',
         name: 'TikTok-annoncering',
-        description: 'Annoncer i TikToks eget format, der når en yngre og meget engageret målgruppe.',
+        description:
+          'Annoncer i TikToks eget format, der når en yngre og meget engageret målgruppe. Annoncebudget betales separat.',
         price: 'Fra 2.500 kr.',
         unit: 'pr. md.',
         icon: 'trending',
@@ -106,14 +109,15 @@ export const addonCategories: AddonCategory[] = [
       {
         id: 'boost',
         name: 'Boost af opslag',
-        description: 'Strategisk boost af jeres bedste opslag for ekstra rækkevidde i lokalområdet.',
+        description:
+          'Strategisk boost af jeres bedste opslag for ekstra rækkevidde i lokalområdet. Annoncebudget betales separat.',
         price: 'Fra 750 kr.',
         unit: 'pr. md.',
         icon: 'rocket',
       },
       {
         id: 'influencer',
-        name: 'Influencer marketing',
+        name: 'Influencermarketing',
         description:
           'Vi finder, kontakter og koordinerer samarbejder med influencers, der passer til jeres brand.',
         price: null,
@@ -138,7 +142,7 @@ export const addonCategories: AddonCategory[] = [
       },
       {
         id: 'email',
-        name: 'E-mail marketing',
+        name: 'E-mailmarketing',
         description:
           'Nyhedsbreve og automatiske flows, der holder kunderne varme og skaber genkøb.',
         price: 'Fra 2.000 kr.',
@@ -162,7 +166,7 @@ export const addonCategories: AddonCategory[] = [
     items: [
       {
         id: 'linkedin',
-        name: 'LinkedIn management',
+        name: 'LinkedIn-management',
         description:
           'Professionel tilstedeværelse på LinkedIn for virksomheden og ledelsen – med opslag, der styrker jeres position.',
         price: 'Fra 2.500 kr.',
@@ -189,7 +193,7 @@ export const addonCategories: AddonCategory[] = [
       {
         id: 'community',
         name: 'Kundehenvendelser & beskeder',
-        description: 'Vi besvarer kommentarer og beskeder i jeres tone of voice – også når I har travlt.',
+        description: 'Vi besvarer kommentarer og beskeder i jeres egen tone – også når I har travlt.',
         price: 'Fra 1.500 kr.',
         unit: 'pr. md.',
         icon: 'chat',
@@ -206,7 +210,7 @@ export const addonCategories: AddonCategory[] = [
       {
         id: 'repost',
         name: 'Repost af stories',
-        description: 'Vi deler kunders og samarbejdspartneres omtale af jer, så den sociale bevisførelse vokser.',
+        description: 'Vi deler kunders og samarbejdspartneres omtale af jer, så flere kan se, hvad andre siger om jer.',
         price: 'Fra 500 kr.',
         unit: 'pr. md.',
         icon: 'repeat',
@@ -215,4 +219,4 @@ export const addonCategories: AddonCategory[] = [
   },
 ];
 
-export const addonNote = 'Alle priser er ekskl. moms. Transport ud over 30 km afregnes efter statens takst.';
+export const addonNote = 'Alle priser er ekskl. moms. Kørsel ud over 30 km afregnes efter statens takst.';

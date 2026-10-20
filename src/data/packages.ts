@@ -13,7 +13,9 @@ export type Package = {
   badge?: string;
   /** Kort opsummering af mængder, vises øverst på kortet */
   summary: { value: string; label: string }[];
-  /** De vigtigste punkter på kortet */
+  /** Vises over highlights på kortet, fx 'Alt i Silver, plus:' */
+  plusLabel?: string;
+  /** De vigtigste punkter på kortet – gentager ikke summary og skal stemme med sammenligningstabellen */
   highlights: string[];
 };
 
@@ -32,9 +34,8 @@ export const packages: Package[] = [
     ],
     highlights: [
       'Instagram & Facebook',
-      '8 opslag og 16 stories om måneden',
-      '2 reels om måneden',
-      'Content-dag med fotograf hvert kvartal',
+      '16 stories om måneden',
+      'Content-dag med fotograf & videograf hvert kvartal',
       'Månedlig contentplan til godkendelse',
       'Månedlig rapport og check-in',
     ],
@@ -47,19 +48,20 @@ export const packages: Package[] = [
       'Til virksomheder, der vil bruge sociale medier aktivt til at få flere følgere, flere henvendelser og et stærkere brand.',
     price: 10995,
     featured: true,
-    badge: 'Mest valgt',
+    badge: 'Vores anbefaling', // TODO: Skift til 'Mest valgt', når det kan dokumenteres
     summary: [
       { value: '3', label: 'kanaler' },
       { value: '12', label: 'opslag / md.' },
       { value: '8', label: 'reels / md.' },
     ],
+    plusLabel: 'Alt i Silver, plus:',
     highlights: [
-      'Instagram, Facebook & TikTok',
-      '12 opslag og 36 stories om måneden',
-      '8 reels / TikToks om måneden',
-      'Content-dag med fotograf hver måned',
+      'TikTok som tredje kanal',
+      '36 stories og 2 karruseller om måneden',
+      'Content-dag med fotograf & videograf hver måned',
       'Svar på kommentarer på hverdage',
-      'Månedligt strategimøde og rapport',
+      'Månedligt strategimøde',
+      'Konkurrent- & trendanalyse',
     ],
   },
   {
@@ -74,12 +76,13 @@ export const packages: Package[] = [
       { value: '16', label: 'opslag / md.' },
       { value: '12', label: 'reels / md.' },
     ],
+    plusLabel: 'Alt i Gold, plus:',
     highlights: [
-      'Instagram, Facebook, TikTok & LinkedIn',
-      '16 opslag og daglige stories på hverdage',
-      '12 reels / TikToks om måneden',
-      '2 content-dage med fotograf om måneden',
+      'LinkedIn som fjerde kanal',
+      'Stories alle hverdage og 4 karruseller om måneden',
+      '2 content-dage med fotograf & videograf om måneden',
       'Meta-annoncering inkl. styring og optimering',
+      'Svar på beskeder (DM) på hverdage',
       'Dedikeret account manager',
     ],
   },
@@ -151,7 +154,8 @@ export const comparison: ComparisonGroup[] = [
     rows: [
       { label: 'Fast kontaktperson', values: [true, true, 'Dedikeret account manager'] },
       { label: 'Check-in-opkald', values: ['1 om måneden', '2 om måneden', 'Ugentligt'] },
-      { label: 'Svartid på hverdage', values: ['Inden for 48 timer', 'Inden for 24 timer', 'Samme dag'] },
+      // TODO: Bekræft – kunders svartid må aldrig være længere end løftet til nye henvendelser (én hverdag)
+      { label: 'Svartid på hverdage', values: ['Inden for 24 timer', 'Samme dag', 'Inden for 2 timer'] },
     ],
   },
 ];
@@ -160,7 +164,7 @@ export const comparison: ComparisonGroup[] = [
 export const includedInAll = [
   'Fast kontaktperson, der kender jeres forretning',
   'Strategi og contentplan, I godkender, før noget bliver postet',
-  'Professionel foto, video, redigering og tekst',
+  'Professionel fotografering, video, redigering og tekst',
   'Grafik i jeres visuelle identitet',
   'Månedlig rapport med konkrete anbefalinger',
   'Ingen skjulte gebyrer – én fast pris om måneden',
@@ -168,6 +172,6 @@ export const includedInAll = [
 
 // TODO: Bekræft vilkår (løbetid, opsigelse, opstart)
 export const pricingNote =
-  'Alle priser er pr. måned ekskl. moms. Annoncebudget, statister og eventuel transport faktureres separat. Løbetid og opsigelse aftales ved opstart.';
+  'Alle priser er pr. måned ekskl. moms. Annoncebudget og statister faktureres separat, og kørsel ud over 30 km afregnes efter statens takst. Løbetid og opsigelse aftales ved opstart.';
 
 export const formatPrice = (n: number) => new Intl.NumberFormat('da-DK').format(n);

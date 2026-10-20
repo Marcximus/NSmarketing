@@ -37,13 +37,23 @@ const ogImageUrl = new URL(ogImage, site.url).href;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  // Andre sider (fx /kontakt/) refererer til organisationen via dette @id
+  '@id': `${site.url}/#organization`,
   name: site.name,
-  url: site.url,
+  url: `${site.url}/`,
   logo: new URL('/brand/silberg-creative-logo.svg', site.url).href,
   image: ogImageUrl,
   description: site.description,
   telephone: '+45' + site.phone.replace(/\s/g, ''),
   email: site.email,
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    telephone: '+45' + site.phone.replace(/\s/g, ''),
+    email: site.email,
+    areaServed: 'DK',
+    availableLanguage: ['Danish'],
+  },
   areaServed: { '@type': 'Country', name: 'Danmark' },
   ...(site.address && {
     address: {
@@ -56,6 +66,17 @@ const jsonLd = {
   }),
   ...(site.cvr && { vatID: `DK${site.cvr}` }),
 };
+
+// Kun på forsiden: giver sitenavnet i Googles søgeresultater
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${site.url}/#website`,
+  name: site.name,
+  url: `${site.url}/`,
+  inLanguage: 'da-DK',
+  publisher: { '@id': `${site.url}/#organization` },
+};
 ---
 
 <!doctype html>
@@ -67,7 +88,7 @@ const jsonLd = {
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
 
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -80,13 +101,14 @@ const jsonLd = {
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />}
     <slot name="head" />
   </head>
   <body>

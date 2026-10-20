@@ -1,5 +1,7 @@
 // Cases / kunder. Vises på /cases/ og udvalgte på forsiden.
 // TODO: Disse er eksempler (placeholder: true). Udskift med rigtige kunder, billeder og resultater.
+// Indtil der er rigtige cases, skal uddrag beskrive hensigten med indholdet – ikke opnåede resultater
+// (markedsføringsloven). Undgå også før/efter-formater for kosmetiske behandlinger.
 
 import type { ImageMetadata } from 'astro';
 import restaurant from '../assets/images/case-restaurant.jpg';
@@ -32,7 +34,7 @@ export const cases: Case[] = [
     industry: 'Restaurant & cocktailbar',
     location: 'København',
     excerpt:
-      'Et nyt visuelt univers med stemningsfulde reels fra køkkenet og baren, der fylder bordene på hverdage.',
+      'Et nyt visuelt univers med stemningsfulde reels fra køkkenet og baren – skabt til at fylde bordene på hverdage.',
     services: ['SoMe', 'Video', 'Foto'],
     channels: ['instagram', 'facebook', 'tiktok'],
     image: restaurant,
@@ -46,7 +48,7 @@ export const cases: Case[] = [
     industry: 'Boutiquehotel',
     location: 'Nordsjælland',
     excerpt:
-      'Indhold, der sælger oplevelsen før gæsten ankommer – kombineret med annoncering mod weekendophold.',
+      'Indhold, der skal sælge oplevelsen, før gæsten ankommer – kombineret med annoncering mod weekendophold.',
     services: ['SoMe', 'Foto', 'Annoncering'],
     channels: ['instagram', 'facebook'],
     image: hotel,
@@ -59,7 +61,7 @@ export const cases: Case[] = [
     client: '[Kundenavn]',
     industry: 'Skønhedsklinik',
     location: 'Aarhus',
-    excerpt: 'Trygge, æstetiske før- og efterforløb og reels, der gør behandlingerne nemme at forstå.',
+    excerpt: 'Trygge, æstetiske reels og forklarende indhold, der gør behandlingerne nemme at forstå.',
     services: ['SoMe', 'Video', 'Statister'],
     channels: ['instagram', 'tiktok'],
     image: beauty,
@@ -84,7 +86,7 @@ export const cases: Case[] = [
     client: '[Kundenavn]',
     industry: 'Ejendomsmægler',
     location: 'Storkøbenhavn',
-    excerpt: 'Boligvideoer og LinkedIn-indhold, der styrker mæglerens lokale position.',
+    excerpt: 'Boligvideoer og LinkedIn-indhold, der skal styrke mæglerens lokale position.',
     services: ['SoMe', 'Video'],
     channels: ['instagram', 'linkedin'],
     image: realestate,

@@ -11,7 +11,7 @@ export const services: { number: string; title: string; text: string; icon: Icon
   },
   {
     number: '02',
-    title: 'Content production',
+    title: 'Produktion & content',
     text: 'Vores fotografer, videografer og redaktører kommer ud til jer og skaber billeder, reels og stories, der ligner jer – bare skarpere.',
     icon: 'camera',
   },
@@ -32,7 +32,7 @@ export const services: { number: string; title: string; text: string; icon: Icon
 export const process: { number: string; title: string; text: string }[] = [
   {
     number: '01',
-    title: 'Uforpligtende samtale',
+    title: 'Uforpligtende møde',
     text: 'Vi lærer jeres forretning, mål og målgruppe at kende – og anbefaler den pakke, der passer.',
   },
   {
@@ -53,20 +53,21 @@ export const process: { number: string; title: string; text: string }[] = [
 ];
 
 // TODO: Bekræft at I kan stå inde for disse løfter
-// Svartiden her gælder nye henvendelser ("Vi svarer inden for én hverdag"). Svartid for kunder
-// afhænger af pakken og står i sammenligningstabellen i packages.ts – hold de to i overensstemmelse.
+// '24 t … på hverdage' svarer til "Vi svarer inden for én hverdag" på resten af sitet. Svartid for kunder
+// afhænger af pakken og står i sammenligningstabellen i packages.ts – den må aldrig være længere end dette.
+// '1–2 uger' matcher FAQ'en "Hvor hurtigt kan vi komme i gang?".
 export const promises: { value: string; label: string }[] = [
   { value: '4', label: 'platforme vi mestrer' },
   { value: '1', label: 'fast kontaktperson til jer' },
-  { value: '24 t', label: 'maks. svartid på nye henvendelser' },
-  { value: '100 %', label: 'skræddersyet indhold' },
+  { value: '24 t', label: 'maks. svartid på hverdage' },
+  { value: '1–2', label: 'uger fra første møde til opstart' },
 ];
 
 export const industries = [
   'Restauranter & caféer',
   'Hoteller & oplevelser',
   'Skønhed & wellness',
-  'Mode & retail',
+  'Mode & detailhandel',
   'Interiør & bolig',
   'Ejendomme',
   'Liberale erhverv',
@@ -79,8 +80,8 @@ export const disciplines = [
   'Reels & TikTok',
   'Fotografering',
   'Meta-annoncering',
-  'Influencer marketing',
-  'E-mail marketing',
+  'Influencermarketing',
+  'E-mailmarketing',
   'SEO',
 ];
 
@@ -104,7 +105,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Hvem ejer indholdet?',
-    a: 'I må frit bruge indholdet på jeres sociale medier. Vil I også bruge det i annoncer, print eller på hjemmesiden, kan I frikøbe det som tillæg.',
+    a: 'Ophavsretten til foto og video ligger hos os, og I får brugsret til indholdet på jeres egne sociale medier – også i de annoncer, vi kører for jer. Vil I bruge det i print, på hjemmesiden eller i egne kampagner, kan I frikøbe de fulde rettigheder som tillæg.',
   },
   {
     q: 'Er annoncebudgettet inkluderet i prisen?',
@@ -116,7 +117,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Arbejder I med virksomheder i hele Danmark?',
-    a: 'Ja. Vi arbejder med virksomheder i hele landet og planlægger content-dage, så de passer ind i jeres hverdag.',
+    a: 'Ja. Vi arbejder med virksomheder i hele landet og planlægger content-dage, så de passer ind i jeres hverdag. Kørsel ud over 30 km fra os afregnes efter statens takst.',
   },
 ];
 

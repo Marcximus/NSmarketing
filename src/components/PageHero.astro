@@ -5,12 +5,14 @@ interface Props {
   title: string;
   lead?: string;
   align?: 'left' | 'center';
+  /** Mindre luft i toppen, så indholdet under hero ses tidligere (fx pakkekort med priser) */
+  compact?: boolean;
 }
 
-const { eyebrow, title, lead, align = 'center' } = Astro.props;
+const { eyebrow, title, lead, align = 'center', compact = false } = Astro.props;
 ---
 
-<section class:list={['page-hero', `page-hero--${align}`]}>
+<section class:list={['page-hero', `page-hero--${align}`, compact && 'page-hero--compact']}>
   <div class="page-hero__marble" aria-hidden="true"></div>
   <div class="container page-hero__inner">
     <p class:list={['eyebrow', align === 'center' && 'eyebrow--center']} data-reveal>{eyebrow}</p>
@@ -27,6 +29,11 @@ const { eyebrow, title, lead, align = 'center' } = Astro.props;
     padding-block: clamp(4.5rem, 3rem + 6vw, 8rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
     border-bottom: 1px solid var(--c-line);
     isolation: isolate;
+  }
+
+  /* Kun toppen strammes: pakkekortene overlapper hero'ens bund */
+  .page-hero--compact {
+    padding-top: clamp(3rem, 2rem + 3vw, 5rem);
   }
 
   .page-hero__marble {
