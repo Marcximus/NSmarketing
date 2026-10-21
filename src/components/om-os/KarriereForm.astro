@@ -1,0 +1,271 @@
+---
+// Ansøgningsformular til /karriere/. Håndteres af src/scripts/forms.ts (data-form="karriere").
+// Rolle-feltet kan forudfyldes via URL'en, fx /karriere/?rolle=Praktikant#ansoeg
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { careerRoles, openings } from './careerRoles';
+
+const steps = [
+  { title: 'Du sender din ansøgning', text: 'Fortæl kort om dig selv, og send gerne et link til dit portfolio eller din Instagram.' },
+  { title: 'Vi læser den grundigt', text: 'Vi gennemgår alle henvendelser og vender tilbage, når der er et match.' },
+  { title: 'Vi tager en snak', text: 'Over en kop kaffe eller et opkald finder vi ud af, hvordan vi kan arbejde sammen.' },
+];
+---
+
+<section class="section apply" id="ansoeg" aria-labelledby="apply-title">
+  <div class="container apply__grid">
+    <div class="apply__info">
+      <h2 id="apply-title">Send os en ansøgning</h2>
+      <p class="lead">
+        Uanset om du søger fast arbejde, freelanceopgaver eller en praktikplads, starter det hele her.
+      </p>
+
+      <ol class="apply__steps" role="list">
+        {
+          steps.map((step, i) => (
+            <li>
+              <span class="apply__step-num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="apply__step-title">{step.title}</h3>
+                <p class="apply__step-text">{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="apply__contact small">
+        Spørgsmål inden du søger? Skriv til <a href={site.emailHref}>{site.email}</a> eller ring på
+        <a href={site.phoneHref} class="nowrap">{site.phone}</a>.
+      </p>
+    </div>
+
+    <div class="apply__panel">
+      <form
+        class="apply-form"
+        data-form="karriere"
+        method="post"
+        action={site.formEndpoint || `mailto:${site.email}`}
+        enctype={site.formEndpoint ? undefined : 'text/plain'}
+      >
+        <p class="apply-form__required small"><span aria-hidden="true">*</span> Skal udfyldes</p>
+
+        <div class="apply-form__grid">
+          <div class="field">
+            <label for="k-navn">Navn <span aria-hidden="true">*</span></label>
+            <input id="k-navn" class="input" type="text" name="navn" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="k-email">E-mail <span aria-hidden="true">*</span></label>
+            <input id="k-email" class="input" type="email" name="email" autocomplete="email" required />
+          </div>
+
+          <div class="field">
+            <label for="k-telefon">Telefon</label>
+            <input id="k-telefon" class="input" type="tel" name="telefon" autocomplete="tel" inputmode="tel" />
+          </div>
+
+          <div class="field">
+            <label for="k-rolle">Rolle <span aria-hidden="true">*</span></label>
+            <select id="k-rolle" class="select" name="rolle" required>
+              <option value="" disabled selected>Vælg en rolle</option>
+              {openings.map((o) => <option value={o.title}>{o.title}</option>)}
+              {careerRoles.map((role) => <option value={role.value}>{role.value}</option>)}
+            </select>
+          </div>
+
+          <div class="field field--full">
+            <label for="k-portfolio">Link til portfolio eller Instagram</label>
+            <input
+              id="k-portfolio"
+              class="input"
+              type="text"
+              name="portfolio"
+              inputmode="url"
+              autocomplete="url"
+              placeholder="fx dinside.dk eller @ditnavn"
+            />
+          </div>
+
+          <div class="field field--full">
+            <label for="k-besked">Fortæl kort om dig selv <span aria-hidden="true">*</span></label>
+            <textarea
+              id="k-besked"
+              class="textarea"
+              name="besked"
+              rows="6"
+              required
+              placeholder="Hvad brænder du for, og hvad kan du bidrage med?"></textarea>
+          </div>
+        </div>
+
+        <label class="checkbox apply-form__consent" for="k-samtykke">
+          <input id="k-samtykke" type="checkbox" name="samtykke" value="Ja" required />
+          <span>
+            Jeg giver samtykke til, at {site.name} gemmer mine oplysninger for at kunne behandle min
+            ansøgning. Læs mere i vores <a href="/privatlivspolitik/">privatlivspolitik</a>.
+            <span aria-hidden="true">*</span>
+          </span>
+        </label>
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="k-gotcha">Lad dette felt være tomt</label>
+          <input id="k-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+        </div>
+        <input type="hidden" name="_subject" value="Karriere: ny henvendelse" />
+
+        <div class="apply-form__actions">
+          <button type="submit" class="btn">Send ansøgning <Icon name="arrow" size={16} /></button>
+          <p class="apply-form__status small" role="status" aria-live="polite" data-form-status></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .apply {
+    background: var(--c-beige);
+  }
+
+  .apply__grid {
+    display: grid;
+    gap: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .apply__grid {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: clamp(4rem, 7vw, 7rem);
+      align-items: start;
+    }
+
+    .apply__info {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+
+  .apply__info .lead {
+    max-width: 30rem;
+    margin-top: var(--space-5);
+  }
+
+  /* ---------- Trin ---------- */
+  .apply__steps {
+    display: grid;
+    margin-top: var(--space-7);
+    list-style: none;
+    border-top: 1px solid var(--c-sand);
+  }
+
+  .apply__steps li {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-bottom: 1px solid var(--c-sand);
+  }
+
+  /* Rækkefølgen er information – derfor numre, sat roman med lining-tal */
+  .apply__step-num {
+    font-family: var(--f-serif);
+    font-size: 1.35rem;
+    font-style: normal;
+    font-variant-numeric: lining-nums;
+    line-height: 1.2;
+    color: var(--c-gold-ink);
+  }
+
+  .apply__step-title {
+    font-family: var(--f-sans);
+    font-size: var(--fs-base);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+
+  .apply__step-text {
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--c-ink-2);
+  }
+
+  .apply__contact {
+    margin-top: var(--space-6);
+    color: var(--c-ink-2);
+  }
+
+  .apply__contact a {
+    color: var(--c-ink);
+    font-weight: 500;
+  }
+
+  .apply__contact a:hover {
+    color: var(--c-gold-ink);
+  }
+
+  /* ---------- Formular ---------- */
+  .apply__panel {
+    padding: clamp(1.5rem, 1rem + 2.4vw, 3.25rem);
+    border: 1px solid var(--c-sand);
+    background: var(--c-white);
+  }
+
+  .apply-form__required {
+    margin-bottom: var(--space-5);
+    color: var(--c-muted);
+  }
+
+  .apply-form__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 640px) {
+    .apply-form__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-5) var(--space-5);
+    }
+
+    .field--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .apply-form__consent {
+    margin-top: var(--space-6);
+  }
+
+  .apply-form__consent a {
+    color: var(--c-ink);
+  }
+
+  .apply-form__consent a:hover {
+    color: var(--c-gold-ink);
+  }
+
+  .apply-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--c-line);
+  }
+
+  @media (max-width: 479px) {
+    .apply-form__actions .btn {
+      width: 100%;
+    }
+  }
+
+  .apply-form__status {
+    flex: 1 1 14rem;
+    color: var(--c-ink-2);
+  }
+</style>

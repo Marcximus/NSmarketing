@@ -1,0 +1,58 @@
+---
+// Redaktionel liste til "Kort fortalt" og lignende: titel + tekst med en hårstreg over hvert punkt
+// (fælles .ruled-list fra global.css), ingen bokse og ingen ikoner. Teksten må indeholde simpel HTML.
+interface Props {
+  items: { title: string; text: string }[];
+  headingLevel?: 'h3' | 'h4';
+}
+
+const { items, headingLevel: H = 'h3' } = Astro.props;
+---
+
+<ul class="legal-block ruled-list ruled-list--2 lcards" role="list">
+  {
+    items.map((item) => (
+      <li class="lcard">
+        <H class="ruled-list__title lcard__title">{item.title}</H>
+        <p class="ruled-list__text lcard__text" set:html={item.text} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* Læsetilstand: kortere afstand mellem punkterne end på markedsføringssiderne */
+  .lcards > .lcard {
+    padding-block: var(--space-5);
+  }
+
+  /* Sidste blok i et afsnit: afsnittets egen hårstreg lukker listen, så der ikke står to streger */
+  .lcards:last-child {
+    border-bottom: 0;
+  }
+
+  /* Titel i brødtekstens skrift, så listen læses som en del af teksten og ikke som overskrifter */
+  .lcard .lcard__title {
+    margin: 0;
+    font-family: var(--f-sans);
+    font-size: var(--fs-md);
+    font-weight: 500;
+    line-height: var(--lh-snug);
+    letter-spacing: 0;
+    color: var(--c-ink);
+  }
+
+  .lcard .lcard__text {
+    margin-top: var(--space-2);
+    font-size: var(--fs-base);
+    line-height: var(--lh-body);
+    color: var(--c-ink-2);
+  }
+
+  /* Ulige antal i to kolonner: sidste punkt får hele bredden, så der ikke står et hul */
+  @media (min-width: 720px) {
+    .lcard:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+// Lille metalinje til PageHero på de juridiske sider: opdateringsdato m.m.
+import Icon from '../Icon.astro';
+import type { IconName } from '../../data/icons';
+
+interface Props {
+  items: { icon: IconName; text: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="lmeta" role="list">
+  {
+    items.map((item) => (
+      <li>
+        <Icon name={item.icon} size={16} />
+        <span>{item.text}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .lmeta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3) var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--c-sand);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  li :global(svg) {
+    color: var(--c-gold);
+    flex-shrink: 0;
+  }
+</style>

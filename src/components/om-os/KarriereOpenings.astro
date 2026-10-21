@@ -1,0 +1,197 @@
+---
+// Ledige stillinger (vises kun, når `openings` i ./careerRoles.ts har indhold) + "Bliv en del af vores netværk"
+// med rollerne som redaktionelle rækker i samme mønster som stillingstavlen.
+// Tilføj kun rigtige stillinger – opfind ikke opslag.
+import Icon from '../Icon.astro';
+import { careerRoles, openings } from './careerRoles';
+
+const applyHref = (value: string) => `/karriere/?rolle=${encodeURIComponent(value)}#ansoeg`;
+const hasOpenings = openings.length > 0;
+---
+
+{
+  hasOpenings && (
+    <section class="section openings" id="stillinger" aria-labelledby="openings-title">
+      <div class="container openings__grid">
+        <div class="openings__head">
+          <h2 id="openings-title">Åbne stillinger</h2>
+          <p class="openings__lead">
+            Se vores aktuelle opslag herunder – eller send os en uopfordret ansøgning, hvis du ikke finder den
+            rette rolle.
+          </p>
+        </div>
+
+        <div class="board">
+          <div class="board__head" aria-hidden="true">
+            <span>Stilling</span>
+            <span>Type</span>
+            <span>Sted</span>
+            <span />
+          </div>
+          <ul class="board__list" role="list">
+            {openings.map((o) => (
+              <li class="board__row">
+                <h3 class="board__role">{o.title}</h3>
+                <p class="board__meta">
+                  <span class="visually-hidden">Type: </span>
+                  {o.type}
+                </p>
+                <p class="board__meta">
+                  <span class="visually-hidden">Sted: </span>
+                  {o.location}
+                </p>
+                <a href={applyHref(o.title)} class="text-link board__link">
+                  Ansøg<span class="visually-hidden">: {o.title}</span>
+                  <Icon name="arrow" size={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<section class="section section--white kroles" id="netvaerk" aria-labelledby="kroles-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <h2 id="kroles-title">Bliv en del af vores netværk</h2>
+      </div>
+      <p class="lead">
+        Vi samarbejder løbende med freelancere og kreative talenter, når vores kunder har brug for ekstra
+        kompetencer. Find din rolle, og send os en ansøgning.
+      </p>
+    </div>
+
+    <ul class="board__list roles" role="list">
+      {
+        careerRoles.map((role) => (
+          <li class="board__row roles__row">
+            <h3 class="board__role">{role.title}</h3>
+            <p class="roles__text">{role.text}</p>
+            <a href={applyHref(role.value)} class="text-link board__link">
+              Ansøg<span class="visually-hidden">: {role.title}</span>
+              <Icon name="arrow" size={16} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* ---------- Ledige stillinger ---------- */
+  .openings__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 1024px) {
+    .openings__grid {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(4rem, 8vw, 7rem);
+      align-items: start;
+    }
+  }
+
+  .openings__grid > * {
+    min-width: 0;
+  }
+
+  .openings__lead {
+    margin-top: var(--space-5);
+    max-width: 26rem;
+    color: var(--c-ink-2);
+  }
+
+  .board {
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .board__head {
+    display: none;
+  }
+
+  .board__list {
+    list-style: none;
+  }
+
+  .board__row {
+    display: grid;
+    gap: 0.35rem var(--space-4);
+    padding: var(--space-5) clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .board__row:last-child {
+    border-bottom: 0;
+  }
+
+  .board__role {
+    font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  }
+
+  .board__meta {
+    font-size: 0.9375rem;
+    color: var(--c-ink-2);
+  }
+
+  .board__link {
+    justify-self: start;
+  }
+
+  @media (min-width: 640px) {
+    .board__head,
+    .board__row {
+      grid-template-columns: 2fr 1fr 1fr auto;
+      align-items: center;
+    }
+
+    .board__head {
+      display: grid;
+      gap: var(--space-4);
+      padding: 1rem clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
+      border-bottom: 1px solid var(--c-line);
+      background: var(--c-paper);
+      font-size: var(--fs-2xs);
+      font-weight: 500;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--c-muted);
+    }
+  }
+
+  /* ---------- Roller: redaktionelle rækker (samme mønster som stillingstavlen, uden boks) ---------- */
+  .roles {
+    border-top: 1px solid var(--c-line);
+  }
+
+  .roles > .roles__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2) var(--space-6);
+    padding: clamp(1.5rem, 1.2rem + 1vw, 2.25rem) 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  @media (min-width: 720px) {
+    .roles > .roles__row {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr) auto;
+      align-items: baseline;
+    }
+  }
+
+  .roles__text {
+    max-width: var(--measure);
+    color: var(--c-ink-2);
+  }
+
+  @media (max-width: 719px) {
+    .roles .board__link {
+      margin-top: var(--space-2);
+    }
+  }
+</style>

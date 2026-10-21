@@ -1,0 +1,26 @@
+---
+// Overskriftsblok til sektioner: titel + valgfri lead. Ingen kicker over overskriften (Impeccable craft-floor), og titlen skrives uden <em>.
+interface Props {
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center' | 'split';
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+
+const { title, lead, align = 'left', as: Tag = 'h2', class: className } = Astro.props;
+const classes = [
+  'section-head',
+  align === 'center' && 'section-head--center',
+  align === 'split' && 'section-head--split',
+  className,
+];
+---
+
+<div class:list={classes}>
+  <div>
+    <Tag set:html={title} />
+  </div>
+  {lead && <p class="lead">{lead}</p>}
+  <slot />
+</div>

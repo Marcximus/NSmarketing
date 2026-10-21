@@ -1,0 +1,96 @@
+---
+// Ét fremhævet kundecitat. Alle udtalelser har deres hjem på /cases/#udtalelser.
+// OBS: Indholdet kommer fra content.ts og er pt. eksempler (placeholder: true), der skal udskiftes.
+// Så længe en udtalelse er placeholder, signeres den "Eksempel på udtalelse" i stedet for navn/virksomhed,
+// så den ikke kan forveksles med en rigtig anmeldelse.
+import Icon from '../Icon.astro';
+import { testimonials } from '../../data/content';
+
+const t = testimonials[0];
+---
+
+{
+  t && (
+    <section class="section section--beige quotes" aria-label="Kundeudtalelse">
+      <div class="container">
+        <figure class="quote-feature">
+          <Icon name="quote" size={34} strokeWidth={1} class="quote-feature__mark" />
+          <blockquote>
+            <p>{t.quote}</p>
+          </blockquote>
+          <figcaption>
+            {t.placeholder ? (
+              <span class="quote-feature__example">Eksempel på udtalelse</span>
+            ) : (
+              <>
+                <span class="quote-feature__name">{t.name}</span>
+                <span class="quote-feature__company">{t.company}</span>
+              </>
+            )}
+          </figcaption>
+        </figure>
+        <p class="quotes__more">
+          <a href="/cases/#udtalelser" class="text-link">
+            Flere udtalelser under cases <Icon name="arrow" size={16} />
+          </a>
+        </p>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .quote-feature {
+    display: grid;
+    justify-items: center;
+    max-width: 46rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .quote-feature :global(.quote-feature__mark) {
+    color: var(--c-gold);
+  }
+
+  .quote-feature blockquote {
+    margin: 1.75rem 0 2rem;
+  }
+
+  .quote-feature blockquote p {
+    font-family: var(--f-serif);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+    font-style: italic;
+    line-height: 1.35;
+    text-wrap: balance;
+    color: var(--c-ink);
+  }
+
+  .quote-feature figcaption {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--c-gold);
+  }
+
+  .quote-feature__name {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .quote-feature__company,
+  .quote-feature__example {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .quotes__more {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+</style>

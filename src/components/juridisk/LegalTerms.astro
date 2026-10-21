@@ -1,0 +1,83 @@
+---
+// Begrebsliste med hårstreger: begreb i serif til venstre, forklaring til højre.
+// Bruges fx til "Dine rettigheder" og forklaring af retsgrundlag. Forklaringen må indeholde simpel HTML.
+interface Props {
+  items: { term: string; desc: string; note?: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="legal-block lterms">
+  {
+    items.map((item) => (
+      <div class="lterms__row">
+        <dt>
+          {item.note && <span class="lterms__note">{item.note}</span>}
+          <span class="lterms__term">{item.term}</span>
+        </dt>
+        <dd set:html={item.desc} />
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .lterms {
+    margin: 0;
+    border-top: 1px solid var(--c-ink);
+  }
+
+  .lterms__row {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  dt {
+    display: grid;
+    gap: 0.2rem;
+    align-content: start;
+  }
+
+  .lterms__note {
+    font-size: var(--fs-2xs);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .lterms__term {
+    font-family: var(--f-serif);
+    font-size: var(--fs-md);
+    line-height: 1.3;
+    color: var(--c-ink);
+  }
+
+  /* Forklaringen holder læsemålet – også på tablet, hvor kolonnen ellers bliver ca. 40em bred */
+  dd {
+    max-width: var(--measure);
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--c-ink-2);
+  }
+
+  dd :global(a) {
+    color: var(--c-ink);
+  }
+
+  @media (min-width: 720px) {
+    .lterms__row {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      gap: var(--space-6);
+    }
+
+    dd {
+      font-size: var(--fs-base);
+      line-height: 1.65;
+    }
+  }
+</style>

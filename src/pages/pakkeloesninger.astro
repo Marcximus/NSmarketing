@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import PlanCards from '../components/pakker/PlanCards.astro';
+import IncludedInAll from '../components/pakker/IncludedInAll.astro';
+import ComparisonTable from '../components/pakker/ComparisonTable.astro';
+import Addons from '../components/pakker/Addons.astro';
+import PackagesFaq from '../components/pakker/PackagesFaq.astro';
+import { packages, formatPrice } from '../data/packages';
+import { faq } from '../data/content';
+
+const fromPrice = formatPrice(Math.min(...packages.map((p) => p.price)));
+const names = packages.map((p) => p.name);
+const nameList = `${names.slice(0, -1).join(', ')} og ${names.at(-1)}`;
+
+const description = `Sammenlign ${nameList} – tre faste SoMe-pakker fra ${fromPrice} kr./md. ekskl. moms. Se også tillæg som statister, e-mailmarketing, SEO og annoncering.`;
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<BaseLayout title="Priser på SoMe-pakker og tillægsydelser" description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <PageHero
+    compact
+    title="Tre pakker. Ét&nbsp;fast team. Alt klaret for jer."
+    lead="Faste månedlige priser – og tillæg, når behovet vokser."
+  />
+
+  <PlanCards />
+  <IncludedInAll />
+  <ComparisonTable />
+  <Addons />
+  <PackagesFaq />
+
+  <CtaBand
+    title="I vælger niveauet&nbsp;– vi klarer resten"
+    text="Vi kigger på jeres profiler og mål og anbefaler den pakke – og de tillæg – der giver mest værdi for jer."
+    image={null}
+  />
+</BaseLayout>

@@ -1,0 +1,1080 @@
+/* ==========================================================================
+   Silberg Creative — design system
+   Farver: hvid, sort, mørkebrun, beige, guld, marmor
+   Stil: minimalistisk, skarp, professionel (ingen runde hjørner)
+   ========================================================================== */
+
+/* ---------- Tokens ---------- */
+:root {
+  /* Farver */
+  --c-white: #ffffff;
+  --c-paper: #faf7f2; /* primær baggrund, varm hvid */
+  --c-beige: #efe7dc; /* sektioner */
+  --c-sand: #dccfbe; /* streger på beige */
+  --c-line: #e4dbcf; /* hårstreger på papir */
+  --c-ink: #14110f; /* sort tekst */
+  --c-ink-2: #4b433d; /* sekundær tekst */
+  --c-muted: #6f645b; /* dæmpet tekst (AA på papir/hvid/beige) */
+  --c-brown: #3a2a21; /* mørkebrun */
+  --c-brown-deep: #241914; /* footer / mørkeste flader */
+  --c-gold: #b08d57; /* dekorativ guld: streger, ikoner, rammer */
+  --c-gold-ink: #7d5e2e; /* guld som tekst på lyse flader (AA) */
+  --c-gold-light: #d4b98a; /* guld som tekst på mørke flader (AA) */
+  --c-cream: #f3eee7; /* tekst på mørke flader */
+  --c-cream-muted: #cdbfae; /* dæmpet tekst på mørke flader (AA) */
+
+  /* RGB-kanaler til gennemsigtige varianter: rgb(var(--c-x-rgb) / 0.5). Samme farver som ovenfor,
+     men virker også i Safari < 16.2, der ikke kender color-mix(). */
+  --c-beige-rgb: 239 231 220;
+  --c-brown-rgb: 58 42 33;
+  --c-brown-deep-rgb: 36 25 20;
+  --c-cream-rgb: 243 238 231;
+  --c-cream-muted-rgb: 205 191 174;
+  --c-gold-rgb: 176 141 87;
+  --c-gold-light-rgb: 212 185 138;
+  --c-line-rgb: 228 219 207;
+  --c-paper-rgb: 250 247 242;
+  --c-field: #8a7d70; /* kant på formularfelter – 4,0:1 på hvid, 3,7:1 på paper (WCAG 1.4.11) */
+  --c-error: #9b2c2c; /* fejltekst og -kant på lyse flader – 7,5:1 på hvid, 7,0:1 på paper */
+  --c-error-on-dark: #f2b8a8; /* fejltekst og -kant på mørke flader – 10,0:1 på brown-deep, 8,0:1 på brown */
+  --line-on-dark: rgb(var(--c-cream-rgb) / 0.16); /* hårstreger på mørke flader */
+
+  /* Typografi */
+  --f-serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --f-sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+
+  --fs-2xs: 0.6875rem; /* gulvet for UI-tekst (11 px) – intet mindre */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1.0625rem;
+  --fs-md: 1.1875rem;
+  --fs-lg: clamp(1.15rem, 0.9rem + 0.6vw, 1.375rem);
+  --fs-h4: 1.25rem;
+  --fs-h3: clamp(1.4rem, 1.1rem + 0.9vw, 1.75rem);
+  --fs-h2: clamp(2rem, 1.25rem + 2.6vw, 3.25rem);
+  --fs-h1: clamp(2.5rem, 1.4rem + 4.2vw, 4.5rem); /* altid et trin under display (forsidens hero) */
+  --fs-display: clamp(2.75rem, 1.2rem + 4.4vw, 4.75rem); /* craft-floor: display maks. 6rem */
+
+  /* Målestok for længere brødtekst: ca. 70 tegn i Jost. em-baseret, så den følger skriftstørrelsen. */
+  --measure: 30em;
+
+  --lh-tight: 1.08;
+  --lh-snug: 1.25;
+  --lh-body: 1.7;
+
+  --tracking-label: 0.28em;
+  --tracking-button: 0.16em;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --section-y: clamp(4.5rem, 3rem + 6vw, 8.75rem);
+
+  /* Layout */
+  --container: 1280px;
+  --container-narrow: 860px;
+  --gutter: clamp(1.25rem, 0.5rem + 3.5vw, 3.5rem);
+  --header-h: 84px;
+
+  /* Effekter */
+  --radius: 0;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.45s;
+  --shadow-soft: 0 24px 60px -30px rgb(var(--c-brown-deep-rgb) / 0.35);
+
+  /* Paletten er pinned lys – browserens egne flader (formularer, scrollbars) følger den */
+  color-scheme: only light;
+
+  /* Caret i formularfelter: guld i stedet for browserens sorte standard */
+  caret-color: var(--c-gold-ink);
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Browser-overflader i paletten. scrollbar-color arves af indre scroll-containere
+     (fx tillægsydelsernes kategoristrimmel og sammenligningstabellen). */
+  scrollbar-color: color-mix(in srgb, var(--c-brown) 40%, var(--c-paper)) var(--c-paper);
+  -webkit-tap-highlight-color: rgb(var(--c-gold-rgb) / 0.22);
+}
+
+/* Mørke flader: lysere guld-caret og scrollbar */
+:is(.on-dark, .section--brown, .section--deep) {
+  caret-color: var(--c-gold-light);
+  scrollbar-color: rgb(var(--c-gold-light-rgb) / 0.55) transparent;
+}
+
+/* Ankre og tastaturfokus må ikke lande under den sticky header. Det løses med scroll-margin på
+   indholdet i stedet for scroll-padding på html: med scroll-padding får fokus på headerens egne
+   links (logo, ring op, menu-knap) browseren til at scrolle siden et halvt skærmbillede op.
+   Browseren regner ikke scroll-margin med ved Tab/Shift+Tab – det klarer src/scripts/focus-clear.ts. */
+main,
+main *,
+footer * {
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+
+body {
+  margin: 0;
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--f-sans);
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+/* Markering: lys guld med mørkebrun tekst (guld på hvidt gav kun ca. 2,9:1) */
+::selection {
+  background: var(--c-gold-light);
+  color: var(--c-brown-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-gold-ink);
+  outline-offset: 3px;
+}
+
+.on-dark :focus-visible,
+.section--brown :focus-visible,
+.section--deep :focus-visible {
+  outline-color: var(--c-gold-light);
+}
+
+/* ---------- Typografi ---------- */
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3,
+.display {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+h1,
+.h1 {
+  font-size: var(--fs-h1);
+}
+
+.display {
+  font-size: var(--fs-display);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+h2,
+.h2 {
+  font-size: var(--fs-h2);
+}
+
+h3,
+.h3 {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+}
+
+h4,
+.h4 {
+  font-family: var(--f-sans);
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  letter-spacing: 0;
+}
+
+h4,
+.h4,
+summary {
+  text-wrap: balance;
+}
+
+/* Fremhævning i overskrifter bæres af ordvalg og størrelse. Eneste kursive signatur
+   (forsidens hero) styles lokalt i HomeHero. */
+:is(h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .display) em {
+  font-style: inherit;
+  color: inherit;
+}
+
+/* Ingen enlige ord på sidste linje i brødtekst, lister, citater og tabeller */
+p,
+li,
+dd,
+dt,
+blockquote,
+figcaption,
+td,
+th {
+  text-wrap: pretty;
+}
+
+.lead {
+  max-width: var(--measure);
+  font-size: var(--fs-lg);
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--c-ink-2);
+}
+
+.section-head--center .lead,
+.text-center .lead {
+  margin-inline: auto;
+}
+
+/* Tal: lining-tal overalt i data; tabulære i tabeller og prislister */
+table {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.small {
+  font-size: var(--fs-sm);
+}
+
+.muted {
+  color: var(--c-muted);
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: var(--c-gold); /* fallback for Safari < 16.2 */
+  text-decoration-color: color-mix(in srgb, currentColor 35%, var(--c-gold));
+}
+
+@media (hover: hover) {
+  a:not([class]):hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+.text-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: var(--tracking-button);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-ink);
+  padding-block: 0.35em;
+  background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+  transition: background-size var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+/* Klikflade på min. 44px uden at flytte understregningen */
+.text-link::after {
+  content: '';
+  position: absolute;
+  inset: -0.5rem -0.25rem;
+}
+
+.text-link svg {
+  width: 1.1em;
+  height: 1.1em;
+  transition: transform var(--dur) var(--ease);
+}
+
+.on-dark .text-link,
+.section--brown .text-link,
+.section--deep .text-link {
+  color: var(--c-cream);
+}
+
+/* Hover kun med mus/trackpad – på touch bliver effekten ellers hængende efter et tap */
+@media (hover: hover) {
+  .text-link:hover {
+    background-size: 0% 1px;
+    background-position: right bottom;
+    color: var(--c-gold-ink);
+  }
+
+  .text-link:hover svg {
+    transform: translateX(4px);
+  }
+
+  .on-dark .text-link:hover,
+  .section--brown .text-link:hover,
+  .section--deep .text-link:hover {
+    color: var(--c-gold-light);
+  }
+}
+
+/* Spærrede versaler – kun data og kontroller, aldrig som kicker over en overskrift */
+.label {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: calc(var(--container-narrow) + var(--gutter) * 2);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-y);
+}
+
+.section--tight {
+  padding-block: calc(var(--section-y) * 0.6);
+}
+
+.section--flush-top {
+  padding-top: 0;
+}
+
+.section--white {
+  background: var(--c-white);
+}
+
+.section--beige {
+  background: var(--c-beige);
+}
+
+.section--brown {
+  background: var(--c-brown);
+  color: var(--c-cream);
+}
+
+.section--deep {
+  background: var(--c-brown-deep);
+  color: var(--c-cream);
+}
+
+.on-dark {
+  color: var(--c-cream);
+}
+
+.section--brown .lead,
+.section--deep .lead,
+.on-dark .lead {
+  color: var(--c-cream-muted);
+}
+
+.section--brown .muted,
+.section--deep .muted,
+.on-dark .muted {
+  color: var(--c-cream-muted);
+}
+
+.section-head {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+}
+
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-head .lead {
+  margin-top: var(--space-5);
+}
+
+.section-head--split {
+  display: grid;
+  gap: var(--space-6);
+  max-width: none;
+  align-items: end;
+}
+
+@media (min-width: 900px) {
+  .section-head--split {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-9);
+  }
+
+  .section-head--split .lead {
+    margin-top: 0;
+  }
+}
+
+.stack > * + * {
+  margin-top: var(--space-5);
+}
+
+.stack-sm > * + * {
+  margin-top: var(--space-3);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 720px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.divider {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--c-line);
+}
+
+/* ---------- Knapper ---------- */
+.btn {
+  --btn-bg: var(--c-ink);
+  --btn-fg: var(--c-paper);
+  --btn-border: var(--c-ink);
+  --btn-bg-hover: var(--c-brown);
+  --btn-fg-hover: var(--c-paper);
+  --btn-border-hover: var(--c-brown);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85em;
+  min-height: 3.25rem;
+  padding: 0.85rem 1.9rem;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--f-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-button);
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.btn svg {
+  width: 1.05em;
+  height: 1.05em;
+  flex-shrink: 0;
+  transition: transform var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--btn-bg-hover);
+    color: var(--btn-fg-hover);
+    border-color: var(--btn-border-hover);
+  }
+
+  .btn:hover svg {
+    transform: translateX(4px);
+  }
+}
+
+.btn--outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--c-ink);
+  --btn-border: var(--c-ink);
+  --btn-bg-hover: var(--c-ink);
+  --btn-fg-hover: var(--c-paper);
+  --btn-border-hover: var(--c-ink);
+}
+
+.btn--gold {
+  --btn-bg: var(--c-gold-light);
+  --btn-fg: var(--c-brown-deep);
+  --btn-border: var(--c-gold-light);
+  --btn-bg-hover: var(--c-cream);
+  --btn-fg-hover: var(--c-brown-deep);
+  --btn-border-hover: var(--c-cream);
+}
+
+.btn--light {
+  --btn-bg: var(--c-cream);
+  --btn-fg: var(--c-brown-deep);
+  --btn-border: var(--c-cream);
+  --btn-bg-hover: var(--c-gold-light);
+  --btn-fg-hover: var(--c-brown-deep);
+  --btn-border-hover: var(--c-gold-light);
+}
+
+.btn--outline-light {
+  --btn-bg: transparent;
+  --btn-fg: var(--c-cream);
+  --btn-border: rgb(var(--c-cream-rgb) / 0.55);
+  --btn-bg-hover: var(--c-cream);
+  --btn-fg-hover: var(--c-brown-deep);
+  --btn-border-hover: var(--c-cream);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* Smalle skærme: lange knaptekster må bryde i stedet for at give vandret scroll */
+@media (max-width: 479px) {
+  .btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
+
+.btn--sm {
+  min-height: 2.75rem;
+  padding: 0.6rem 1.3rem;
+  font-size: 0.75rem;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* ---------- Billeder ---------- */
+.media {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-beige);
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media--zoom img {
+  transition: transform 1.2s var(--ease);
+}
+
+@media (hover: hover) {
+  .media--zoom:hover img {
+    transform: scale(1.04);
+  }
+}
+
+/* Guldramme forskudt bag billedet */
+.frame-gold {
+  position: relative;
+  isolation: isolate;
+}
+
+.frame-gold::before {
+  content: '';
+  position: absolute;
+  inset: 1.25rem -1.25rem -1.25rem 1.25rem;
+  border: 1px solid var(--c-gold);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ---------- Lister ---------- */
+.check-list {
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.check-list li {
+  position: relative;
+  padding-left: 1.9rem;
+  line-height: 1.5;
+}
+
+.check-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.95rem;
+  height: 0.5rem;
+  border-left: 1.5px solid var(--c-gold);
+  border-bottom: 1.5px solid var(--c-gold);
+  transform: translateY(-60%) rotate(-45deg);
+}
+
+/* ---------- Formularer ---------- */
+.field {
+  display: grid;
+  align-content: start; /* feltet beholder sin højde, når nabofeltet får en fejltekst */
+  gap: 0.5rem;
+}
+
+.field label,
+.field .field-label {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--c-field);
+  border-radius: var(--radius);
+  background: var(--c-white);
+  color: var(--c-ink);
+  font-size: var(--fs-base);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--c-muted);
+}
+
+@media (hover: hover) {
+  .input:hover,
+  .select:hover,
+  .textarea:hover {
+    border-color: var(--c-ink-2);
+  }
+}
+
+/* Fokusring kommer fra den globale :focus-visible (guld, 2px) */
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--c-ink);
+}
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314110f' stroke-width='1.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 1.1rem;
+  padding-right: 2.75rem;
+}
+
+.checkbox {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--c-ink-2);
+}
+
+.checkbox input {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.15rem;
+  accent-color: var(--c-brown);
+}
+
+/* Fejltekst ved et felt (indsættes af src/scripts/forms.ts) */
+.field-error {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: var(--c-error);
+}
+
+.input[aria-invalid='true'],
+.select[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-color: var(--c-error);
+}
+
+.on-dark .field-error,
+.section--deep .field-error,
+.section--brown .field-error {
+  color: var(--c-error-on-dark);
+}
+
+:is(.on-dark, .section--deep, .section--brown) :is(.input, .select, .textarea)[aria-invalid='true'] {
+  border-color: var(--c-error-on-dark);
+}
+
+/* Honeypot mod spam: skjult for mennesker, udfyldes kun af bots */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---------- Accordion (details/summary) ---------- */
+.accordion {
+  border-top: 1px solid var(--c-line);
+}
+
+.accordion details {
+  border-bottom: 1px solid var(--c-line);
+}
+
+.accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: 1.5rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--f-serif);
+  font-size: var(--fs-lg);
+  line-height: 1.35;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion summary::after {
+  content: '';
+  flex-shrink: 0;
+  width: 0.9rem;
+  height: 0.9rem;
+  background:
+    linear-gradient(var(--c-gold-ink), var(--c-gold-ink)) center / 100% 1.5px no-repeat,
+    linear-gradient(var(--c-gold-ink), var(--c-gold-ink)) center / 1.5px 100% no-repeat;
+  transition: transform var(--dur) var(--ease);
+}
+
+.accordion details[open] summary::after {
+  transform: rotate(135deg);
+}
+
+@media (hover: hover) {
+  .accordion summary:hover {
+    color: var(--c-gold-ink);
+  }
+}
+
+.accordion .accordion-body {
+  padding: 0 0 1.75rem;
+  max-width: var(--measure);
+  color: var(--c-ink-2);
+}
+
+/* ---------- Badges / tags ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--c-sand);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  background: transparent;
+}
+
+.tag--gold {
+  border-color: var(--c-gold);
+  color: var(--c-gold-ink);
+}
+
+/* ---------- Hjælpeklasser ---------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  background: var(--c-ink);
+  color: var(--c-paper);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* ---------- Redaktionel liste ----------
+   Erstatter grids af ens kort med ikon + overskrift + tekst: en hårstreg over hvert punkt,
+   ingen bokse og ingen ikonfliser. Varianter: --2 (to kolonner fra 720px), --3 (tre fra 960px). */
+.ruled-list {
+  --rule: var(--c-line);
+  list-style: none;
+  display: grid;
+  column-gap: clamp(2rem, 1rem + 4vw, 5rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.ruled-list > li {
+  padding-block: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+  border-top: 1px solid var(--rule);
+}
+
+@media (min-width: 720px) {
+  .ruled-list--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .ruled-list--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ruled-list__title {
+  font-family: var(--f-serif);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
+}
+
+.ruled-list__text {
+  margin-top: var(--space-3);
+  max-width: var(--measure);
+  color: var(--c-ink-2);
+}
+
+.ruled-list__action {
+  margin-top: var(--space-4);
+}
+
+.section--beige .ruled-list {
+  --rule: var(--c-sand);
+}
+
+:is(.on-dark, .section--brown, .section--deep) .ruled-list {
+  --rule: var(--line-on-dark);
+}
+
+:is(.on-dark, .section--brown, .section--deep) .ruled-list__text {
+  color: var(--c-cream-muted);
+}
+
+/* ---------- Marmor som materiale ----------
+   PINNED brand-materiale – kun hvor årerne kan ses. Forælderen skal have
+   position: relative; isolation: isolate; overflow: hidden.
+   Lys: papirvask styret af --marble-wash (≤ ca. 85 %) og placering af --marble-pos.
+   Mørk (.marble--dark): inverteret og lagt med screen, så de lyse årer står frem på brun –
+   gennemsnittet bliver selve brandbrunen. sepia holder årerne varme (uden den bliver de
+   blåviolette mod brunen). Styrke via --marble-strength. */
+.marble {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    var(
+      --marble-wash,
+      linear-gradient(
+        180deg,
+        rgb(var(--c-paper-rgb) / 0.58),
+        rgb(var(--c-paper-rgb) / 0.8)
+      )
+    ),
+    url('../assets/images/marble.jpg');
+  background-size: cover;
+  background-position: var(--marble-pos, center);
+}
+
+.marble--dark {
+  background-image: url('../assets/images/marble.jpg');
+  filter: invert(1) sepia(0.5) contrast(1.4);
+  mix-blend-mode: screen;
+  opacity: var(--marble-strength, 0.4);
+}
+
+/* ---------- Logo ----------
+   Inline SVG i currentColor (src/assets/logo-currentcolor.svg): arver farven fra header/footer og
+   forbliver synligt i Windows' høj kontrast-tilstand. */
+.logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1168 / 450;
+}
+
+/* ---------- Input-metoder ---------- */
+/* Touch: tekstlinks i lister og accordion-rækker får mindst 44 px trykflade */
+@media (pointer: coarse) {
+  .check-list a,
+  .accordion summary {
+    min-height: 44px;
+  }
+}
+
+/* Telefon på tværs: lavere header, så indholdet får plads. Mobilmenuens inset, scroll-margin og
+   overlay-margin følger tokenet automatisk. */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --header-h: 64px;
+  }
+}
+
+/* Glidende scroll først efter load (klassen sættes i BaseLayout), så et direkte link til et #anker
+   lander præcist i stedet for at animere mod et mål, der flytter sig, mens skrifttyperne indlæses */
+html.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.smooth-scroll {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Windows høj kontrast (forced colors) ----------
+   Funktionelle streger og ikoner tegnes med border eller currentColor – baggrunde fjernes af browseren. */
+@media (forced-colors: active) {
+  .accordion summary::after {
+    forced-color-adjust: none;
+    background:
+      linear-gradient(CanvasText, CanvasText) center / 100% 1.5px no-repeat,
+      linear-gradient(CanvasText, CanvasText) center / 1.5px 100% no-repeat;
+  }
+
+  .text-link {
+    background: none;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  .marble {
+    display: none;
+  }
+}

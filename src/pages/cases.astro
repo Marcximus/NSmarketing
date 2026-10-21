@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import CaseGrid from '../components/cases/CaseGrid.astro';
+import CaseTestimonials from '../components/cases/CaseTestimonials.astro';
+import CaseIndustries from '../components/cases/CaseIndustries.astro';
+import { cases } from '../data/cases';
+import { site } from '../data/site';
+import feedImage from '../assets/images/phone-feed.jpg';
+
+// Så længe alle cases er eksempler (placeholder: true), må teksten ikke påstå, at det er rigtige kunder.
+const examplesOnly = cases.every((c) => c.placeholder);
+
+const lead = examplesOnly
+  ? 'Sådan kan et forløb hos os se ud – på tværs af brancher, platforme og formater. Fælles for dem alle: en klar strategi, en gennemført æstetik og indhold, der passer til netop deres kunder.'
+  : 'Et udpluk af de profiler, vi skaber indhold til – på tværs af brancher, platforme og formater. Fælles for dem alle: en klar strategi, en gennemført æstetik og indhold, der passer til netop deres kunder.';
+
+const heroTitle = examplesOnly
+  ? 'Indhold skabt til at blive set'
+  : 'Udvalgt arbejde – skabt til at blive set';
+
+const description = `Se, hvordan ${site.name} arbejder med content, video, foto og annoncering på sociale medier – på tværs af brancher, platforme og formater.`;
+---
+
+<BaseLayout title="Cases – content til sociale medier" description={description}>
+  <PageHero title={heroTitle} lead={lead}>
+    <a href="#cases" class="btn">Se cases <Icon name="arrow" size={16} /></a>
+    <a href="/kontakt/" class="btn btn--outline">Book et uforpligtende møde</a>
+  </PageHero>
+
+  <CaseGrid />
+  <CaseTestimonials />
+  <CaseIndustries />
+
+  <CtaBand
+    title="Skal jeres virksomhed være den næste case?"
+    text="Vi kigger på jeres profiler, mål og kunder – og fortæller ærligt, hvad vi ville gøre, og hvilken pakke der giver mening for jer."
+    image={feedImage}
+    imageAlt="Hånd holder en telefon med et Instagram-feed i et lyst, beige interiør"
+  />
+</BaseLayout>

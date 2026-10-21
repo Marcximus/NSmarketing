@@ -1,0 +1,171 @@
+---
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/jost/300.css';
+import '@fontsource/jost/400.css';
+import '@fontsource/jost/500.css';
+// Preload af de latin-filer, der bruges over folden – undgår layout-skift, når skrifttyperne skifter
+import playfair400 from '@fontsource/playfair-display/files/playfair-display-latin-400-normal.woff2?url';
+import jost300 from '@fontsource/jost/files/jost-latin-300-normal.woff2?url';
+import jost400 from '@fontsource/jost/files/jost-latin-400-normal.woff2?url';
+import jost500 from '@fontsource/jost/files/jost-latin-500-normal.woff2?url';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  /** Sidens titel – " | Silberg Creative" tilføjes automatisk (undtagen på forsiden) */
+  title: string;
+  description?: string;
+  /** Sti til delingsbillede i /public */
+  ogImage?: string;
+  /** 'overlay' = gennemsigtig header over et mørkt hero-billede */
+  headerVariant?: 'solid' | 'overlay';
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  ogImage = '/og-image.jpg',
+  headerVariant = 'solid',
+  noindex = false,
+} = Astro.props;
+
+const isHome = Astro.url.pathname === '/';
+const fullTitle = isHome ? title : `${title} | ${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImageUrl = new URL(ogImage, site.url).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  // Andre sider (fx /kontakt/) refererer til organisationen via dette @id
+  '@id': `${site.url}/#organization`,
+  name: site.name,
+  url: `${site.url}/`,
+  logo: new URL('/brand/silberg-creative-logo.svg', site.url).href,
+  image: ogImageUrl,
+  description: site.description,
+  telephone: '+45' + site.phone.replace(/\s/g, ''),
+  email: site.email,
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    telephone: '+45' + site.phone.replace(/\s/g, ''),
+    email: site.email,
+    areaServed: 'DK',
+    availableLanguage: ['Danish'],
+  },
+  areaServed: { '@type': 'Country', name: 'Danmark' },
+  ...(site.address && {
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.street,
+      postalCode: site.address.zip,
+      addressLocality: site.address.city,
+      addressCountry: 'DK',
+    },
+  }),
+  ...(site.cvr && { vatID: `DK${site.cvr}` }),
+};
+
+// Kun på forsiden: giver sitenavnet i Googles søgeresultater
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${site.url}/#website`,
+  name: site.name,
+  url: `${site.url}/`,
+  inLanguage: 'da-DK',
+  publisher: { '@id': `${site.url}/#organization` },
+};
+---
+
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Progressive enhancement: html.js sættes før første paint, så menu, pakkevælger og case-filter
+      // vises i deres JS-udgave uden blink eller layout-skift. Ved DOMContentLoaded har alle modul-scripts
+      // kørt (eller er sprunget over, fx ved 404): en controller med [data-needs-js], der ikke har meldt
+      // .is-ready, får .is-dead og falder tilbage til visningen uden JS.
+      (function (d) {
+        d.classList.add('js');
+        window.addEventListener('load', function () {
+          // setTimeout: browserens hop til et #anker sker efter load – det skal ske øjeblikkeligt
+          setTimeout(function () {
+            d.classList.add('smooth-scroll');
+          }, 0);
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+          var els = document.querySelectorAll('[data-needs-js]');
+          for (var i = 0; i < els.length; i++) {
+            if (!els[i].classList.contains('is-ready')) els[i].classList.add('is-dead');
+          }
+        });
+      })(document.documentElement);
+    </script>
+    {
+      [playfair400, jost300, jost400, jost500].map((href) => (
+        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+      ))
+    }
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="color-scheme" content="only light" />
+    <!-- --c-brown-deep over forsidens mørke hero, ellers --c-paper -->
+    <meta name="theme-color" content={headerVariant === 'overlay' ? '#241914' : '#faf7f2'} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="da_DK" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#indhold">Spring til indhold</a>
+    <Header variant={headerVariant} />
+    <main id="indhold" class:list={[headerVariant === 'overlay' && 'main--overlay']} tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import '../scripts/forms';
+      import '../scripts/focus-clear';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Ved overlay-header trækkes indholdet op under headeren. Hero-sektionen skal selv lægge
+     var(--header-h) ekstra luft i toppen. */
+  .main--overlay {
+    margin-top: calc(-1 * var(--header-h));
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>

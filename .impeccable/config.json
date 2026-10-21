@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "**"
+        ],
+        "createdAt": "2026-10-20T17:01:40.674Z",
+        "reason": "Kundens brief (PINNED): 'Brandfarver: hvid, sort, mørkebrun, beige, guld, marmor'. Papirgrunden --c-paper #faf7f2 og beige-sektionerne --c-beige #efe7dc er kundens eget valg på hele sitet – briefet vinder over mønsteradvarslen (Impeccable: 'The brief wins')."
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "{http,https}://*/"
+        ],
+        "createdAt": "2026-10-20T17:01:40.684Z",
+        "reason": "Bevidst signatur, kun forsidens H1-ord 'scene' (HomeHero .hero__title em): ekkoer logoets serif i heroens ene forfattede øjeblik. Alle øvrige kursive/guld-ord i overskrifter er fjernet. Globben matcher kun sitets rod-URL; undersider scannes fortsat for reglen."
+      }
+    ]
+  }
+}

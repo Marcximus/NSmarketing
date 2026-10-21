@@ -1,0 +1,212 @@
+---
+// Cookiepolitik for Silberg Creative.
+// Skrevet ud fra, at hjemmesiden IKKE bruger statistik-, marketing- eller tredjepartsscripts.
+// Se den vigtige note til jer i HTML-kommentaren øverst i sidens indhold herunder.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import LegalLayout from '../components/juridisk/LegalLayout.astro';
+import LegalSection from '../components/juridisk/LegalSection.astro';
+import LegalCards from '../components/juridisk/LegalCards.astro';
+import LegalTable from '../components/juridisk/LegalTable.astro';
+import LegalTerms from '../components/juridisk/LegalTerms.astro';
+import LegalMeta from '../components/juridisk/LegalMeta.astro';
+import { legalUpdated, type TocItem } from '../components/juridisk/legal';
+import { site } from '../data/site';
+
+const domain = new URL(site.url).hostname;
+
+// "Instagram, Facebook, LinkedIn og TikTok" – hentet fra site.ts
+const platforms = site.social.map((s) => s.label);
+const platformList =
+  platforms.length > 1 ? `${platforms.slice(0, -1).join(', ')} og ${platforms.at(-1)}` : platforms.join('');
+
+const toc: TocItem[] = [
+  { id: 'kort-fortalt', title: 'Kort fortalt' },
+  { id: 'hvad-er-cookies', title: 'Hvad er cookies?' },
+  { id: 'cookies-her', title: 'Cookies på hjemmesiden' },
+  { id: 'tredjeparter', title: 'Tredjeparter og indlejret indhold' },
+  { id: 'formularer', title: 'Formularer og nyhedsbrev' },
+  { id: 'browser', title: 'Slet eller bloker cookies' },
+  { id: 'aendringer', title: 'Ændringer' },
+  { id: 'kontakt', title: 'Spørgsmål' },
+];
+const t = Object.fromEntries(toc.map((item, i) => [item.id, { ...item, number: i + 1 }]));
+
+const summary = [
+  {
+    title: 'Ingen statistik eller marketing',
+    text: 'Vi bruger ikke Google Analytics, Meta Pixel eller lignende værktøjer, der måler eller følger dit besøg.',
+  },
+  {
+    title: 'Ingen tredjepartsscripts',
+    text: 'Siden henter ikke scripts, videoer, kort eller sociale plugins fra andre tjenester.',
+  },
+  {
+    title: 'Selvhostede skrifttyper',
+    text: 'Skrifttyperne ligger på vores egen server, så dit besøg ikke deles med fx Google Fonts.',
+  },
+] as const;
+
+const tagNo = '<span class="tag">Bruges ikke</span>';
+
+const categories = [
+  [
+    'Nødvendige',
+    'Får hjemmesiden til at virke og beskytter den mod misbrug.',
+    '<span class="tag tag--gold">Kun teknisk nødvendige</span><span class="ctag-note">Vi sætter ingen selv. Vores hostingudbyder kan i særlige tilfælde sætte en teknisk nødvendig cookie, fx for at beskytte siden mod angreb. Den slags kræver ikke samtykke.</span>',
+  ],
+  ['Præferencer', 'Husker dine valg, fx sprog eller region.', tagNo],
+  ['Statistik', 'Måler, hvordan besøgende bruger hjemmesiden.', tagNo],
+  ['Marketing', 'Følger dig på tværs af hjemmesider for at vise målrettede annoncer.', tagNo],
+];
+
+const browsers = [
+  { term: 'Google Chrome', desc: 'Indstillinger → Privatliv og sikkerhed → Tredjepartscookies / Slet browserdata' },
+  { term: 'Safari på Mac', desc: 'Safari → Indstillinger → Anonymitet → Administrer webstedsdata' },
+  { term: 'Safari på iPhone og iPad', desc: 'Indstillinger → Safari → Ryd historik og webstedsdata' },
+  { term: 'Mozilla Firefox', desc: 'Indstillinger → Privatliv & sikkerhed → Cookies og webstedsdata' },
+  { term: 'Microsoft Edge', desc: 'Indstillinger → Cookies og webstedstilladelser' },
+];
+---
+
+<BaseLayout
+  title="Cookiepolitik"
+  description={`${site.name} bruger ingen cookies til statistik eller marketing og ingen sporing fra tredjeparter. Læs, hvad det betyder for dig.`}
+>
+  <!--
+    ===================================================================================
+    VIGTIGT TIL SILBERG CREATIVE – LÆS FØR I TILFØJER NYE VÆRKTØJER
+    ===================================================================================
+    Denne cookiepolitik er skrevet ud fra, at hjemmesiden IKKE sætter cookies til
+    statistik eller marketing og IKKE bruger tredjepartsscripts.
+
+    Tilføjer I senere fx Google Analytics, Google Tag Manager, Meta Pixel (Facebook/
+    Instagram), TikTok Pixel, LinkedIn Insight Tag, Hotjar, YouTube-/Vimeo-videoer,
+    Google Maps, et Instagram-feed, en chat-widget eller Google reCAPTCHA, SKAL I:
+
+      1. indføre et samtykkebanner (Consent Management Platform), der blokerer de
+         pågældende scripts, indtil den besøgende aktivt har sagt ja,
+      2. opdatere denne side med en oversigt over de konkrete cookies
+         (navn, udbyder, formål, kategori og udløbstid) og ændre teksterne, der siger,
+         at vi ikke bruger cookies/sporing (afsnit 01, 03 og 04),
+      3. opdatere privatlivspolitikken (afsnit 05 "Modtagere" og evt. overførsel til
+         lande uden for EU/EØS samt afsnit 10 "Cookies"), og
+      4. rette datoen i src/components/juridisk/legal.ts.
+
+    Det samme gælder, hvis I begynder at gemme oplysninger i besøgendes browser
+    med fx localStorage. Er I i tvivl, så spørg jeres webudvikler.
+    ===================================================================================
+  -->
+  <PageHero
+    title="Ingen sporing – og derfor intet cookiebanner"
+    lead="Vi har bygget hjemmesiden uden cookies til statistik og marketing. Du kan læse i ro, uden at dit besøg bliver målt, fulgt eller delt med andre."
+    align="center"
+  >
+    <LegalMeta
+      items={[
+        { icon: 'calendar', text: `Senest opdateret: ${legalUpdated}` },
+        { icon: 'layout', text: `Gælder for ${domain}` },
+      ]}
+    />
+  </PageHero>
+
+  <LegalLayout toc={toc}>
+    <LegalSection {...t['kort-fortalt']}>
+      <LegalCards items={[...summary]} />
+      <p>
+        Derfor viser vi heller ikke et cookiebanner, når du besøger os. Der er simpelthen ikke noget at give samtykke
+        til.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t['hvad-er-cookies']}>
+      <p>
+        En cookie er en lille tekstfil, som en hjemmeside gemmer på din computer, telefon eller tablet. Cookies kan
+        bruges til at få en hjemmeside til at fungere – fx til at huske indholdet af en indkøbskurv – men også til at
+        føre statistik over besøg eller følge dig på tværs af hjemmesider for at vise dig målrettede annoncer.
+      </p>
+      <p>
+        Reglerne gælder også for lignende teknologier som pixels, local storage og fingerprinting. Når vi skriver
+        ”cookies” her, mener vi dem alle.
+      </p>
+      <p>
+        Efter de danske cookieregler må en hjemmeside kun gemme eller hente oplysninger på dit udstyr, hvis du har
+        givet samtykke – medmindre det er strengt nødvendigt for at levere den tjeneste, du selv har bedt om.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t['cookies-her']}>
+      <p>
+        Cookies inddeles typisk i fire kategorier. Her kan du se, hvad vi bruger – og ikke bruger – på {domain}.
+      </p>
+      <LegalTable
+        caption="Cookiekategorier på hjemmesiden"
+        columns={['Kategori', 'Formål', 'Hos os']}
+        rows={categories}
+        firstCol="22%"
+      />
+      <p>
+        Vi gemmer heller ikke oplysninger om dig i din browsers lokale lager (local storage) og bruger ingen andre
+        sporingsteknologier.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.tredjeparter}>
+      <p>
+        Vi har bevidst fravalgt indhold, der hentes fra andre tjenester – fx YouTube-videoer, Google Maps,
+        Instagram-feeds og ”Del”-knapper. Den slags indhold sætter ofte cookies, så snart siden indlæses.
+      </p>
+      <p>
+        Vores links til {platformList} er almindelige links. Først når du klikker på et af dem og forlader vores
+        hjemmeside, gælder den pågældende platforms egne regler for cookies og privatliv.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.formularer}>
+      <p>
+        Når du sender en formular – fx kontaktformularen, ”Ring mig op” eller tilmelding til nyhedsbrevet – sendes
+        oplysningerne til os uden brug af cookies. Vi bruger heller ikke CAPTCHA-tjenester som Google reCAPTCHA, der
+        ofte sætter cookies.
+      </p>
+      <p>
+        Hvordan vi behandler de oplysninger, du sender til os, kan du læse i vores
+        <a href="/privatlivspolitik/">privatlivspolitik</a>.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.browser}>
+      <p>
+        Selvom vi ikke sætter cookies, kan du altid se og slette cookies fra andre hjemmesider i din browser – eller
+        blokere dem helt. Vær opmærksom på, at mange hjemmesider ikke fungerer optimalt, hvis du blokerer alle cookies.
+      </p>
+      <LegalTerms items={browsers} />
+      <p class="small muted">Menupunkterne kan hedde lidt forskelligt afhængigt af browser og version.</p>
+    </LegalSection>
+
+    <LegalSection {...t.aendringer}>
+      <p>
+        Begynder vi på et tidspunkt at bruge statistik- eller marketingværktøjer – fx for at måle, hvordan hjemmesiden
+        bliver brugt – opdaterer vi først denne cookiepolitik. Samtidig indfører vi et samtykkebanner, så du selv kan
+        vælge til og fra, før der bliver sat cookies, som kræver dit samtykke.
+      </p>
+      <p class="legal-updated">Senest opdateret: {legalUpdated}</p>
+    </LegalSection>
+
+    <LegalSection {...t.kontakt}>
+      <p>
+        Har du spørgsmål til vores cookiepolitik eller til, hvordan vi behandler personoplysninger, er du altid
+        velkommen til at skrive til <a href={site.emailHref}>{site.email}</a> eller ringe på
+        <span class="nowrap"><a href={site.phoneHref}>{site.phone}</a></span>.
+      </p>
+    </LegalSection>
+  </LegalLayout>
+</BaseLayout>
+
+<style>
+  /* Statusmærkerne i tabellen "Cookies på hjemmesiden" bruger den fælles .tag (global.css).
+     Forklaringen under mærket står som almindelig tekst. */
+  :global(.ctag-note) {
+    display: block;
+    margin-top: 0.6rem;
+  }
+</style>

@@ -1,0 +1,161 @@
+---
+// Historie og mission: billedkollage i guldramme, tekst og mission. Løfterne har ét hjem på forsiden.
+// Bevidst neutral formulering – ingen navne eller årstal, før de er bekræftet.
+import { Image } from 'astro:assets';
+import studioImage from '../../assets/images/studio.jpg';
+import detailImage from '../../assets/images/creator-hands.jpg';
+---
+
+<section class="section story" id="historie" aria-labelledby="story-title">
+  <div class="container">
+    <div class="story__grid">
+      <div class="story__media">
+        <div class="frame-gold story__frame">
+          <div class="media story__main">
+            <Image
+              src={studioImage}
+              alt="Moodboard med materialeprøver i marmor, træ, hør og guld"
+              widths={[480, 720, 960, 1280]}
+              sizes="(min-width: 1024px) 42vw, 92vw"
+            />
+          </div>
+        </div>
+        <div class="media story__detail">
+          <Image
+            src={detailImage}
+            alt="Hænder holder et analogt kamera klar til at tage et billede"
+            widths={[320, 480, 640]}
+            sizes="(min-width: 1024px) 17vw, 38vw"
+          />
+        </div>
+      </div>
+
+      <div class="story__content">
+        <h2 id="story-title">Sociale medier, der er lige så gennemførte som jeres forretning</h2>
+        <div class="story__text">
+          <p class="lead">
+            Silberg Creative blev grundlagt med en enkel ambition: at give danske virksomheder et udtryk på
+            de sociale medier, der matcher kvaliteten af det, de laver – og som skaber målbare resultater.
+          </p>
+          <p>
+            Alt for mange dygtige virksomheder bruger aftener og weekender på at finde på opslag, der
+            hverken ligner dem eller skaber nye kunder. Derfor samler vi strategi, content, annoncering og
+            rapportering ét sted – hos ét fast team, der tager ansvar for det hele.
+          </p>
+          <p>
+            Vi kombinerer et skarpt, æstetisk blik med en datadrevet tilgang. Hvert opslag har et formål,
+            hver måned bliver målt, og hver anbefaling bygger på jeres tal.
+          </p>
+        </div>
+
+        <figure class="story__mission">
+          <p class="story__mission-label">Vores mission</p>
+          <blockquote>
+            <p>
+              At gøre jeres sociale medier til en af jeres stærkeste salgskanaler – uden at det
+              koster jer tid.
+            </p>
+          </blockquote>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .story__grid {
+    display: grid;
+    gap: clamp(3.5rem, 7vw, 6rem);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .story__grid {
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: clamp(4rem, 8vw, 8rem);
+    }
+  }
+
+  /* ---------- Billedkollage ---------- */
+  .story__media {
+    position: relative;
+    padding: 0 1.25rem 3.5rem 0;
+  }
+
+  .story__main {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 1024px) {
+    .story__media {
+      padding-bottom: 5rem;
+    }
+
+    .story__main {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  .story__detail {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 38%;
+    aspect-ratio: 4 / 5;
+    outline: 10px solid var(--c-paper);
+  }
+
+  @media (min-width: 1024px) {
+    .story__detail {
+      right: -1.5rem;
+      width: 40%;
+      outline-width: 12px;
+    }
+  }
+
+  /* ---------- Tekst ---------- */
+  .story__content h2 {
+    max-width: 17ch;
+  }
+
+  .story__text {
+    margin-top: var(--space-6);
+  }
+
+  .story__text > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .story__text p:not(.lead) {
+    max-width: var(--measure);
+    color: var(--c-ink-2);
+  }
+
+  .story__mission {
+    margin-top: var(--space-7);
+    padding: var(--space-6) 0 0;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .story__mission-label {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .story__mission blockquote {
+    position: relative;
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-5);
+    border-left: 1px solid var(--c-gold);
+  }
+
+  .story__mission blockquote p {
+    font-family: var(--f-serif);
+    font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem);
+    line-height: 1.4;
+    color: var(--c-ink);
+  }
+</style>

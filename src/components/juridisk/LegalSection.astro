@@ -1,0 +1,68 @@
+---
+// Nummereret afsnit i en juridisk tekst. Bruges inde i LegalLayout.
+// Nummeret står på overskriftens grundlinje (hængende på desktop), ikke som en label over overskriften.
+interface Props {
+  id: string;
+  number: number;
+  title: string;
+}
+
+const { id, number, title } = Astro.props;
+const num = String(number).padStart(2, '0');
+---
+
+<section class="legal-section" id={id} aria-labelledby={`${id}-titel`} data-legal-section>
+  <header class="legal-section__head">
+    <span class="legal-section__num" aria-hidden="true">{num}</span>
+    <h2 id={`${id}-titel`} class="legal-section__title">{title}</h2>
+  </header>
+  <div class="legal-section__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .legal-section {
+    padding-block: clamp(2.5rem, 2rem + 2vw, 3.75rem);
+    border-top: 1px solid var(--c-line);
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+
+  .legal-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  /* Nummeret står på overskriftens grundlinje – ikke som en label over den. Numrene bevares, fordi
+     afsnittene krydsrefereres i teksten (fx "afsnit 05"). Roman, lining-tal, samme kolonne som i
+     indholdsfortegnelsen. */
+  .legal-section__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .legal-section__num {
+    flex: none;
+    width: 1.75rem;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--c-gold-ink);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  /* Desktop: nummeret hænger ude i spaltemellemrummet, så overskriften flugter med brødteksten */
+  @media (min-width: 1024px) {
+    .legal-section__head {
+      margin-left: calc(-1 * (1.75rem + var(--space-4)));
+    }
+  }
+
+  .legal-section__title {
+    min-width: 0;
+    font-size: clamp(1.6rem, 1.25rem + 1.2vw, 2.25rem);
+    line-height: 1.18;
+  }
+</style>

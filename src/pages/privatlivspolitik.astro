@@ -1,0 +1,376 @@
+---
+// Privatlivspolitik for Silberg Creative.
+// Skabelon skrevet til et mindre bureau. Gennemlæs og tilpas før lancering:
+//  - CVR (og evt. adresse) udfyldes i src/data/site.ts – så forsvinder pladsholderen automatisk.
+//  - Opbevaringsfristerne i afsnit 06 er vejledende standarder – bekræft, at de passer til jeres praksis.
+//  - Tilføjer I nye værktøjer (fx statistik, CRM, nyhedsbrevssystem), skal afsnit 05 og cookiepolitikken opdateres.
+//  - Husk at rette datoen i src/components/juridisk/legal.ts, når politikken ændres.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import LegalLayout from '../components/juridisk/LegalLayout.astro';
+import LegalSection from '../components/juridisk/LegalSection.astro';
+import LegalCards from '../components/juridisk/LegalCards.astro';
+import LegalTable from '../components/juridisk/LegalTable.astro';
+import LegalTerms from '../components/juridisk/LegalTerms.astro';
+import LegalFacts from '../components/juridisk/LegalFacts.astro';
+import LegalMeta from '../components/juridisk/LegalMeta.astro';
+import { legalUpdated, type TocItem } from '../components/juridisk/legal';
+import { site } from '../data/site';
+
+const domain = new URL(site.url).hostname;
+const mail = `<a href="${site.emailHref}">${site.email}</a>`;
+
+const toc: TocItem[] = [
+  { id: 'kort-fortalt', title: 'Kort fortalt' },
+  { id: 'dataansvarlig', title: 'Dataansvarlig' },
+  { id: 'oplysninger', title: 'Oplysninger, vi indsamler' },
+  { id: 'formaal', title: 'Formål og retsgrundlag' },
+  { id: 'modtagere', title: 'Modtagere og databehandlere' },
+  { id: 'opbevaring', title: 'Opbevaring og sletning' },
+  { id: 'sikkerhed', title: 'Sikkerhed' },
+  { id: 'rettigheder', title: 'Dine rettigheder' },
+  { id: 'klage', title: 'Klage til Datatilsynet' },
+  { id: 'cookies', title: 'Cookies' },
+  { id: 'aendringer', title: 'Ændringer' },
+];
+const t = Object.fromEntries(toc.map((item, i) => [item.id, { ...item, number: i + 1 }]));
+
+const summary = [
+  {
+    title: 'Kun det, du selv giver os',
+    text: 'Vi indsamler kun de oplysninger, du giver os, når du udfylder en formular, skriver eller ringer – og de tekniske oplysninger, der er nødvendige for at vise hjemmesiden.',
+  },
+  {
+    title: 'Aldrig solgt',
+    text: `Vi sælger aldrig dine oplysninger og deler dem kun, når det er nødvendigt for at hjælpe dig – læs mere i <a href="#${t.modtagere.id}">afsnit ${String(t.modtagere.number).padStart(2, '0')}</a>.`,
+  },
+  {
+    title: 'Ingen sporing',
+    text: 'Hjemmesiden sætter ingen cookies til statistik eller markedsføring og bruger ingen sporingsværktøjer.',
+  },
+  {
+    title: 'Du bestemmer',
+    text: `Du kan altid få indsigt i, rette eller få slettet dine oplysninger – skriv til ${mail}.`,
+  },
+] as const;
+
+const sources = [
+  {
+    title: 'Kontaktformularen',
+    text: 'Navn, e-mail og din besked – og de felter, du vælger at udfylde: virksomhed, telefonnummer, den pakke, du er interesseret i, og hvad henvendelsen drejer sig om.',
+  },
+  {
+    title: '”Ring mig op”',
+    text: 'Navn, telefonnummer og det tidspunkt, du helst vil ringes op.',
+  },
+  {
+    title: 'Ansøgninger via karrieresiden',
+    text: 'Navn, e-mail, telefonnummer, den rolle, du søger, link til portfolio eller profil og det, du fortæller om dig selv. Sender du CV eller andre bilag på mail, behandler vi også dem.',
+  },
+  {
+    title: 'Nyhedsbrevet',
+    text: 'Din e-mailadresse og oplysninger om din tilmelding, fx hvornår du tilmeldte dig.',
+  },
+  {
+    title: 'E-mail og telefon',
+    text: 'Når du skriver eller ringer til os, behandler vi det, du fortæller – typisk navn, kontaktoplysninger, virksomhed og indholdet af henvendelsen.',
+  },
+  {
+    title: 'Besøg på hjemmesiden',
+    text: 'Vores hostingudbyder registrerer tekniske oplysninger som IP-adresse, browsertype, tidspunkt og den side, du besøger, i en serverlog. De bruges kun til drift og sikkerhed – ikke til statistik eller markedsføring.',
+  },
+  {
+    title: 'Sociale medier',
+    text: 'Når du følger, kommenterer eller skriver til os på fx Instagram, Facebook, TikTok eller LinkedIn, behandler vi det, du deler med os dér. Platformene behandler også selv oplysninger om dig efter deres egne privatlivspolitikker, og for den statistik, de giver os om vores profiler, kan vi være fælles dataansvarlige med platformen.',
+  },
+  {
+    title: 'Når I er kunde hos os',
+    text: 'Vi behandler kontaktoplysninger på jeres kontaktpersoner samt oplysninger om aftale, fakturering og betaling. Behandler vi personoplysninger på jeres vegne – fx på jeres sociale medier, i annoncer eller nyhedsbreve – gør vi det som databehandler efter en databehandleraftale med jer.',
+  },
+] as const;
+
+const purposes = [
+  [
+    'Besvare henvendelser og give tilbud',
+    'Art. 6, stk. 1, <strong>litra b</strong> (skridt forud for en aftale på din anmodning) og <strong>litra f</strong> (vores legitime interesse i at besvare og følge op på henvendelser). Sætter du flueben i kontaktformularen, bygger vi desuden på dit samtykke, jf. <strong>litra a</strong>.',
+  ],
+  ['Ringe dig op, når du beder om det', 'Art. 6, stk. 1, <strong>litra b</strong> og <strong>litra f</strong>.'],
+  [
+    'Behandle ansøgninger',
+    'Art. 6, stk. 1, <strong>litra b</strong> (rekruttering forud for en eventuel ansættelse) og <strong>litra a</strong> (dit samtykke, som du giver i formularen).',
+  ],
+  [
+    'Sende nyhedsbrev',
+    'Art. 6, stk. 1, <strong>litra a</strong> (dit samtykke), jf. også markedsføringslovens § 10.',
+  ],
+  [
+    'Levere vores ydelser og administrere kundeforholdet',
+    'Art. 6, stk. 1, <strong>litra b</strong> (opfyldelse af aftale) og <strong>litra f</strong> (vores legitime interesse i at kommunikere med kundens kontaktpersoner).',
+  ],
+  [
+    'Bogføring og overholdelse af lovkrav',
+    'Art. 6, stk. 1, <strong>litra c</strong> (retlig forpligtelse, fx efter bogføringsloven).',
+  ],
+  [
+    'Drift og sikkerhed på hjemmesiden',
+    'Art. 6, stk. 1, <strong>litra f</strong> (vores legitime interesse i en stabil og sikker hjemmeside).',
+  ],
+  [
+    'Dialog på sociale medier',
+    'Art. 6, stk. 1, <strong>litra f</strong> (vores legitime interesse i at kommunikere med følgere og potentielle kunder).',
+  ],
+];
+
+const bases = [
+  {
+    note: 'Litra a',
+    term: 'Samtykke',
+    desc: 'Du har givet os lov. Du kan til enhver tid trække samtykket tilbage.',
+  },
+  {
+    note: 'Litra b',
+    term: 'Aftale',
+    desc: 'Behandlingen er nødvendig for at indgå eller opfylde en aftale med dig – eller for at gøre noget, du har bedt om, før en aftale indgås.',
+  },
+  {
+    note: 'Litra c',
+    term: 'Retlig forpligtelse',
+    desc: 'Vi er forpligtet til det efter lovgivningen, fx reglerne om bogføring.',
+  },
+  {
+    note: 'Litra f',
+    term: 'Legitim interesse',
+    desc: 'Behandlingen er nødvendig for en berettiget interesse hos os, som vejer tungere end hensynet til dig. Du kan altid gøre indsigelse.',
+  },
+];
+
+const retention = [
+  ['Henvendelser, der ikke fører til et samarbejde', 'Op til 12 måneder efter den seneste kontakt.'],
+  ['”Ring mig op”-forespørgsler', 'Op til 3 måneder, medmindre samtalen fører til et samarbejde.'],
+  [
+    'Ansøgninger',
+    'Op til 6 måneder efter, at stillingen er besat – eller efter, at vi har modtaget en uopfordret ansøgning. Vil vi gemme din ansøgning længere, spørger vi dig først.',
+  ],
+  [
+    'Nyhedsbrev',
+    'Indtil du afmelder dig. Dokumentation for dit samtykke gemmer vi herefter i op til 2 år, så vi kan dokumentere, at vi har overholdt markedsføringsloven.',
+  ],
+  [
+    'Kundeoplysninger og aftaler',
+    'Så længe samarbejdet varer og op til 3 år efter, så vi kan dokumentere aftalen (forældelsesfristen).',
+  ],
+  ['Regnskabsmateriale', '5 år fra udgangen af det regnskabsår, materialet vedrører (bogføringsloven).'],
+  ['Serverlog', 'Kun så længe det er nødvendigt for drift og sikkerhed – typisk få uger.'],
+];
+
+const rights = [
+  {
+    term: 'Indsigt',
+    desc: 'Du kan få at vide, hvilke oplysninger vi behandler om dig, hvor de kommer fra, og hvad vi bruger dem til – og få en kopi.',
+  },
+  { term: 'Berigtigelse', desc: 'Er en oplysning forkert eller ufuldstændig, kan du få den rettet.' },
+  {
+    term: 'Sletning',
+    desc: 'Du kan få slettet dine oplysninger, før vores normale sletning sker, medmindre vi er forpligtet til at gemme dem.',
+  },
+  {
+    term: 'Begrænsning',
+    desc: 'I visse tilfælde kan du kræve, at vi kun opbevarer oplysningerne og ikke bruger dem – fx mens vi undersøger, om en oplysning er korrekt.',
+  },
+  {
+    term: 'Dataportabilitet',
+    desc: 'Du kan få de oplysninger, du selv har givet os, udleveret i et struktureret, almindeligt anvendt og maskinlæsbart format – og få dem overført til en anden dataansvarlig.',
+  },
+  {
+    term: 'Indsigelse',
+    desc: 'Du kan gøre indsigelse mod behandling, der bygger på vores legitime interesse. Mod brug af dine oplysninger til direkte markedsføring kan du altid gøre indsigelse.',
+  },
+  {
+    term: 'Tilbagetrækning af samtykke',
+    desc: 'Har du givet samtykke, kan du til enhver tid trække det tilbage – fx ved at afmelde nyhedsbrevet via linket i hver mail eller ved at skrive til os. Det påvirker ikke lovligheden af den behandling, der er sket, før du trak samtykket tilbage.',
+  },
+];
+---
+
+<BaseLayout
+  title="Privatlivspolitik"
+  description={`Læs, hvordan ${site.name} indsamler, bruger og beskytter personoplysninger – og hvilke rettigheder du har efter databeskyttelsesreglerne (GDPR).`}
+>
+  <PageHero
+    title="Sådan passer vi på dine oplysninger"
+    lead="Her kan du læse, hvilke personoplysninger vi indsamler, hvorfor vi gør det, og hvilke rettigheder du har. Vi har skrevet det så klart, vi kan – uden at gå på kompromis med det juridiske."
+    align="center"
+  >
+    <LegalMeta
+      items={[
+        { icon: 'calendar', text: `Senest opdateret: ${legalUpdated}` },
+        { icon: 'layout', text: `Gælder for ${domain}` },
+      ]}
+    />
+  </PageHero>
+
+  <LegalLayout toc={toc}>
+    <LegalSection {...t['kort-fortalt']}>
+      <LegalCards items={[...summary]} />
+    </LegalSection>
+
+    <LegalSection {...t.dataansvarlig}>
+      <p>
+        {site.name} er dataansvarlig for behandlingen af de personoplysninger, vi modtager om dig. Har du spørgsmål
+        til, hvordan vi behandler dine oplysninger, eller vil du gøre brug af dine rettigheder, er du altid velkommen
+        til at kontakte os.
+      </p>
+      <LegalFacts
+        role="Dataansvarlig"
+        title={site.name}
+        rows={[
+          site.cvr ? { label: 'CVR', value: site.cvr } : { label: 'CVR', placeholder: 'CVR-nummer' },
+          ...(site.address
+            ? [{ label: 'Adresse', value: `${site.address.street}, ${site.address.zip} ${site.address.city}` }]
+            : []),
+          { label: 'E-mail', value: site.email, href: site.emailHref },
+          { label: 'Telefon', value: site.phone, href: site.phoneHref },
+        ]}
+      />
+      <p>
+        Vi er ikke forpligtet til at udpege en databeskyttelsesrådgiver (DPO). Henvendelser om databeskyttelse
+        besvares derfor direkte af os.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.oplysninger}>
+      <p>
+        Vi indsamler kun oplysninger, som du selv giver os, eller som opstår, når du besøger hjemmesiden. Vi beder ikke
+        om følsomme oplysninger – fx om helbred, religion eller fagforeningsforhold – og vi beder dig om ikke at sende
+        den slags til os.
+      </p>
+      <LegalCards items={[...sources]} />
+    </LegalSection>
+
+    <LegalSection {...t.formaal}>
+      <p>
+        Vi behandler kun personoplysninger, når vi har et lovligt grundlag efter databeskyttelsesforordningens (GDPR)
+        artikel 6. Her kan du se, hvad vi bruger oplysningerne til, og hvilket retsgrundlag vi bygger på.
+      </p>
+      <LegalTable caption="Formål og retsgrundlag" columns={['Formål', 'Retsgrundlag']} rows={purposes} />
+      <h3>Retsgrundlagene kort forklaret</h3>
+      <LegalTerms items={bases} />
+      <p>Vi træffer ikke automatiske afgørelser om dig, og vi bruger ikke dine oplysninger til profilering.</p>
+    </LegalSection>
+
+    <LegalSection {...t.modtagere}>
+      <p>
+        Vi sælger, udlejer eller bytter aldrig dine oplysninger. Vi deler dem kun med andre, når det er nødvendigt for
+        at drive vores virksomhed – og kun i det omfang, det er nødvendigt.
+      </p>
+      <h3>Databehandlere</h3>
+      <p>
+        Leverandører, der behandler oplysninger på vores vegne og efter vores instruks. Vi har indgået
+        databehandleraftaler med dem, og de må ikke bruge oplysningerne til egne formål. Det drejer sig om udbydere
+        af:
+      </p>
+      <ul class="legal-list">
+        <li>hosting af hjemmesiden</li>
+        <li>e-mail og IT-systemer, fx kalender og fildeling</li>
+        <li>formularløsning, der modtager og videresender de formularer, du sender via hjemmesiden</li>
+        <li>nyhedsbrevssystem</li>
+        <li>regnskabs- og faktureringssystem.</li>
+      </ul>
+      <h3>Selvstændige dataansvarlige</h3>
+      <p>
+        I visse tilfælde videregiver vi oplysninger til andre, der selv er dataansvarlige – fx revisor, bank eller
+        offentlige myndigheder som Skattestyrelsen, når vi er forpligtet til det.
+      </p>
+      <h3>Overførsel til lande uden for EU/EØS</h3>
+      <p>
+        Nogle leverandører kan have servere eller underleverandører uden for EU/EØS, fx i USA. Sker det, sikrer vi, at
+        overførslen har et lovligt grundlag – fx EU-Kommissionens standardkontraktbestemmelser eller en afgørelse om,
+        at landet har et tilstrækkeligt beskyttelsesniveau.
+      </p>
+      <p>Vil du have en oversigt over vores aktuelle databehandlere, kan du skrive til <a href={site.emailHref}>{site.email}</a>.</p>
+    </LegalSection>
+
+    <LegalSection {...t.opbevaring}>
+      <p>
+        Vi gemmer kun dine oplysninger, så længe det er nødvendigt for det formål, de blev indsamlet til. Derefter
+        sletter eller anonymiserer vi dem.
+      </p>
+      <LegalTable
+        caption="Opbevaring og sletning"
+        columns={['Oplysninger', 'Hvor længe']}
+        rows={retention}
+        firstCol="42%"
+      />
+      <p>
+        Er vi forpligtet til at gemme oplysninger længere – fx på grund af en verserende sag – gør vi det kun, så længe
+        det er nødvendigt.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.sikkerhed}>
+      <p>
+        Vi beskytter dine oplysninger med tekniske og organisatoriske foranstaltninger, der passer til risikoen. Det
+        betyder blandt andet, at:
+      </p>
+      <ul class="legal-list">
+        <li>hjemmesiden og formularerne er krypteret med HTTPS</li>
+        <li>kun de medarbejdere og samarbejdspartnere, der har brug for oplysningerne i deres arbejde, har adgang til dem</li>
+        <li>vi bruger stærke adgangskoder og totrinsbekræftelse på vores systemer, hvor det er muligt</li>
+        <li>vi kun bruger leverandører, der kan dokumentere et passende sikkerhedsniveau</li>
+        <li>vi sletter oplysninger, når vi ikke længere har brug for dem.</li>
+      </ul>
+      <p>
+        Skulle der ske et brud på sikkerheden, som indebærer en høj risiko for dig, giver vi dig besked hurtigst
+        muligt.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.rettigheder}>
+      <p>
+        Efter databeskyttelsesreglerne har du en række rettigheder. Vil du gøre brug af dem, så skriv til
+        <a href={site.emailHref}>{site.email}</a>. Vi svarer hurtigst muligt og senest inden for én måned.
+      </p>
+      <LegalTerms items={rights} />
+      <p>
+        Der kan være betingelser eller begrænsninger for de enkelte rettigheder. Du kan læse mere i Datatilsynets
+        vejledning om de registreredes rettigheder på
+        <a href="https://www.datatilsynet.dk" target="_blank" rel="noopener"
+          >datatilsynet.dk<span class="visually-hidden"> (åbner i et nyt vindue)</span></a
+        >.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.klage}>
+      <p>
+        Er du utilfreds med den måde, vi behandler dine personoplysninger på, vil vi meget gerne høre fra dig, så vi
+        kan finde en løsning. Du har også altid ret til at klage til Datatilsynet.
+      </p>
+      <LegalFacts
+        role="Klageinstans"
+        title="Datatilsynet"
+        rows={[
+          { label: 'Adresse', value: 'Carl Jacobsens Vej 35, 2500 Valby' },
+          { label: 'E-mail', value: 'dt@datatilsynet.dk', href: 'mailto:dt@datatilsynet.dk' },
+          { label: 'Hjemmeside', value: 'www.datatilsynet.dk', href: 'https://www.datatilsynet.dk', external: true },
+        ]}
+      />
+    </LegalSection>
+
+    <LegalSection {...t.cookies}>
+      <p>
+        Hjemmesiden sætter ingen cookies til statistik eller markedsføring, og vi bruger ingen sporingsværktøjer fra
+        tredjeparter. Skrifttyperne ligger på vores egen server, så dit besøg ikke deles med fx Google. Læs mere i
+        vores <a href="/cookiepolitik/">cookiepolitik</a>.
+      </p>
+    </LegalSection>
+
+    <LegalSection {...t.aendringer}>
+      <p>
+        Vi opdaterer privatlivspolitikken, når vi ændrer den måde, vi behandler personoplysninger på, eller når
+        lovgivningen ændrer sig. Den nyeste version ligger altid her på siden. Ved væsentlige ændringer giver vi besked
+        på hjemmesiden – og direkte til dig, hvis ændringen har betydning for dig, og vi har dine kontaktoplysninger.
+      </p>
+      <p class="legal-updated">Senest opdateret: {legalUpdated}</p>
+    </LegalSection>
+  </LegalLayout>
+</BaseLayout>

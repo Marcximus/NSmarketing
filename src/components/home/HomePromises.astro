@@ -1,0 +1,83 @@
+---
+// Mørkebrunt bånd med vores løfter (commitments) som sætninger – ikke som tal-bånd.
+import { commitments } from '../../data/content';
+---
+
+<section class="section section--brown promises" aria-labelledby="promises-title">
+  <div class="container promises__grid">
+    <h2 id="promises-title" class="h3 promises__title">
+      Et samarbejde med faste rammer – fra første dag
+    </h2>
+
+    <ul class="commitments" role="list">
+      {commitments.map((c) => <li>{c}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .promises {
+    padding-block: clamp(4rem, 3rem + 4vw, 6.5rem);
+  }
+
+  .promises__grid {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 900px) {
+    .promises__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      align-items: start;
+      gap: clamp(3rem, 5vw, 5rem);
+    }
+  }
+
+  .promises__title {
+    max-width: 16ch;
+    font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.25rem);
+    line-height: 1.2;
+    color: var(--c-cream);
+  }
+
+  /* Mobil: én kolonne med hårstreg over hvert løfte */
+  .commitments {
+    display: grid;
+    list-style: none;
+    border-bottom: 1px solid var(--line-on-dark);
+  }
+
+  .commitments li {
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line-on-dark);
+    font-family: var(--f-serif);
+    font-size: clamp(1.15rem, 0.95rem + 0.6vw, 1.5rem);
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--c-cream);
+  }
+
+  /* ≥ 900 px: løfterne i et 2×2-grid med lodrette og vandrette hårstreger */
+  @media (min-width: 900px) {
+    .commitments {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-bottom: 0;
+    }
+
+    .commitments li {
+      padding: 1.5rem;
+    }
+
+    .commitments li:nth-child(odd) {
+      padding-left: 0;
+    }
+
+    .commitments li:nth-child(even) {
+      border-left: 1px solid var(--line-on-dark);
+    }
+
+    .commitments li:nth-last-child(-n + 2) {
+      border-bottom: 1px solid var(--line-on-dark);
+    }
+  }
+</style>

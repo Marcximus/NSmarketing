@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import KarriereIntro from '../components/om-os/KarriereIntro.astro';
+import KarriereOpenings from '../components/om-os/KarriereOpenings.astro';
+import KarriereForm from '../components/om-os/KarriereForm.astro';
+import { site } from '../data/site';
+
+const description = `Bliv en del af ${site.name}. Vi hører altid gerne fra fotografer, videografer, content creators, grafikere, statister og praktikanter. Send en ansøgning.`;
+---
+
+<BaseLayout title="Karriere – freelance, job og praktik" description={description}>
+  <PageHero
+    title="Bliv en del af Silberg Creative"
+    lead="Vi skaber indhold i topklasse til danske virksomheder – og vi er altid nysgerrige på dygtige, kreative mennesker, der vil være med."
+  >
+    <a href="#ansoeg" class="btn">Send en ansøgning <Icon name="arrow" size={16} /></a>
+    <a href="#netvaerk" class="btn btn--outline">Se hvem vi søger</a>
+  </PageHero>
+
+  <KarriereIntro />
+  <KarriereOpenings />
+  <KarriereForm />
+
+  <section class="contact-line" aria-label="Kontakt">
+    <div class="container contact-line__inner">
+      <p class="contact-line__text">Er du virksomhed og på udkig efter et SoMe-bureau?</p>
+      <div class="contact-line__links">
+        <a href="/kontakt/" class="text-link">Kontakt os <Icon name="arrow" size={16} /></a>
+        <a href={site.phoneHref} class="contact-line__phone">
+          <Icon name="phone" size={16} />
+          {site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-line {
+    border-top: 1px solid var(--c-line);
+    background: var(--c-paper);
+  }
+
+  .contact-line__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+    padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem);
+  }
+
+  .contact-line__text {
+    font-family: var(--f-serif);
+    font-size: var(--fs-lg);
+    line-height: 1.35;
+  }
+
+  .contact-line__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .contact-line__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--c-ink);
+  }
+
+  .contact-line__phone :global(svg) {
+    color: var(--c-gold);
+  }
+
+  .contact-line__phone:hover {
+    color: var(--c-gold-ink);
+  }
+</style>

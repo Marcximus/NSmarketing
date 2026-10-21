@@ -1,0 +1,61 @@
+---
+// "Alle pakker inkluderer" – fælles standard på tværs af pakkerne (src/data/packages.ts → includedInAll).
+import { packages, includedInAll } from '../../data/packages';
+
+const names = packages.map((p) => p.name);
+const nameList = names.length > 1 ? `${names.slice(0, -1).join(', ')} eller ${names.at(-1)}` : names[0];
+---
+
+<section class="section section--tight section--beige incl" aria-labelledby="incl-titel">
+  <div class="container incl__grid">
+    <div class="incl__head">
+      <h2 id="incl-titel">Det får I altid med</h2>
+      <p class="lead">
+        Uanset om I vælger {nameList}, arbejder I med det samme team, de samme processer og den samme standard.
+      </p>
+    </div>
+
+    <ul class="check-list incl__list" role="list">
+      {includedInAll.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .incl {
+    border-block: 1px solid var(--c-line);
+  }
+
+  .incl__grid {
+    display: grid;
+    gap: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+
+  @media (min-width: 960px) {
+    .incl__grid {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+  }
+
+  .incl__head h2 {
+    font-size: clamp(2rem, 1.4rem + 2vw, 2.9rem);
+  }
+
+  .incl__head .lead {
+    margin-top: var(--space-5);
+  }
+
+  /* Seks løfter med guld-flueben – ingen bokse */
+  .incl__list {
+    row-gap: 1.1rem;
+  }
+
+  @media (min-width: 720px) {
+    .incl__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2.5rem;
+    }
+  }
+</style>

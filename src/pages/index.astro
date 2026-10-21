@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import HomeIntro from '../components/home/HomeIntro.astro';
+import HomeServices from '../components/home/HomeServices.astro';
+import HomePromises from '../components/home/HomePromises.astro';
+import HomePackages from '../components/home/HomePackages.astro';
+import HomeProcess from '../components/home/HomeProcess.astro';
+import HomeCases from '../components/home/HomeCases.astro';
+import HomeTestimonials from '../components/home/HomeTestimonials.astro';
+import { packages, formatPrice } from '../data/packages';
+
+const fromPrice = formatPrice(Math.min(...packages.map((p) => p.price)));
+const description = `SoMe-bureau med strategi, content, reels og annoncering på Instagram, Facebook, TikTok og LinkedIn. Få jeres egen Social Media Manager fra ${fromPrice} kr./md.`;
+---
+
+<BaseLayout
+  title="Silberg Creative – SoMe-bureau og social media management"
+  description={description}
+  headerVariant="overlay"
+>
+  <HomeHero />
+  <HomeIntro />
+  <HomeServices />
+  <HomePromises />
+  <HomePackages />
+  <HomeProcess />
+  <HomeCases />
+  <HomeTestimonials />
+  <CtaBand />
+</BaseLayout>

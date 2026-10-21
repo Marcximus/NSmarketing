@@ -1,0 +1,145 @@
+---
+// Kort FAQ-udsnit (3 spørgsmål fra src/data/content.ts) + "Andre henvendelser" på /kontakt/.
+import Icon from '../Icon.astro';
+import { faq } from '../../data/content';
+import { site } from '../../data/site';
+
+// Udvalgte spørgsmål, der er relevante, før man tager kontakt. Findes et spørgsmål ikke længere
+// i data-filen, fyldes der op med de første spørgsmål, så der altid vises tre.
+const wanted = [
+  'Hvor hurtigt kan vi komme i gang?',
+  'Er der binding på pakkerne?',
+  'Arbejder I med virksomheder i hele Danmark?',
+];
+const picked = wanted
+  .map((q) => faq.find((item) => item.q === q))
+  .filter((item): item is (typeof faq)[number] => Boolean(item));
+const selected = [...picked, ...faq.filter((item) => !picked.includes(item))].slice(0, 3);
+
+const otherInquiries = [
+  {
+    title: 'Job & praktik',
+    text: 'Vil du være en del af holdet? Se, hvem vi søger, eller send en uopfordret ansøgning.',
+    href: '/karriere/',
+    linkLabel: 'Se karriere',
+  },
+  {
+    title: 'Eksisterende kunde',
+    text: 'Kontakt jeres faste kontaktperson direkte – eller ring til os, så stiller vi jer videre.',
+    href: site.phoneHref,
+    linkLabel: `Ring ${site.phone}`,
+  },
+  {
+    title: 'Presse & samarbejder',
+    text: 'Skriv til os med en kort beskrivelse, så sørger vi for, at den rette person vender tilbage.',
+    href: `${site.emailHref}?subject=${encodeURIComponent('Presse & samarbejder')}`,
+    linkLabel: 'Skriv til os',
+  },
+];
+---
+
+<section class="section section--white kfaq" id="faq" aria-labelledby="kfaq-titel">
+  <div class="container">
+    <div class="kfaq__grid">
+      <div class="kfaq__intro">
+        <h2 id="kfaq-titel">Godt at vide, inden I skriver</h2>
+        <p class="lead">De spørgsmål, vi oftest får i det første opkald. Resten svarer vi gerne på, når vi tales ved.</p>
+        <a href="/pakkeloesninger/#faq" class="text-link kfaq__more">
+          Se alle spørgsmål <Icon name="arrow" size={16} />
+        </a>
+      </div>
+
+      <div class="accordion kfaq__list">
+        {
+          selected.map((item, i) => (
+            <details open={i === 0}>
+              <summary>{item.q}</summary>
+              <div class="accordion-body">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="kfaq__other">
+      <h2 class="kfaq__other-title">Andre henvendelser</h2>
+      <ul class="ruled-list ruled-list--3 kfaq__cells" role="list">
+        {
+          otherInquiries.map((item) => (
+            <li>
+              <h3 class="ruled-list__title">{item.title}</h3>
+              <p class="ruled-list__text">{item.text}</p>
+              <a href={item.href} class="text-link ruled-list__action">
+                {item.linkLabel} <Icon name="arrow" size={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kfaq__grid {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  @media (min-width: 960px) {
+    .kfaq__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: start;
+    }
+  }
+
+  .kfaq__intro .lead {
+    max-width: 28rem;
+    margin-top: var(--space-5);
+  }
+
+  .kfaq__more,
+  .kfaq__cells .ruled-list__action {
+    min-height: 2.75rem;
+  }
+
+  .kfaq__more {
+    margin-top: var(--space-5);
+  }
+
+  .kfaq__list .accordion-body p {
+    max-width: var(--measure);
+  }
+
+  /* ---------- Andre henvendelser ---------- */
+  .kfaq__other {
+    margin-top: clamp(4rem, 3rem + 4vw, 6.5rem);
+  }
+
+  .kfaq__other-title {
+    margin-bottom: var(--space-5);
+    font-family: var(--f-serif);
+    font-size: var(--fs-h3);
+    line-height: var(--lh-snug);
+  }
+
+  /* Punkterne er et trin under sektionens H2: serif i h4-størrelse. Linket lægges i bunden,
+     så de tre handlinger flugter, selv når teksterne har forskellig længde. */
+  .kfaq__cells > li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kfaq__cells .ruled-list__title {
+    font-size: var(--fs-h4);
+  }
+
+  .kfaq__cells .ruled-list__text {
+    flex: 1;
+    font-size: 0.9375rem;
+  }
+</style>

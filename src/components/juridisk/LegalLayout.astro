@@ -1,0 +1,424 @@
+---
+// Læselayout til juridiske sider: indholdsfortegnelse (sticky i venstre kolonne på desktop,
+// sammenfoldelig boks på mobil) + artikel med typografi til lange tekster.
+// Indholdet lægges i slot'en som <LegalSection>-blokke med id'er, der matcher `toc`.
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import type { TocItem } from './legal';
+
+interface Props {
+  toc: TocItem[];
+}
+
+const { toc } = Astro.props;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<div class="legal">
+  <div class="container legal__grid">
+    <aside class="legal__aside">
+      <div class="legal__aside-inner">
+        <nav class="toc" aria-label="Indholdsfortegnelse">
+          <p class="toc__label" aria-hidden="true">Indhold</p>
+          <ol class="toc__list" role="list">
+            {
+              toc.map((item, i) => (
+                <li>
+                  <a href={`#${item.id}`} class="toc__link" data-toc-link={item.id}>
+                    <span class="toc__num" aria-hidden="true">
+                      {num(i)}
+                    </span>
+                    <span>{item.title}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+
+        <div class="legal__help">
+          <p class="legal__help-title">Spørgsmål til politikken?</p>
+          <a href={site.emailHref} class="legal__help-link">
+            <Icon name="mail" size={16} />
+            <span>{site.email}</span>
+          </a>
+          <a href={site.phoneHref} class="legal__help-link">
+            <Icon name="phone" size={16} />
+            <span>{site.phone}</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <details class="toc-mobile">
+      <summary class="toc-mobile__summary">
+        <span>Indhold</span>
+        <span class="toc-mobile__count">{toc.length} afsnit</span>
+      </summary>
+      <nav aria-label="Indholdsfortegnelse">
+        <ol class="toc__list" role="list">
+          {
+            toc.map((item, i) => (
+              <li>
+                <a href={`#${item.id}`} class="toc__link">
+                  <span class="toc__num" aria-hidden="true">
+                    {num(i)}
+                  </span>
+                  <span>{item.title}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </details>
+
+    <article class="legal__body">
+      <slot />
+    </article>
+  </div>
+</div>
+
+<script>
+  // Markerer det afsnit, man læser, i indholdsfortegnelsen (kun desktop-visningen).
+  const links = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]').forEach((a) => {
+    links.set(a.dataset.tocLink ?? '', a);
+  });
+
+  const setActive = (id: string) => {
+    links.forEach((a, key) => {
+      if (key === id) a.setAttribute('aria-current', 'location');
+      else a.removeAttribute('aria-current');
+    });
+  };
+
+  // Aktivt afsnit = det sidste, hvis top er scrollet forbi en "læselinje" 35 % nede på skærmen.
+  // Nederst på siden vælges sidste afsnit, så korte slutafsnit også kan blive markeret.
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-legal-section]')];
+  if (sections.length && links.size) {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const line = window.innerHeight * 0.35;
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      let current = '';
+      if (atBottom) current = sections[sections.length - 1].id;
+      else {
+        for (const s of sections) {
+          if (s.getBoundingClientRect().top <= line) current = s.id;
+          else break;
+        }
+      }
+      setActive(current);
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+  // Luk mobil-indholdsfortegnelsen, når man vælger et afsnit
+  document.querySelectorAll<HTMLAnchorElement>('.toc-mobile a').forEach((a) => {
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open'));
+  });
+</script>
+
+<style>
+  .legal {
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) var(--section-y);
+  }
+
+  .legal__grid {
+    display: grid;
+    gap: var(--space-6);
+    max-width: calc(72rem + var(--gutter) * 2);
+  }
+
+  /* ---------- Indholdsfortegnelse: desktop ---------- */
+  .legal__aside {
+    display: none;
+  }
+
+  .toc__label,
+  .legal__help-title {
+    margin-bottom: var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .toc__list {
+    list-style: none;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .toc__list li {
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .toc__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    align-items: baseline;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 0.7rem 0;
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+    color: var(--c-ink-2);
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  /* Numrene bevares: afsnittene krydsrefereres i teksten (fx "afsnit 05") */
+  .toc__num {
+    font-size: var(--fs-2xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--c-muted);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .toc__link:hover {
+    color: var(--c-ink);
+  }
+
+  .toc__link[aria-current] {
+    color: var(--c-ink);
+    font-weight: 500;
+  }
+
+  .toc__link[aria-current] .toc__num {
+    color: var(--c-gold-ink);
+  }
+
+  /* Markering af det aktive afsnit: tegnet med kant, så den også ses i Windows' høj kontrast */
+  .toc__link::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-5));
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 1px solid var(--c-gold);
+    transform: translateY(-50%);
+    transition: height var(--dur) var(--ease);
+  }
+
+  .toc__link[aria-current]::before {
+    height: 1.4rem;
+  }
+
+  .legal__help {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .legal__help-title {
+    margin-bottom: var(--space-2);
+  }
+
+  .legal__help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 44px;
+    font-size: var(--fs-sm);
+    color: var(--c-ink);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .legal__help-link :global(svg) {
+    flex-shrink: 0;
+    color: var(--c-gold);
+  }
+
+  .legal__help-link:hover span {
+    text-decoration: underline;
+    text-decoration-color: var(--c-gold);
+  }
+
+  /* ---------- Indholdsfortegnelse: mobil ---------- */
+  .toc-mobile {
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .toc-mobile__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 3.5rem;
+    padding: 0.9rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .toc-mobile__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-mobile__count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--c-muted);
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+  }
+
+  .toc-mobile__count::after {
+    content: '';
+    width: 0.8rem;
+    height: 0.8rem;
+    background:
+      linear-gradient(var(--c-gold-ink), var(--c-gold-ink)) center / 100% 1.5px no-repeat,
+      linear-gradient(var(--c-gold-ink), var(--c-gold-ink)) center / 1.5px 100% no-repeat;
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .toc-mobile[open] .toc-mobile__count::after {
+    transform: rotate(135deg);
+  }
+
+  .toc-mobile nav {
+    padding: 0 1.25rem 0.75rem;
+  }
+
+  .toc-mobile .toc__list li:last-child {
+    border-bottom: 0;
+  }
+
+  /* ---------- Artikel ---------- */
+  .legal__body {
+    min-width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .legal__grid {
+      grid-template-columns: 15.5rem minmax(0, 1fr);
+      gap: clamp(4rem, 2rem + 4vw, 7rem);
+    }
+
+    .legal__aside {
+      display: block;
+      padding-left: var(--space-5);
+    }
+
+    .legal__aside-inner {
+      position: sticky;
+      top: calc(var(--header-h) + 2.5rem);
+    }
+
+    .toc-mobile {
+      display: none;
+    }
+
+    .legal__body {
+      max-width: 46rem;
+    }
+  }
+
+  /* ---------- Typografi til lange tekster (gælder indhold i slot'en) ---------- */
+  /* Læsemål: ca. 70 tegn (global --measure, em-baseret). Tabeller, lister og faktabokse må gå bredere. */
+  .legal__body :global(p) {
+    max-width: var(--measure);
+    color: var(--c-ink-2);
+  }
+
+  .legal__body :global(p + p),
+  .legal__body :global(p + ul),
+  .legal__body :global(ul + p),
+  .legal__body :global(p + ol),
+  .legal__body :global(ol + p),
+  .legal__body :global(.legal-block + p),
+  .legal__body :global(p + .legal-block),
+  .legal__body :global(.legal-block + .legal-block) {
+    margin-top: var(--space-5);
+  }
+
+  .legal__body :global(h3) {
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-3);
+    font-family: var(--f-sans);
+    font-size: var(--fs-md);
+    font-weight: 500;
+    line-height: var(--lh-snug);
+    letter-spacing: 0;
+    color: var(--c-ink);
+  }
+
+  .legal__body :global(strong) {
+    font-weight: 500;
+    color: var(--c-ink);
+  }
+
+  /* Understregning, farve på stregen, offset og hover kommer fra global.css */
+  .legal__body :global(a:not([class])) {
+    color: var(--c-ink);
+  }
+
+  .legal__body :global(.legal-list) {
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+    max-width: var(--measure);
+    color: var(--c-ink-2);
+  }
+
+  .legal__body :global(.legal-list > li) {
+    position: relative;
+    padding-left: 1.6rem;
+  }
+
+  /* Listemarkør som kant (ikke baggrund), så den overlever forced colors */
+  .legal__body :global(.legal-list > li::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.85em;
+    width: 0.75rem;
+    height: 0;
+    border-top: 1px solid var(--c-gold);
+    background: none;
+  }
+
+  /* Metalinje (data), derfor spærrede versaler – men uden guldstreg foran */
+  .legal__body :global(.legal-updated) {
+    margin-top: var(--space-6);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  /* Windows' høj kontrast: plus/kryds på mobil-indholdsfortegnelsen er funktionelt og tegnes i systemfarven */
+  @media (forced-colors: active) {
+    .toc-mobile__count::after {
+      forced-color-adjust: none;
+      background:
+        linear-gradient(CanvasText, CanvasText) center / 100% 1.5px no-repeat,
+        linear-gradient(CanvasText, CanvasText) center / 1.5px 100% no-repeat;
+    }
+  }
+</style>

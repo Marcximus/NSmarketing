@@ -1,0 +1,618 @@
+---
+// Sammenligningstabel (src/data/packages.ts → comparison).
+// Desktop/tablet: én samlet tabel med sticky kolonneoverskrifter.
+// Mobil og telefon på tværs (med JS): en pakkevælger viser én pakke ad gangen – uden JS kan tabellen scrolles
+// vandret i sin egen boks. Media-queryen står både i CSS'en og i scriptet (PICKER_QUERY) og skal holdes ens.
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { packages, comparison, formatPrice } from '../../data/packages';
+import { addonCategories } from '../../data/addons';
+
+const featured = packages.find((p) => p.featured) ?? packages[0];
+const defaultPlan = featured.id;
+const nameList = `${packages
+  .slice(0, -1)
+  .map((p) => p.name)
+  .join(', ')} og ${packages.at(-1)?.name}`;
+
+const isAddonValue = (v: string) => v.trim().toLowerCase() === 'tillæg';
+// "Tillæg" linker direkte til det tillæg, rækken handler om (fx Meta-annoncering → #tillaeg-meta-ads)
+const addonFor = (label: string) => addonCategories.flatMap((c) => c.items).find((a) => label.startsWith(a.name));
+const addonHref = (label: string) => {
+  const addon = addonFor(label);
+  return addon ? `#tillaeg-${addon.id}` : '#tillaeg';
+};
+const colClass = (id: string, extra?: string | false) => [
+  extra,
+  id === featured.id && 'is-featured',
+  id !== defaultPlan && 'is-off',
+];
+---
+
+<section class="section section--white cmp-section" id="sammenlign">
+  <div class="container">
+    <SectionHead
+      title="Hele indholdet&nbsp;– side om side"
+      lead="Alt, hvad der indgår i hver pakke, samlet ét sted. Så kan I se præcis, hvad I får – og hvad der er forskellen."
+      align="split"
+    />
+
+    <div class="cmp" data-cmp data-active={defaultPlan} data-needs-js>
+      <div class="cmp__picker" role="group" aria-label="Vælg hvilken pakke tabellen viser">
+        {
+          packages.map((p) => (
+            <button
+              type="button"
+              class="cmp__pick"
+              data-pick={p.id}
+              data-name={p.name}
+              aria-pressed={p.id === defaultPlan ? 'true' : 'false'}
+            >
+              <span class="cmp__pick-name">{p.name}</span>
+              <span class="cmp__pick-price">{formatPrice(p.price)} kr./md.</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="cmp__scroll">
+        <table class="cmp__table">
+          <caption class="visually-hidden">
+            Sammenligning af indholdet i {nameList}
+            <span class="cmp__caption-active" data-cmp-caption>– viser {featured.name}</span>
+          </caption>
+          <colgroup>
+            <col class="cmp__col-label" />
+            {packages.map((p) => <col class:list={colClass(p.id)} data-col={p.id} />)}
+          </colgroup>
+
+          <thead>
+            <tr>
+              <th scope="row" class="cmp__corner">
+                <span>Pris pr. måned</span>
+                <span>ekskl. moms</span>
+              </th>
+              {
+                packages.map((p) => (
+                  <th scope="col" class:list={colClass(p.id, 'cmp__head')} data-col={p.id}>
+                    {p.featured && p.badge && <span class="cmp__badge">{p.badge}</span>}
+                    <span class="cmp__name">{p.name}</span>
+                    <span class="cmp__price">{formatPrice(p.price)} kr.</span>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+
+          {
+            comparison.map((group) => (
+              <tbody>
+                <tr class="cmp__group">
+                  <th scope="rowgroup">
+                    <span>{group.title}</span>
+                  </th>
+                  {packages.map((p) => (
+                    <td class:list={colClass(p.id)} data-col={p.id} />
+                  ))}
+                </tr>
+                {group.rows.map((row) => (
+                  <tr>
+                    <th scope="row">
+                      {row.label}
+                      {row.note && <span class="cmp__note">{row.note}</span>}
+                    </th>
+                    {row.values.map((v, i) => {
+                      const id = packages[i].id;
+                      return (
+                        <td class:list={colClass(id)} data-col={id}>
+                          {v === true ? (
+                            <>
+                              <Icon name="check" size={20} strokeWidth={1.6} class="cmp__yes" />
+                              <span class="visually-hidden">Inkluderet</span>
+                            </>
+                          ) : v === false ? (
+                            <>
+                              <span class="cmp__no" aria-hidden="true" />
+                              <span class="visually-hidden">Ikke inkluderet</span>
+                            </>
+                          ) : isAddonValue(v) ? (
+                            <a href={addonHref(row.label)} class="cmp__addon">
+                              {v}
+                              <span class="visually-hidden">
+                                {addonFor(row.label) ? ` – se tillægget ${addonFor(row.label)!.name}` : ' – se tillægsydelser'}
+                              </span>
+                            </a>
+                          ) : (
+                            <span class="cmp__text">{v}</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            ))
+          }
+
+          <tfoot>
+            <tr>
+              <th scope="row" class="cmp__foot-label">
+                <span class="visually-hidden">Vælg pakke</span>
+              </th>
+              {
+                packages.map((p) => (
+                  <td class:list={colClass(p.id)} data-col={p.id}>
+                    <a
+                      href={`/kontakt/?pakke=${p.id}`}
+                      class:list={['btn', 'btn--sm', 'btn--block', p.featured ? '' : 'btn--outline']}
+                    >
+                      Vælg {p.name}
+                      <Icon name="arrow" size={14} />
+                    </a>
+                  </td>
+                ))
+              }
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Safari < 14 kender kun MediaQueryList.addListener (forældet, men nødvendig som fallback)
+  type LegacyMediaQueryList = { addListener(listener: (event: MediaQueryListEvent) => void): void };
+
+  const root = document.querySelector<HTMLElement>('[data-cmp]');
+
+  if (root) {
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-pick]')];
+    const cells = [...root.querySelectorAll<HTMLElement>('[data-col]')];
+    const caption = root.querySelector<HTMLElement>('[data-cmp-caption]');
+    const footCells = [...root.querySelectorAll<HTMLTableCellElement>('tfoot td[data-col]')];
+    // Samme query som pakkevælgerens CSS-blok: smalle skærme og telefoner på tværs
+    const mobile = window.matchMedia('(max-width: 719px), (orientation: landscape) and (max-height: 500px)');
+
+    const show = (id: string | undefined) => {
+      // En død tabel (BaseLayout satte .is-dead) vises i sin helhed og må ikke omskrives bagefter
+      if (root.classList.contains('is-dead')) return;
+      const button = buttons.find((b) => b.dataset.pick === id);
+      if (!id || !button) return;
+      root.dataset.active = id;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      cells.forEach((c) => c.classList.toggle('is-off', c.dataset.col !== id));
+      if (caption) caption.textContent = `– viser ${button.dataset.name}`;
+      // På mobil fylder knappen hele bredden under den viste pakke
+      footCells.forEach((td) => (td.colSpan = mobile.matches && td.dataset.col === id ? 2 : 1));
+    };
+
+    // Først alle listeners, så is-ready, og til sidst første show(). Kaster noget før is-ready, er DOM'en
+    // urørt; kaster første show(), rulles is-ready og colSpan tilbage. I begge tilfælde giver BaseLayout
+    // .is-dead (hele tabellen) i stedet for en halvt omskrevet tabel.
+    const onMobileChange = () => show(root.dataset.active);
+    // Safari < 14 har kun den ældre addListener
+    if (mobile.addEventListener) mobile.addEventListener('change', onMobileChange);
+    else (mobile as unknown as LegacyMediaQueryList).addListener(onMobileChange);
+
+    buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.pick)));
+
+    // "Se alt indhold" på pakkekortene åbner tabellen på den valgte pakke (mobil)
+    document.querySelectorAll<HTMLAnchorElement>('[data-show-plan]').forEach((link) => {
+      link.addEventListener('click', () => show(link.dataset.showPlan));
+    });
+
+    if (!root.classList.contains('is-dead')) {
+      root.classList.add('is-ready');
+      try {
+        show(root.dataset.active ?? buttons.find((b) => b.getAttribute('aria-pressed') === 'true')?.dataset.pick);
+      } catch (error) {
+        root.classList.remove('is-ready');
+        footCells.forEach((td) => (td.colSpan = 1));
+        throw error;
+      }
+    }
+  }
+</script>
+
+<style>
+  .cmp {
+    --cmp-feat: #f8f5f0; /* = beige 42 % på hvid (color-mix er ikke brugt af hensyn til Safari < 16.2) */
+    --cmp-pad-x: clamp(0.6rem, 1.2vw, 1.25rem);
+
+    position: relative;
+  }
+
+  /* ---------- Tabel (fælles) ---------- */
+  /* position: relative holder skjulte tekster (caption m.m.) inde i scroll-boksen */
+  .cmp__scroll {
+    position: relative;
+  }
+
+  .cmp__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  .cmp__col-label {
+    width: 34%;
+  }
+
+  .cmp__table th,
+  .cmp__table td {
+    padding: 1rem var(--cmp-pad-x);
+    border-bottom: 1px solid var(--c-line);
+    vertical-align: middle;
+  }
+
+  .cmp__table td {
+    text-align: center;
+    color: var(--c-ink);
+  }
+
+  .cmp__table .is-featured {
+    background: var(--cmp-feat);
+  }
+
+  /* Fokuserede links (Tab/Shift+Tab) må ikke ende skjult bag de klæbende kolonneoverskrifter */
+  .cmp__table a {
+    scroll-margin-top: calc(var(--header-h) + 9.5rem);
+  }
+
+  /* Kolonneoverskrifter – klæber under den faste header */
+  .cmp__table thead th {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 2;
+    padding-block: 1.35rem 1.15rem;
+    background: var(--c-white);
+    border-bottom: 1px solid var(--c-ink);
+    vertical-align: bottom;
+  }
+
+  .cmp__table thead .is-featured {
+    background: var(--cmp-feat);
+    box-shadow: inset 0 2px 0 var(--c-gold);
+  }
+
+  .cmp__table .cmp__corner {
+    text-align: left;
+    font-weight: 400;
+    padding-left: 0;
+  }
+
+  .cmp__corner span {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.6;
+    color: var(--c-muted);
+  }
+
+  .cmp__head {
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .cmp__badge {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 0.6rem;
+    padding: 0.25rem 0.6rem;
+    background: var(--c-gold-light);
+    color: var(--c-brown-deep);
+    font-size: var(--fs-2xs);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .cmp__name {
+    display: block;
+    font-family: var(--f-serif);
+    font-size: clamp(1.4rem, 1.1rem + 0.8vw, 1.75rem);
+    line-height: 1.1;
+  }
+
+  .cmp__price {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: var(--fs-sm);
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--c-ink-2);
+  }
+
+  /* Grupperækker – teksten må løbe ind over de tomme celler uden at gøre kolonnen bredere */
+  .cmp__table .cmp__group th {
+    padding-left: 0;
+    padding-top: 2.6rem;
+    padding-bottom: 0.85rem;
+    text-align: left;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+    border-bottom-color: var(--c-sand);
+  }
+
+  .cmp__group th span {
+    display: block;
+    contain: inline-size;
+    white-space: nowrap;
+  }
+
+  .cmp__group td {
+    border-bottom-color: var(--c-sand);
+  }
+
+  tbody:first-of-type .cmp__group th,
+  tbody:first-of-type .cmp__group td {
+    padding-top: 1.75rem;
+  }
+
+  /* Rækkeetiketter */
+  .cmp__table tbody th[scope='row'] {
+    padding-left: 0;
+    text-align: left;
+    font-weight: 400;
+    color: var(--c-ink);
+  }
+
+  .cmp__note {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+
+  /* Værdier */
+  .cmp__table :global(.cmp__yes) {
+    display: inline-block;
+    vertical-align: middle;
+    color: var(--c-gold-ink);
+  }
+
+  /* Tegnes som kant (ikke baggrund), så stregen også ses i forced colors */
+  .cmp__no {
+    display: inline-block;
+    width: 0.9rem;
+    height: 0;
+    vertical-align: middle;
+    border-top: 1px solid var(--c-muted);
+    background: none;
+  }
+
+  .cmp__text {
+    display: inline-block;
+    max-width: 14rem;
+    text-wrap: balance;
+  }
+
+  .cmp__addon {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--c-gold-ink);
+    text-underline-offset: 0.3em;
+  }
+
+  .cmp__addon:hover {
+    color: var(--c-ink);
+  }
+
+  /* Touch: "Tillæg"-linket får et trykmål på mindst 44 px */
+  @media (pointer: coarse) {
+    .cmp__addon {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+
+  /* Bund med knapper */
+  .cmp__table tfoot th,
+  .cmp__table tfoot td {
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 0;
+  }
+
+  .cmp__table tfoot .btn {
+    padding-inline: 0.75rem;
+  }
+
+  /* Lave skærme: klæbende kolonneoverskrifter ville dække for meget af højden */
+  @media (max-height: 560px) {
+    .cmp__table thead th {
+      position: static;
+    }
+  }
+
+  /* ---------- Pakkevælger (mobil og telefon på tværs, med JS) ---------- */
+  .cmp__picker {
+    display: none;
+  }
+
+  @media (max-width: 719px), (orientation: landscape) and (max-height: 500px) {
+    /* Uden JS: tabellen scroller vandret i sin egen boks med fast etiketkolonne */
+    .cmp__scroll {
+      overflow-x: auto;
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      overscroll-behavior-x: contain;
+    }
+
+    .cmp__table {
+      min-width: 38rem;
+    }
+
+    .cmp__table tbody th,
+    .cmp__table tfoot th,
+    .cmp__corner {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: var(--c-white);
+    }
+
+    .cmp__table thead th {
+      position: static;
+    }
+
+    .cmp__table thead .cmp__corner {
+      position: sticky;
+      top: auto;
+      left: 0;
+      z-index: 3;
+    }
+
+    /* Med JS: én pakke ad gangen. Uden JS – eller hvis vælger-scriptet ikke kørte (.is-dead, se
+       BaseLayout) – hele tabellen med vandret scroll. is-off på de ikke-valgte kolonner er server-renderet. */
+    /* Under den klæbende pakkevælger i stedet for under kolonneoverskrifterne */
+    :global(html.js) .cmp:not(.is-dead) .cmp__table a {
+      scroll-margin-top: calc(var(--header-h) + 7rem);
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__picker {
+      position: sticky;
+      top: var(--header-h);
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-inline: calc(-1 * var(--gutter));
+      padding: 0.75rem var(--gutter);
+      background: var(--c-white);
+      border-bottom: 1px solid var(--c-line);
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__scroll {
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table {
+      min-width: 0;
+      table-layout: auto;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table thead,
+    :global(html.js) .cmp:not(.is-dead) .cmp__table .is-off {
+      display: none;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tbody th,
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tfoot th {
+      position: static;
+      width: 58%;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table td {
+      text-align: right;
+      padding-right: 0;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table .is-featured {
+      background: transparent;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tfoot th {
+      display: none;
+    }
+
+    :global(html.js) .cmp:not(.is-dead) .cmp__table tfoot td {
+      padding-inline: 0;
+      text-align: left;
+    }
+
+    /* Gruppetitlen står alene i rækken (de øvrige celler er skjult) – lad den ombryde */
+    :global(html.js) .cmp:not(.is-dead) .cmp__group th span {
+      white-space: normal;
+      contain: none;
+    }
+  }
+
+  .cmp__pick {
+    display: grid;
+    gap: 0.15rem;
+    justify-items: center;
+    min-height: 3.6rem;
+    padding: 0.55rem 0.4rem;
+    border: 1px solid var(--c-ink);
+    background: var(--c-white);
+    color: var(--c-ink);
+    transition:
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .cmp__pick + .cmp__pick {
+    border-left: 0;
+  }
+
+  .cmp__pick-name {
+    font-family: var(--f-serif);
+    font-size: var(--fs-md);
+    line-height: 1.1;
+  }
+
+  .cmp__pick-price {
+    font-size: var(--fs-xs);
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--c-muted);
+  }
+
+  /* Telefon på tværs: header + klæbende vælger må højst dække ca. 30 % af højden –
+     navn og pris står på én linje i en lavere knap */
+  @media (orientation: landscape) and (max-height: 500px) {
+    :global(html.js) .cmp:not(.is-dead) .cmp__picker {
+      padding-block: 0.1875rem;
+    }
+
+    .cmp__pick {
+      grid-auto-flow: column;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0.6rem;
+      min-height: 2.75rem;
+      padding-block: 0.25rem;
+    }
+  }
+
+  .cmp__pick[aria-pressed='true'] {
+    background: var(--c-brown);
+    border-color: var(--c-brown);
+    color: var(--c-cream);
+  }
+
+  .cmp__pick[aria-pressed='true'] .cmp__pick-price {
+    color: var(--c-cream-muted);
+  }
+
+  .cmp__pick:focus-visible {
+    outline-offset: -5px;
+    outline-color: var(--c-gold-light);
+  }
+
+  .cmp__pick[aria-pressed='false']:focus-visible {
+    outline-color: var(--c-gold-ink);
+  }
+
+  /* Billedtekstens "viser …" giver kun mening, når der vises én pakke */
+  @media (min-width: 720px) and (orientation: portrait), (min-width: 720px) and (min-height: 501px) {
+    .cmp__caption-active {
+      display: none;
+    }
+  }
+
+  :global(html:not(.js)) .cmp__caption-active,
+  .cmp.is-dead .cmp__caption-active {
+    display: none;
+  }
+</style>

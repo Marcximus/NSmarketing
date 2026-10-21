@@ -1,0 +1,133 @@
+---
+// Arbejdsprocessen i fire trin på marmor (sitets lyse marmorsektion). id="proces": om-os linker til /#proces.
+// Numrene bevares, fordi rækkefølgen er information – sat roman med lining-tal.
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { process } from '../../data/content';
+---
+
+<section class="section process" id="proces">
+  <div class="marble" aria-hidden="true"></div>
+  <div class="container">
+    <SectionHead
+      title="Fra første møde til målbare resultater"
+      lead="En fast og gennemskuelig proces, så I altid ved, hvad der sker – og hvornår. I godkender, vi leverer."
+      align="split"
+    />
+
+    <ol class="steps">
+      {
+        process.map((step) => (
+          <li class="step">
+            <span class="step__num" aria-hidden="true">
+              {step.number}
+            </span>
+            <span class="step__line" aria-hidden="true" />
+            <h3 class="step__title">{step.title}</h3>
+            <p class="step__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="process__cta">
+      <p>Det hele begynder med et uforpligtende møde.</p>
+      <a href="/kontakt/" class="text-link">Book et møde <Icon name="arrow" size={16} /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--c-paper);
+  }
+
+  .process .marble {
+    --marble-wash: linear-gradient(
+      180deg,
+      rgb(var(--c-paper-rgb) / 0.55),
+      rgb(var(--c-paper-rgb) / 0.78)
+    );
+  }
+
+  .steps {
+    display: grid;
+    gap: 2.75rem;
+    list-style: none;
+  }
+
+  @media (min-width: 720px) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3.5rem 2.5rem;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .step__num {
+    display: block;
+    font-family: var(--f-serif);
+    font-variant-numeric: lining-nums;
+    font-size: clamp(2.75rem, 2.4rem + 1.8vw, 4.25rem);
+    font-style: normal;
+    line-height: 1;
+    color: var(--c-gold-ink);
+  }
+
+  /* Hårstreg med lille guld-rude – tegnet med border, så den også ses i forced colors */
+  .step__line {
+    position: relative;
+    display: block;
+    height: 0;
+    margin-block: 1.5rem 1.75rem;
+    border-top: 1px solid var(--c-sand);
+  }
+
+  .step__line::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--c-gold);
+    background: var(--c-gold);
+    transform: rotate(45deg);
+  }
+
+  .step__title {
+    font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  }
+
+  .step__text {
+    margin-top: var(--space-3);
+    max-width: 22rem;
+    font-size: 0.9375rem;
+    color: var(--c-ink-2);
+  }
+
+  .process__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 2rem;
+    margin-top: clamp(3rem, 5vw, 4.5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--c-sand);
+  }
+
+  .process__cta p {
+    font-family: var(--f-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
+  }
+</style>

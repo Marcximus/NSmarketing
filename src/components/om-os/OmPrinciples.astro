@@ -1,0 +1,44 @@
+---
+// Fire arbejdsprincipper på beige baggrund – redaktionel liste med hårstreger (ingen rækkefølge, derfor ul).
+import SectionHead from '../SectionHead.astro';
+
+const principles: { title: string; text: string }[] = [
+  {
+    title: 'Æstetik med formål',
+    text: 'Smukt indhold er kun halvdelen. Alt, vi skaber, har et mål – flere følgere, der bliver til henvendelser, bookinger og salg.',
+  },
+  {
+    title: 'Et fast team, der kender jer',
+    text: 'I får én fast kontaktperson og et team, der lærer jeres brand, tone og kunder at kende. Ingen nye ansigter hver måned.',
+  },
+  {
+    title: 'Gennemsigtighed i tal',
+    text: 'Hver måned får I en rapport i et sprog, alle kan forstå. Vi viser, hvad der virker – og hvad vi justerer næste gang.',
+  },
+  {
+    title: 'Nemt for jer',
+    text: 'Vi står for planlægning, produktion og opfølgning. I siger god for indholdet – og bruger tiden på det, I er bedst til.',
+  },
+];
+---
+
+<section class="section section--beige principles">
+  <div class="container">
+    <SectionHead
+      title="Fire principper bag alt, vi laver"
+      lead="Uanset om vi planlægger en kampagne, filmer en reel eller gennemgår jeres tal, arbejder vi ud fra de samme fire principper."
+      align="split"
+    />
+
+    <ul class="ruled-list ruled-list--2 principles__list" role="list">
+      {
+        principles.map((item) => (
+          <li>
+            <h3 class="ruled-list__title">{item.title}</h3>
+            <p class="ruled-list__text">{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

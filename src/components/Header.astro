@@ -1,0 +1,548 @@
+---
+import Icon from './Icon.astro';
+import Logo from '../assets/logo-currentcolor.svg';
+import { site, mainNav, socialLinks } from '../data/site';
+
+interface Props {
+  /** 'overlay' = gennemsigtig header over et mørkt hero-billede, indtil man scroller */
+  variant?: 'solid' | 'overlay';
+}
+
+const { variant = 'solid' } = Astro.props;
+const path = Astro.url.pathname;
+// Karriere hører under Om os i menuen
+const section = path.startsWith('/karriere/') ? '/om-os/' : path;
+const isActive = (href: string) => !href.includes('#') && href !== '/' && section.startsWith(href);
+---
+
+<aside class="topbar on-dark" aria-label="Kontaktoplysninger">
+  <div class="container topbar__inner">
+    <p class="topbar__tagline">Social media management · Content · Annoncering</p>
+    <ul class="topbar__links">
+      <li>
+        <a href={site.phoneHref}><Icon name="phone" size={14} /> {site.phone}</a>
+      </li>
+      <li>
+        <a href={site.emailHref}><Icon name="mail" size={14} /> {site.email}</a>
+      </li>
+      {
+        /* Kun rigtige profil-links (se socialLinks i site.ts) – generiske links til platformens forside vises ikke */
+        socialLinks.length > 0 && (
+          <li class="topbar__social">
+            {socialLinks.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener" aria-label={`${site.name} på ${s.label} (åbner i nyt vindue)`}>
+                <Icon name={s.icon} size={15} />
+              </a>
+            ))}
+          </li>
+        )
+      }
+    </ul>
+  </div>
+</aside>
+
+<header class="site-header" data-variant={variant} data-header data-needs-js>
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__logo" aria-label={`${site.name} – til forsiden`}>
+      {/* Inline SVG i currentColor: ink på lys header, creme over forsidens hero, synligt i høj kontrast */}
+      <Logo class="logo" aria-hidden="true" focusable="false" />
+    </a>
+
+    <nav class="site-nav" aria-label="Hovedmenu">
+      <ul>
+        {
+          mainNav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a href="/kontakt/" class="btn btn--sm site-header__cta">Book et møde</a>
+
+    <a href={site.phoneHref} class="header-call" aria-label={`Ring til ${site.name} på ${site.phone}`}>
+      <Icon name="phone" size={18} />
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+    >
+      <span class="visually-hidden">Menu</span>
+      <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span></span>
+    </button>
+    <!-- Uden JS virker burgeren ikke – i stedet hopper "Menu" til genvejene i footeren -->
+    <a href="#genveje" class="menu-fallback">Menu</a>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <div class="container mobile-menu__inner">
+      <nav aria-label="Mobilmenu">
+        <ul class="mobile-menu__list">
+          <li><a href="/" aria-current={path === '/' ? 'page' : undefined}>Forside</a></li>
+          {
+            mainNav.map((item) => (
+              <li>
+                <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="mobile-menu__footer">
+        <a href="/kontakt/" class="btn btn--block">Book et uforpligtende møde</a>
+        <a href={site.phoneHref} class="mobile-menu__contact"><Icon name="phone" size={18} /> {site.phone}</a>
+        <a href={site.emailHref} class="mobile-menu__contact"><Icon name="mail" size={18} /> {site.email}</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* Topbar */
+  .topbar {
+    display: none;
+    background: var(--c-brown-deep);
+    color: var(--c-cream-muted);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 1024px) {
+    .topbar {
+      display: block;
+    }
+  }
+
+  .topbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 40px;
+  }
+
+  .topbar__tagline {
+    font-size: var(--fs-2xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .topbar__links {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    list-style: none;
+  }
+
+  .topbar__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--c-cream-muted);
+    text-decoration: none;
+    transition: color 0.3s var(--ease);
+  }
+
+  @media (hover: hover) {
+    .topbar__links a:hover {
+      color: var(--c-gold-light);
+    }
+  }
+
+  .topbar__social {
+    display: flex;
+    gap: 0.9rem;
+    padding-left: 1.75rem;
+    border-left: 1px solid rgb(var(--c-cream-muted-rgb) / 0.25);
+  }
+
+  /* Touch på iPad på tværs (topbaren vises fra 1024px): trykflader på mindst 44 px */
+  @media (pointer: coarse) {
+    .topbar__links a {
+      min-height: 44px;
+    }
+
+    .topbar__social a {
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+    }
+  }
+
+  /* Header */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 0.4s var(--ease),
+      color 0.4s var(--ease);
+  }
+
+  /* Baggrund + blur ligger på et pseudo-element. backdrop-filter direkte på headeren ville gøre
+     headeren til containing block for den fixed mobilmenu, så menuen fik 0 px højde. */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background: rgb(var(--c-paper-rgb) / 0.96);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    transition: opacity 0.4s var(--ease);
+  }
+
+  .site-header.menu-open::before {
+    background: var(--c-paper);
+  }
+
+  .site-header.is-scrolled {
+    border-bottom-color: var(--c-line);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: var(--header-h);
+  }
+
+  /* Logoet arver headerens farve (ink; creme i overlay-tilstanden) – ingen fast farve her */
+  .site-header__logo {
+    display: block;
+    flex-shrink: 0;
+    width: 132px;
+    margin-right: auto;
+    color: inherit;
+  }
+
+  @media (min-width: 1024px) {
+    .site-header__logo {
+      width: 150px;
+    }
+  }
+
+  /* Telefon på tværs: lavere header (--header-h: 64px i global.css) og mindre logo */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .site-header__logo {
+      width: 112px;
+    }
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .site-nav {
+      display: block;
+    }
+  }
+
+  .site-nav ul {
+    display: flex;
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
+    list-style: none;
+  }
+
+  .site-nav a {
+    position: relative;
+    display: inline-block;
+    padding-block: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.1rem;
+    height: 1px;
+    background: var(--c-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease);
+  }
+
+  .site-nav a[aria-current='page']::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  @media (hover: hover) {
+    .site-nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  .site-header__cta {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .site-header__cta {
+      display: inline-flex;
+    }
+  }
+
+  /* Overlay-variant (over mørkt hero-billede). Kun når scroll-scriptet kører – uden JS eller ved
+     .is-dead bliver headeren aldrig solid ved scroll, så den holdes solid fra start. */
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open) {
+    color: var(--c-cream);
+  }
+
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open)::before {
+    opacity: 0;
+  }
+
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open) .site-header__cta {
+    --btn-bg: var(--c-cream);
+    --btn-fg: var(--c-brown-deep);
+    --btn-border: var(--c-cream);
+    --btn-bg-hover: var(--c-gold-light);
+    --btn-fg-hover: var(--c-brown-deep);
+    --btn-border-hover: var(--c-gold-light);
+  }
+
+  :global(html.js) .site-header[data-variant='overlay']:not(.is-dead):not(.is-scrolled):not(.menu-open) :focus-visible {
+    outline-color: var(--c-gold-light);
+  }
+
+  /* Ring op-ikon: på mobil/tablet, hvor topbaren og "Book et møde" er skjult */
+  .header-call {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: inherit;
+  }
+
+  @media (min-width: 1024px) {
+    .header-call {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .site-header__inner {
+      gap: 0.25rem;
+    }
+  }
+
+  /* Mobilmenu-knap */
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-right: -12px;
+    color: inherit;
+  }
+
+  @media (min-width: 1024px) {
+    .menu-toggle {
+      display: none;
+    }
+  }
+
+  /* Uden JS – eller hvis menu-scriptet ikke kørte (.is-dead, se BaseLayout): skjul burgeren og
+     vis et almindeligt link til footerens genveje. */
+  .menu-fallback {
+    display: none;
+  }
+
+  :global(html:not(.js)) .menu-toggle,
+  .site-header.is-dead .menu-toggle {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
+    :global(html:not(.js)) .menu-fallback,
+    .site-header.is-dead .menu-fallback {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  .menu-toggle__bars {
+    position: relative;
+    width: 26px;
+    height: 10px;
+  }
+
+  /* Stregerne tegnes med kant (ikke baggrund), så de også ses i Windows' høj kontrast-tilstand */
+  .menu-toggle__bars span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-top: 1.5px solid currentColor;
+    background: none;
+    transition:
+      transform 0.4s var(--ease),
+      top 0.4s var(--ease);
+  }
+
+  .menu-toggle__bars span:first-child {
+    top: 0;
+  }
+
+  .menu-toggle__bars span:last-child {
+    top: 8.5px;
+  }
+
+  /* Krydset: begge streger midt i 10px-boksen (midten af en 1,5px-streg ligger på 4,25px) */
+  .menu-open .menu-toggle__bars span:first-child,
+  .menu-open .menu-toggle__bars span:last-child {
+    top: 4.25px;
+  }
+
+  .menu-open .menu-toggle__bars span:first-child {
+    transform: rotate(45deg);
+  }
+
+  .menu-open .menu-toggle__bars span:last-child {
+    transform: rotate(-45deg);
+  }
+
+  /* Mobilmenu */
+  .mobile-menu {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    background: var(--c-paper);
+    overflow-y: auto;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .mobile-menu[hidden] {
+    display: none;
+  }
+
+  .mobile-menu__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    padding-block: 2rem 2.5rem;
+    gap: 2.5rem;
+  }
+
+  .mobile-menu__list {
+    list-style: none;
+  }
+
+  .mobile-menu__list a {
+    display: block;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--c-line);
+    font-family: var(--f-serif);
+    font-size: 1.75rem;
+    line-height: 1.2;
+    text-decoration: none;
+    color: var(--c-ink);
+  }
+
+  .mobile-menu__list a[aria-current='page'] {
+    color: var(--c-gold-ink);
+  }
+
+  .mobile-menu__footer {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .mobile-menu__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--c-ink-2);
+    text-decoration: none;
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Safari < 14 kender kun MediaQueryList.addListener (forældet, men nødvendig som fallback)
+  type LegacyMediaQueryList = { addListener(listener: (event: MediaQueryListEvent) => void): void };
+
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+
+  if (header) {
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  if (header && toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      header.classList.toggle('menu-open', open);
+      menu.hidden = !open;
+      // Lås body (ikke html): låses html, bliver body en scroll-container pga. overflow-x: hidden,
+      // og så forsvinder den sticky header op ad skærmen, når menuen åbnes efter scroll.
+      document.body.style.overflow = open ? 'hidden' : '';
+      // Alt uden for headeren er utilgængeligt, mens menuen er åben (fokus og skærmlæsere)
+      for (const el of Array.from(document.body.children)) {
+        if (el !== header && el instanceof HTMLElement) el.inert = open;
+      }
+    };
+
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        // preventScroll: siden skal blive stående, hvor brugeren var
+        toggle.focus({ preventScroll: true });
+      }
+    });
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onDesktop = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+    // Safari < 14 har kun den ældre addListener
+    if (desktop.addEventListener) desktop.addEventListener('change', onDesktop);
+    else (desktop as unknown as LegacyMediaQueryList).addListener(onDesktop);
+
+    // Meld klar til BaseLayouts DOMContentLoaded-kontrol (ellers falder headeren tilbage til no-JS-visningen)
+    if (!header.classList.contains('is-dead')) header.classList.add('is-ready');
+  }
+</script>

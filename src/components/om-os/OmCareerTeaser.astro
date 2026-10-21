@@ -1,0 +1,85 @@
+---
+// Karriere-teaser på Om os: "Bliv en del af holdet" → /karriere/.
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import teamImage from '../../assets/images/strategy.jpg';
+
+const roles = ['Fotografer', 'Videografer', 'Content creators', 'Statister & modeller', 'Praktikanter'];
+---
+
+<section class="section section--white career" aria-labelledby="career-title">
+  <div class="container">
+    <div class="career__card">
+      <div class="career__media">
+        <div class="media">
+          <Image
+            src={teamImage}
+            alt="Team samlet om et træbord i planlægning"
+            widths={[480, 720, 960, 1200]}
+            sizes="(min-width: 960px) 46vw, 92vw"
+          />
+        </div>
+      </div>
+      <div class="career__content">
+        <h2 id="career-title">Bliv en del af holdet</h2>
+        <p class="career__text">
+          Vi er altid på udkig efter dygtige og kreative talenter, der vil være med til at skabe indhold i
+          topklasse til danske virksomheder – som fast del af teamet eller i vores netværk.
+        </p>
+        <ul class="career__roles" role="list" aria-label="Vi hører gerne fra">
+          {roles.map((role) => <li class="tag">{role}</li>)}
+        </ul>
+        <a href="/karriere/" class="btn">Se karriere <Icon name="arrow" size={16} /></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .career__card {
+    display: grid;
+    border: 1px solid var(--c-line);
+    background: var(--c-paper);
+  }
+
+  @media (min-width: 960px) {
+    .career__card {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  .career__media .media {
+    height: 100%;
+    aspect-ratio: 3 / 2;
+  }
+
+  @media (min-width: 960px) {
+    .career__media .media {
+      aspect-ratio: auto;
+      min-height: 28rem;
+    }
+  }
+
+  .career__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(2rem, 1.2rem + 3.2vw, 4.5rem);
+  }
+
+  .career__text {
+    margin-top: var(--space-5);
+    max-width: var(--measure);
+    color: var(--c-ink-2);
+  }
+
+  .career__roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: var(--space-5) var(--space-6);
+    list-style: none;
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import OmStory from '../components/om-os/OmStory.astro';
+import OmPrinciples from '../components/om-os/OmPrinciples.astro';
+import OmTeam from '../components/om-os/OmTeam.astro';
+import OmCareerTeaser from '../components/om-os/OmCareerTeaser.astro';
+import workspaceImage from '../assets/images/workspace.jpg';
+import { site } from '../data/site';
+
+const description = `Mød ${site.name}: strateger, fotografer, content creators og performance-specialister, der klarer jeres sociale medier fra strategi til rapport.`;
+---
+
+<BaseLayout title="Om os – specialister i sociale medier" description={description}>
+  <PageHero
+    title="Et bureau bygget på æstetik og resultater"
+    lead="Vi hjælper virksomheder med at få mere ud af deres sociale medier – uden at det koster dem tid. Med et fast team af specialister bag hver eneste profil."
+  >
+    <a href="#team" class="btn">Mød teamet <Icon name="arrow" size={16} /></a>
+    <a href="/kontakt/" class="btn btn--outline">Book et uforpligtende møde</a>
+  </PageHero>
+
+  <OmStory />
+  <OmPrinciples />
+  <OmTeam />
+
+  <section class="om-next" aria-label="Sådan arbejder vi">
+    <div class="container om-next__inner">
+      <p class="om-next__text">
+        Fire trin fra første møde til faste månedlige leverancer – med jeres godkendelse undervejs.
+      </p>
+      <div class="om-next__links">
+        <a href="/#proces" class="text-link">Se, hvordan vi arbejder <Icon name="arrow" size={16} /></a>
+        <a href="/pakkeloesninger/" class="btn btn--outline">Se pakkeløsninger <Icon name="arrow" size={16} /></a>
+      </div>
+    </div>
+  </section>
+
+  <OmCareerTeaser />
+
+  <CtaBand
+    title="Skal vi tage ansvaret for jeres sociale medier?"
+    text="Mød os til en uforpligtende snak om jeres mål – og hør, hvordan teamet ville gribe jeres profiler an."
+    image={workspaceImage}
+    imageAlt="Laptop og cappuccino på et marmorbord"
+    imagePosition="75% center"
+  />
+</BaseLayout>
+
+<style>
+  /* Slank overgang til processen (forsiden) og pakkerne – samme mønster som karriere-sidens contact-line */
+  .om-next {
+    border-top: 1px solid var(--c-line);
+    background: var(--c-paper);
+  }
+
+  .om-next__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+    padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem);
+  }
+
+  .om-next__text {
+    max-width: var(--measure);
+    font-family: var(--f-serif);
+    font-size: var(--fs-lg);
+    line-height: 1.35;
+  }
+
+  .om-next__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+  }
+</style>

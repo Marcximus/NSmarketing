@@ -1,0 +1,139 @@
+---
+// 404 – vises, når en side ikke findes.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site, mainNav } from '../data/site';
+
+const packagesLink = mainNav.find((item) => item.href.startsWith('/pakkeloesninger'))?.href ?? '/pakkeloesninger/';
+const contactLink = mainNav.find((item) => item.href.startsWith('/kontakt'))?.href ?? '/kontakt/';
+---
+
+<BaseLayout
+  title="Siden blev ikke fundet"
+  description={`Siden findes ikke. Gå til forsiden, se vores pakkeløsninger, eller kontakt ${site.name} på ${site.phone}.`}
+  noindex
+>
+  <section class="nf">
+    <div class="marble nf__marble" aria-hidden="true"></div>
+    <div class="container nf__inner">
+      <p class="nf__code" aria-hidden="true">
+        4<em>0</em>4
+      </p>
+
+      <h1>Siden findes ikke</h1>
+
+      <p class="lead nf__lead">
+        Siden, du leder efter, er flyttet, har skiftet navn eller har aldrig eksisteret. Herfra kommer du hurtigt
+        videre.
+      </p>
+
+      <div class="btn-row nf__actions">
+        <a href="/" class="btn">Til forsiden <Icon name="arrow" size={16} /></a>
+        <a href={packagesLink} class="btn btn--outline">Se pakkeløsninger</a>
+        <a href={contactLink} class="btn btn--outline">Kontakt os</a>
+      </div>
+
+      <p class="nf__help small">
+        Leder du efter noget bestemt? Ring på
+        <a href={site.phoneHref} class="nowrap">{site.phone}</a>
+        eller skriv til <a href={site.emailHref}>{site.email}</a> – så hjælper vi dig videre.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    align-items: center;
+    min-height: calc(100svh - var(--header-h));
+    padding-block: clamp(4rem, 3rem + 5vw, 7.5rem);
+    border-bottom: 1px solid var(--c-line);
+    text-align: center;
+  }
+
+  /* Marmor (global .marble): tættest vask bag teksten i midten, årerne står frem ud mod kanterne */
+  .nf__marble {
+    --marble-wash: radial-gradient(
+      ellipse at center,
+      rgb(var(--c-paper-rgb) / 0.9) 0%,
+      rgb(var(--c-paper-rgb) / 0.55) 70%
+    );
+  }
+
+  /* Tynd guldramme inde i marmorfladen */
+  .nf__marble::after {
+    content: '';
+    position: absolute;
+    inset: clamp(0.75rem, 0.25rem + 1.5vw, 1.75rem);
+    border: 1px solid var(--c-gold);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .nf__inner {
+    max-width: calc(46rem + var(--gutter) * 2);
+    /* Ekstra luft, så indholdet ikke rører guldrammen på små skærme */
+    padding-inline: calc(var(--gutter) + clamp(0.75rem, 0.25rem + 1.5vw, 1.75rem));
+  }
+
+  /* Dekorativt tal (aria-hidden), ikke en overskrift. Display maks. 6rem. */
+  .nf__code {
+    margin-bottom: clamp(1.25rem, 0.75rem + 1.5vw, 2.25rem);
+    font-family: var(--f-serif);
+    font-size: clamp(4.5rem, 2.5rem + 8vw, 6rem);
+    font-weight: 400;
+    font-variant-numeric: lining-nums;
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+  }
+
+  .nf__code em {
+    font-style: italic;
+    color: var(--c-gold-ink);
+  }
+
+  .nf h1 {
+    font-size: var(--fs-h2);
+  }
+
+  .nf__lead {
+    max-width: 34rem;
+    margin: var(--space-5) auto 0;
+  }
+
+  .nf__actions {
+    justify-content: center;
+    margin-top: var(--space-7);
+  }
+
+  .nf__help {
+    max-width: 30rem;
+    margin: var(--space-7) auto 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--c-sand);
+    color: var(--c-ink-2);
+  }
+
+  /* Understregning og offset kommer fra global.css */
+  .nf__help a {
+    color: var(--c-ink);
+    overflow-wrap: anywhere;
+  }
+
+  @media (hover: hover) {
+    .nf__help a:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  @media (max-width: 539px) {
+    .nf__actions .btn {
+      width: 100%;
+    }
+  }
+</style>

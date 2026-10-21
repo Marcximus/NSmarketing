@@ -1,0 +1,117 @@
+---
+// Topsektion til undersider: H1 + lead + handlinger på synlig marmor. Ingen kicker; titlen skrives uden <em>.
+interface Props {
+  title: string;
+  lead?: string;
+  align?: 'left' | 'center';
+  /** Mindre luft i toppen, så indholdet under hero ses tidligere (fx pakkekort med priser) */
+  compact?: boolean;
+}
+
+const { title, lead, align = 'center', compact = false } = Astro.props;
+---
+
+<section class:list={['page-hero', `page-hero--${align}`, compact && 'page-hero--compact']}>
+  <div class="marble page-hero__marble" aria-hidden="true"></div>
+  <div class="container page-hero__inner">
+    <h1 set:html={title} />
+    {lead && <p class="lead">{lead}</p>}
+    <div class="page-hero__actions"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(4.5rem, 3rem + 6vw, 8rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    border-bottom: 1px solid var(--c-line);
+    isolation: isolate;
+  }
+
+  /* Kun toppen strammes: pakkekortene overlapper hero'ens bund */
+  .page-hero--compact {
+    padding-top: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  /* Marmor (global .marble) med en lettere papirvask end før (72–92 %), så årerne kan ses */
+  .page-hero__marble {
+    --marble-wash: linear-gradient(
+      180deg,
+      rgb(var(--c-paper-rgb) / 0.62) 0%,
+      rgb(var(--c-paper-rgb) / 0.86) 100%
+    );
+    --marble-pos: center 30%;
+  }
+
+  .page-hero__inner {
+    max-width: calc(58rem + var(--gutter) * 2);
+  }
+
+  .page-hero--center .page-hero__inner {
+    text-align: center;
+  }
+
+  .page-hero .lead {
+    max-width: var(--measure);
+    margin-top: var(--space-5);
+  }
+
+  .page-hero--center .lead {
+    margin-inline: auto;
+  }
+
+  .page-hero__actions:not(:empty) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .page-hero--center .page-hero__actions {
+    justify-content: center;
+  }
+
+  /* Mobil: knapperne i fuld bredde under hinanden */
+  @media (max-width: 479px) {
+    .page-hero__actions:not(:empty) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  /* Lav desktop/laptop (fx 1280×720): samme greb som forsidens hero – mindre H1 og topluft.
+     Bundpaddingen røres ikke, fordi pakkekortenes overlap (PlanCards) regner med den. */
+  @media (min-width: 1024px) and (max-height: 820px) {
+    .page-hero {
+      padding-top: clamp(3rem, 1rem + 5vh, 4.5rem);
+    }
+
+    .page-hero--compact {
+      padding-top: 2.5rem;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(2.75rem, 1rem + 7vh, 4.25rem);
+    }
+  }
+
+  /* Telefon på tværs: kompakt hero, så indholdet under (fx pakkerne) begynder i første skærmbillede */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .page-hero {
+      padding-block: 1.75rem 2.25rem;
+    }
+
+    .page-hero h1 {
+      font-size: 2.25rem;
+    }
+
+    .page-hero .lead {
+      margin-top: 0.75rem;
+    }
+
+    .page-hero__actions:not(:empty) {
+      margin-top: 1.25rem;
+    }
+  }
+</style>

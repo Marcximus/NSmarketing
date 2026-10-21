@@ -1,0 +1,222 @@
+---
+// Tre udvalgte cases (featured) med billede, branche, lokation, ydelser og kanaler.
+// Eksempel-cases (placeholder: true) mærkes "Eksempel" i meta-linjen, så de ikke ligner rigtige kunder.
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { cases } from '../../data/cases';
+
+const featured = cases.filter((c) => c.featured).slice(0, 3);
+// Så længe alle cases er eksempler, kaldes de ikke "udvalgte"
+const examplesOnly = cases.every((c) => c.placeholder);
+const channelLabel = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok', linkedin: 'LinkedIn' };
+---
+
+<section class="section section--white home-cases">
+  <div class="container">
+    <div class="home-cases__head">
+      <h2>Indhold, der får folk til at stoppe op</h2>
+      <div class="home-cases__intro">
+        <p class="lead">
+          {
+            examplesOnly
+              ? 'Eksempler på forløb fra restauranter til klinikker: Vi skaber indhold, der passer til branchen – og til jeres kunder.'
+              : 'Fra restauranter til klinikker: Vi skaber indhold, der passer til branchen – og til jeres kunder.'
+          }
+        </p>
+        <a href="/cases/" class="text-link">Se alle cases <Icon name="arrow" size={16} /></a>
+      </div>
+    </div>
+
+    <ul class="home-cases__grid">
+      {
+        featured.map((c) => {
+          const heading = c.placeholder ? c.industry : c.client;
+          const meta = c.placeholder ? `Eksempel · ${c.location}` : `${c.industry} · ${c.location}`;
+          return (
+            <li class="case">
+              <div class="media media--zoom case__media">
+                <Image src={c.image} alt={c.imageAlt} widths={[480, 720, 960]} sizes="(min-width: 960px) 30vw, 92vw" />
+              </div>
+              <div class="case__body">
+                <div class="case__meta">
+                  <p class="case__location">
+                    <Icon name="pin" size={13} />
+                    {meta}
+                  </p>
+                  <ul class="case__channels" aria-label="Kanaler">
+                    {c.channels.map((ch) => (
+                      <li>
+                        <Icon name={ch} size={15} label={channelLabel[ch]} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <h3 class="case__title">
+                  <a href={`/cases/#${c.id}`} class="case__link">
+                    {heading}
+                  </a>
+                </h3>
+                <p class="case__excerpt">{c.excerpt}</p>
+                <ul class="case__tags" aria-label="Ydelser">
+                  {c.services.map((s) => (
+                    <li class="tag">{s === 'SoMe' ? 'Sociale medier' : s}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .home-cases__head {
+    display: grid;
+    gap: var(--space-5);
+    margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  }
+
+  @media (min-width: 900px) {
+    .home-cases__head {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: end;
+      gap: var(--space-9);
+    }
+  }
+
+  .home-cases__head h2 {
+    max-width: 14ch;
+  }
+
+  .home-cases__intro {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-5);
+  }
+
+  .home-cases__grid {
+    display: grid;
+    gap: 3rem;
+    list-style: none;
+  }
+
+  @media (min-width: 960px) {
+    .home-cases__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1.5rem, 2.5vw, 2.5rem);
+    }
+  }
+
+  .case {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .case__media {
+    aspect-ratio: 3 / 2;
+  }
+
+  @media (min-width: 960px) {
+    .case__media {
+      aspect-ratio: 4 / 5;
+    }
+
+    .case:nth-child(2) {
+      margin-top: 3.5rem;
+    }
+  }
+
+  .case__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-top: 1.5rem;
+  }
+
+  .case__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .case__location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--fs-2xs);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-gold-ink);
+  }
+
+  .case__channels {
+    display: flex;
+    gap: 0.6rem;
+    list-style: none;
+    color: var(--c-ink-2);
+  }
+
+  .case__title {
+    margin-top: 1.25rem;
+    font-size: clamp(1.4rem, 1.25rem + 0.6vw, 1.75rem);
+  }
+
+  .case__link {
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat;
+    transition:
+      background-size var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  /* Hele kortet er klikbart */
+  .case__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  @media (hover: hover) {
+    .case:hover .case__link {
+      color: var(--c-gold-ink);
+      background-size: 100% 1px;
+    }
+
+    .case:hover .case__media :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  .case:has(.case__link:focus-visible) {
+    outline: 2px solid var(--c-gold-ink);
+    outline-offset: 6px;
+  }
+
+  .case__link:focus-visible {
+    outline: none;
+  }
+
+  .case__excerpt {
+    max-width: var(--measure);
+    margin-top: var(--space-3);
+    font-size: 0.9375rem;
+    color: var(--c-ink-2);
+  }
+
+  .case__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: var(--space-5);
+    list-style: none;
+  }
+</style>
